@@ -1,0 +1,654 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://embesozzi.medium.com/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a"><meta name="generator" content="Astro v6.4.2"><!-- Fonts --><style>@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/2015c3ee75fce6cd.woff") format("woff"), url("/_astro/fonts/186e6385d7852012.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/20302367397c05fa.woff") format("woff"), url("/_astro/fonts/b08a78609a8a086b.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/bb754429c8057718.woff") format("woff"), url("/_astro/fonts/610b113b74c3265a.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/29e2519b5d70ba84.woff") format("woff"), url("/_astro/fonts/c341830447fbbd1e.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/be84b35bcfc349e9.woff") format("woff"), url("/_astro/fonts/d57ed212a535d863.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/9f194d9b0de98159.woff") format("woff"), url("/_astro/fonts/7b8bc1ccb887754d.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/fdb5d17a23b6aa6e.woff") format("woff"), url("/_astro/fonts/3be34b09d07b7f66.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/39c158497c7c5a90.woff") format("woff"), url("/_astro/fonts/6a646b2f24236261.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/45ae197ec2801a42.woff") format("woff"), url("/_astro/fonts/c3fd635c00a11802.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/8a2dc10ea0fb4488.woff") format("woff"), url("/_astro/fonts/2f812678838d3545.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}:root{--font-inter:Inter-938b6d9a5b97ad60,"Inter-938b6d9a5b97ad60 fallback: Arial",sans-serif;}</style><style>@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/6014e528f57806f3.woff") format("woff"), url("/_astro/fonts/75d17da681d49dc0.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/31ac3931b90bfe7a.woff") format("woff"), url("/_astro/fonts/66c8f2a9e4b334e5.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/cec8ae6b731972f8.woff") format("woff"), url("/_astro/fonts/a0534acacfcf0885.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/334b4db9de3a5fe4.woff") format("woff"), url("/_astro/fonts/cf39180873795e06.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/9bf5aa116af20a93.woff") format("woff"), url("/_astro/fonts/be45d86507988f6b.ttf") format("truetype");font-display:swap;font-weight:800;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/4c0b37f553ec06f9.woff") format("woff"), url("/_astro/fonts/b5e86eb0a6ececd3.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/fdda611a1e41f26f.woff") format("woff"), url("/_astro/fonts/5fa68f67a95fdc63.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/167823ee192baf0f.woff") format("woff"), url("/_astro/fonts/16c9148d715a9889.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/d005e41eec063bbe.woff") format("woff"), url("/_astro/fonts/4f409386f6ffef9a.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/c68a8c249f10e302.woff") format("woff"), url("/_astro/fonts/5eeef7238f758dc8.ttf") format("truetype");font-display:swap;font-weight:800;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}:root{--font-jakarta:"Plus Jakarta Sans-69ff88703f9ba026","Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial",sans-serif;}</style><!-- Primary meta --><title>Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC) | Martin Besozzi</title><meta name="title" content="Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC) | Martin Besozzi"><meta name="description" content="How to integrate Keycloak with OpenFGA (inspired by Zanzibar) to implement scalable Relationship-Based Access Control (ReBAC) with fine-grained authorization."><meta name="author" content="Martin Besozzi"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Martin Besozzi"><meta property="og:title" content="Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC) | Martin Besozzi"><meta property="og:description" content="How to integrate Keycloak with OpenFGA (inspired by Zanzibar) to implement scalable Relationship-Based Access Control (ReBAC) with fine-grained authorization."><meta property="og:url" content="https://embesozzi.medium.com/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a"><meta property="og:image" content="https://cdn-images-1.medium.com/max/645/1*AaeSBST50z4Z-Wm_0PvxKA.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://embesozzi.medium.com/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a"><meta property="twitter:title" content="Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC) | Martin Besozzi"><meta property="twitter:description" content="How to integrate Keycloak with OpenFGA (inspired by Zanzibar) to implement scalable Relationship-Based Access Control (ReBAC) with fine-grained authorization."><meta property="twitter:image" content="https://cdn-images-1.medium.com/max/645/1*AaeSBST50z4Z-Wm_0PvxKA.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Martin Besozzi" href="https://embesozzi.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2022-10-22T00:36:38.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC) | Martin Besozzi","image":"https://cdn-images-1.medium.com/max/645/1*AaeSBST50z4Z-Wm_0PvxKA.png","datePublished":"2022-10-22T00:36:38.000Z","author":[{"@type":"Person","name":"Martin Besozzi","url":"https://www.linkedin.com/in/embesozzi/"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const theme = stored ?? "light";
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BPFdHnW-.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: openfga; }@layer astro { ::view-transition-old(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: api; }@layer astro { ::view-transition-old(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: keycloak; }@layer astro { ::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-4"] { view-transition-name: authorization; }@layer astro { ::view-transition-old(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-5"] { view-transition-name: auth0; }@layer astro { ::view-transition-old(auth0) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(auth0) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(auth0) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(auth0) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-wide-layout"> <!--  items-start  --> <div class="border-border flex justify-between border-b pt-5 pb-4 sm:pt-6 sm:pb-5"> <!-- Identity: avatar + name + role + small socials --> <div class="flex items-center gap-2"> <a href="/" class="flex items-center gap-3 focus-visible:no-underline"> <img src="https://avatars.githubusercontent.com/u/25515681?v=4" alt="Martin Besozzi" class="border-border hidden size-14 shrink-0 rounded-full border object-cover sm:block" width="56" height="56"> <div> <span class="font-heading text-xl font-bold whitespace-nowrap sm:text-2xl"> Martin Besozzi </span> <span class="text-muted-foreground hidden text-xs sm:block">
+AI Security Architect · IAM Architect · CTO · Founder
+</span> </div> </a> </div> <!-- Socials outside the <a> to avoid invalid nested anchors --> <div class="hidden sm:flex [&_a]:!p-0.5 [&_svg]:!size-4.5 [&_svg]:!scale-100"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </div> <!-- Right side: desktop nav + controls --> <div class="flex items-center gap-4"> <!-- Nav links — desktop only --> <ul class="hidden sm:flex sm:items-center sm:gap-5
+               [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:transition-colors [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> </ul> <!-- Controls: search + theme + mobile hamburger --> <div class="flex items-center gap-0.5"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-9 p-2">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-9 p-2" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> <!-- Hamburger: mobile only --> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> </div> </div> </div> <!-- Mobile nav dropdown --> <nav id="nav-menu" class="sm:hidden"> <ul id="menu-items" class="hidden grid-cols-1 gap-0.5 pb-3 pt-2
+             [&>li>a]:block [&>li>a]:py-2 [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> <li class="pt-1"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </li> </ul> </nav> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-rebac" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC) </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2022-10-22T00:36:38.000Z"> 21 Oct, 2022 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <blockquote>
+<p>This article was originally published on <a href="https://embesozzi.medium.com/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a">Medium</a>.</p>
+</blockquote>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#in-short">In Short</a>
+<ul>
+<li><a href="#whats-new-october-8-2023-">What’s new: October 8, 2023 😀</a></li>
+<li><a href="#whats-new-june-29-2024">What’s new: June 29, 2024</a></li>
+<li><a href="#whats-new-dec-9-2024-">What’s new: Dec 9, 2024 🚀</a></li>
+</ul>
+</li>
+<li><a href="#some-background">Some Background</a>
+<ul>
+<li><a href="#authentication-vs-authorization">Authentication vs Authorization</a></li>
+<li><a href="#openid-connect-oidc">OpenID Connect (OIDC)</a></li>
+<li><a href="#oauth-20">OAuth 2.0</a></li>
+<li><a href="#json-web-token-jwt">JSON web token (JWT)</a></li>
+<li><a href="#access-control">Access Control</a></li>
+<li><a href="#relationship-based-authorization-rebac">Relationship-based authorization (ReBAC)</a></li>
+<li><a href="#zanzibar">Zanzibar</a></li>
+</ul>
+</li>
+<li><a href="#proposed-authorization-framework">Proposed Authorization Framework</a></li>
+<li><a href="#openfga---authorization-layer">OpenFGA - Authorization Layer</a>
+<ul>
+<li><a href="#openfga-concepts">OpenFGA Concepts</a></li>
+<li><a href="#openfga-keycloak-authorization-model">OpenFGA Keycloak Authorization Model</a></li>
+<li><a href="#openfga-sdk">OpenFGA SDK</a></li>
+</ul>
+</li>
+<li><a href="#keycloak---identity-layer">Keycloak - Identity Layer</a>
+<ul>
+<li><a href="#authentication">Authentication</a></li>
+<li><a href="#keycloak-roles-model">Keycloak Roles Model</a></li>
+</ul>
+</li>
+<li><a href="#keycloak-openfga-event-publisher-spi">Keycloak OpenFGA Event Publisher (SPI)</a></li>
+<li><a href="#use-case-how-does-it-work">Use case: How Does It Work?</a>
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#involved-components">Involved Components</a></li>
+<li><a href="#step-1-deploy-and-configure-the-poc">Step 1) Deploy and configure the PoC</a></li>
+<li><a href="#step-21-try-it-out-check-user-access-thru-openfga-playground">Step 2.1) Try it Out: Check User Access thru OpenFGA Playground</a></li>
+<li><a href="#step-2-try-it-out-run-the-full-demo">Step 2) Try it Out: Run the full demo</a></li>
+<li><a href="#use-case-1-access-to-the-store-for-managing-products-as-an-analyst-paula">Use case 1: Access to the Store for managing products as an Analyst (Paula)</a></li>
+<li><a href="#use-case-2-access-to-the-store-for-managing-products-as-an-admin-richard">Use case 2: Access to the Store for managing products as an Admin (Richard)</a></li>
+<li><a href="#use-case-3-access-to-the-store-for-managing-products-as-an-regular-user-peter">Use case 3: Access to the Store for managing products as an Regular User (Peter)</a></li>
+</ul>
+</li>
+<li><a href="#conclusions">Conclusions</a></li>
+<li><a href="#reference">Reference:</a></li>
+</ul>
+<p></p></details><p></p>
+<h2 id="in-short">In Short</h2>
+<p>With the growing importance of <strong>zero-trust architecture</strong> which is based on the principle that nothing can be trusted, questions around the level of access granted have become critical. Furthermore, <strong>security and compliance</strong> are mandatory problems to tackle in any architecture, and <strong>authorization</strong> is a crucial part of any solution having in mind that the 2021 top OWASP risk was a broken access control. And last but not least, how to make authorization <strong>flexible, fast and scalable</strong>.</p>
+<p>Taking into consideration the aim of the article is to provide an open-source authorization framework to solve those problems thanks to the implementation of <strong>Keycloak</strong> open-source Identity and Access Management platform integrated with <strong>OpenFGA</strong>, which is an open source solution for Fine-Grained Authorization that applies the concept of ReBAC (created by the Auth0 inspired by <strong>Zanzibar</strong>).</p>
+<p>Therefore, I have implemented Keycloak for handling the authentication with the standard OpenID Connect and also taking advantage of the Keycloak role model for managing the user access. I am still using the standard OAuth 2.0 for API protection, since the application is sending the access token when it is calling the service but I have just used it for getting identity claims. This architecture is focused on decoupling the authorization part.</p>
+<p>Additionally, OpenFGA is responsible for applying fine-grained access control in a high performance and flexible authorization / permission system. The OpenFGA service answers authorization checks by determining whether a relationship exists between an object and a user. It uses the authorization model of the system and the relationship tuples present in the system at that time in order to make a decision.</p>
+<h3 id="whats-new-october-8-2023-">What’s new: October 8, 2023 😀</h3>
+<p>A new version of the PoC is now available. We have achieved <strong>direct integration</strong> between the Access Manager platform and the OpenFGA solution, thanks to the use of the <a href="https://github.com/openfga/java-sdk">OpenFGA Java SDK</a> to publish events over HTTP. In the past, we used a Kafka cluster to synchronize events between platforms when the SDK wasn’t available. Therefore, I’ve updated some sections to showcase the newly improved and simplified ❤️ authorization architecture.</p>
+<h3 id="whats-new-june-29-2024">What’s new: June 29, 2024</h3>
+<p>I wrote a new article explaining the approach for low-code authorization with OpenFGA and the decoupling pattern by applying access control at the API Gateway. If you are interested, check out the <a href="https://medium.com/@embesozzi/mastering-access-control-implementing-low-code-authorization-based-on-rebac-and-decoupling-pattern-f6f54f70115e">Mastering Access Control: Low-Code Authorization with ReBAC, Decoupling Patterns and Policy as Code article</a>.</p>
+<h3 id="whats-new-dec-9-2024-">What’s new: Dec 9, 2024 🚀</h3>
+<p>Checkout new article about the <a href="https://medium.com/@embesozzi/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-and-7341fcd87b64">Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software</a>: Keycloak, OpenFGA and Apache APISIX.</p>
+<p>So, one thing is still missing: how do we connect the Keycloak permission model events with the OpenFGA authorization model (ReBAC) ?</p>
+<p>Well, I developed a new custom extension known as Service Provider Interfaces (SPI) called <strong>keycloak-openfga-event-publisher</strong> which basically:</p>
+<ul>
+<li>Listens to the Keycloak events, for instance, an User Role Assignment.</li>
+<li>Translates this event to an OpenFGA tuple key using the OpenFGA SDK (more details are available further).</li>
+<li>Publishes the event directly to the OpenFGA Solution</li>
+</ul>
+<p>Here is a basic example of how all the components work together, for instance, for allowing an Analyst to have rights to see the product catalog:</p>
+<p>a) We have modeled the <strong>Analyst role</strong> related to the <strong>view product role</strong> and the former has been assigned to the user <strong>Peter</strong> in Keycloak</p>
+<p>b) The custom Keycloak extension “listens” to two events in this case, parses them and creates two OpenFGA tuples, which represents the relationship between those roles and that the user Peter is related to the Analyst role. As a final step, it publishes the event to the OpenFGA solution</p>
+<p>c) Then the application or API can do an authorization check invoking the OpenFGA service asking for example: “Is Peter related to the role view product as assignee?” Allowed</p>
+<p>In this case OpenFGA allows the operation because the user has an implied relationship to the child role thanks to the parent role.</p>
+<p>Another cool feature of this extension is its capability to discover the OpenFGA authorization model and determine which events are handled. This gives you the flexibility to choose your authorization model, whether it’s RBAC, GBAC, or both 🙌.</p>
+<p>Here I described the most simple scenario; other details are described in the article to give you a complete idea.</p>
+<h2 id="some-background">Some Background</h2>
+<h3 id="authentication-vs-authorization">Authentication vs Authorization</h3>
+<p>Authentication (or AuthN) is a process that ensures a user’s identity. Authorization (or AuthZ) means determining if a user can perform a certain action on a particular resource.</p>
+<h3 id="openid-connect-oidc">OpenID Connect (OIDC)</h3>
+<p>Identity layer on top of the OAuth 2.0 protocol. OIDC provides authentication by the ID token which contains information about the identity.</p>
+<h3 id="oauth-20">OAuth 2.0</h3>
+<p>It is one of the most well-known security policies. It provides authorization via an access token (JWT) containing:</p>
+<ul>
+<li>Scopes: are used to express what an application can do on behalf of the user.</li>
+<li>Identity claims: are used to provide identity user attributes information.</li>
+</ul>
+<h3 id="json-web-token-jwt">JSON web token (JWT)</h3>
+<p>Open standard used to share information between two parties, it is signed using a cryptographic algorithm to ensure that the claims cannot be altered after the token is issued and it could also be encrypted.</p>
+<h3 id="access-control">Access Control</h3>
+<p>Access control involves users, resources and applications, and it is a complex model. Role-based Access Control - or RBAC: is an authorization model used to determine access control based on predefined roles. In this approach you proceed to assign roles to users, and permissions to roles, and use those to decide who can do what. E.g. Simon is an Admin who can administer the Store application. Keycloak permissions model is based on RBAC. On the other hand, the OpenFGA authorization model is based on Relationship-based authorization, or ReBAC, which means organizing permissions based on relationships between resources. Nevertheless, there is no fixed path to follow, depending on the business requirements we can apply one or a mix of the access control models.</p>
+<h3 id="relationship-based-authorization-rebac">Relationship-based authorization (ReBAC)</h3>
+<p>ReBAC allows expressing rules based on relations that users have with objects and that objects have with other objects. For example, a user can view a document if they can view its parent folder. In many cases, roles would fit in well as relations on an object type. In this case I implemented custom roles for accomplishing the integration with the Keycloak permission model.</p>
+<h3 id="zanzibar">Zanzibar</h3>
+<p>Zanzibar is “Google’s Consistent, Global Authorization System” for “determining whether online users are authorized to access digital objects” across their products (Google Drive, YouTube, Google Photos, etc..). It uses (object, relation, user) tuples to store relation data and traverses those relations to check if there is a relation between a user and an object. Zanzibar scales to trillions of objects, billions of users and millions of authorization requests per second.</p>
+<h2 id="proposed-authorization-framework">Proposed Authorization Framework</h2>
+<p>The components involved in the authorization framework are described below:</p>
+<p><img src="https://cdn-images-1.medium.com/max/645/1*AaeSBST50z4Z-Wm_0PvxKA.png" alt="Authorization Architecture (v2.0.0)"></p>
+<p>The diagram described before has the following components:</p>
+<ul>
+<li>Keycloak: Responsible for handling the authentication</li>
+<li>OpenFGA: Responsible for applying fine-grained access control. The OpenFGA service answers authorization checks by determining whether a relationship exists between an object and a user</li>
+<li>New Custom extension Keycloak OpenFGA Event Publisher: Responsible for parsing and sending the events to the OpenFGA Solution</li>
+</ul>
+<p>Each component is described below in more detail.</p>
+<h2 id="openfga---authorization-layer">OpenFGA - Authorization Layer</h2>
+<p>OpenFGA is an open source solution to Fine-Grained Authorization that applies the concept of ReBAC. It was created by the Auth0 FGA team and was inspired by Zanzibar. It was designed for reliability and low latency at a high scale. It offers an HTTP API and has SDKs for programming languages including Node.js/JavaScript, GoLang and .NET. The OpenFGA service answers authorization checks by determining whether a relationship exists between an object and a user.</p>
+<h3 id="openfga-concepts">OpenFGA Concepts</h3>
+<p>OpenFGA is based on the ReBAC model, this is why it’s built to quickly and reliably make authorization checks. This means providing an answer to a question: “Can user U perform action A on object O?” ReBAC systems determine access from a user’s relation to an object. Authorization decisions are then yes or no answers to the question: “Does user U have relation R with object O?”.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*1iLRiTQYr2WIzIQg" alt="Source of the image: https://zanzibar.academy/"></p>
+<p>Please visit the <a href="https://openfga.dev/docs/concepts">official link</a> to review the main concepts of OpenFGA, the most important ones are below:</p>
+<ul>
+<li>An <strong>authorization model</strong> is a combination of one or more type definitions. This is used to define the permission model of a system</li>
+<li>An <strong>user</strong> is an entity in the system that can be related to an object</li>
+<li>An <strong>object</strong> represents an entity in the system.</li>
+<li>A <strong>relation</strong> is a string defined in the type definition of an authorization model that defines the possibility of a relationship between an object of the same type as the type definition and a user in the system.</li>
+<li>A **relationship tuple **is a tuple consisting of a user, relation and object stored in OpenFGA.</li>
+<li>A <strong>check request</strong> is a call to the OpenFGA check endpoint that returns whether the user has a certain relationship with an object.</li>
+</ul>
+<p>There are a lot of super cool examples about the data modeling and theory behind the scenes, this is why I recommend reviewing the oficial <a href="https://openfga.dev/docs/modeling">doc</a>.</p>
+<p>In our case, I have implemented the authorization model of <a href="https://openfga.dev/docs/modeling/custom-roles">custom roles</a> based on the Keycloak Role and Group model. This authorization model is based on the following premises:</p>
+<ul>
+<li>Keycloak administrators are able to create arbitrary sets of roles with different permissions that govern the users’ access to objects.</li>
+<li>It is not known beforehand (at the time of Authorization Model creation) what the application roles are.</li>
+</ul>
+<h3 id="openfga-keycloak-authorization-model">OpenFGA Keycloak Authorization Model</h3>
+<p>Based on the Keycloak’s model (see section Keycloak - Role model) we can define the following cases (I will start with the simpler to the more complex case)</p>
+<ul>
+<li>A certain user can be assigned to a certain role (user role assignment)</li>
+<li>A certain role can be related to a parent role (role to role assignment)</li>
+<li>A certain user can be assigned to a certain group (user group</li>
+<li>membership)</li>
+<li>A certain group can be related to a certain role (group role assignment)</li>
+</ul>
+<p>Take into consideration these premises, we can represent all of these cases with the following Keycloak authorization model (OpenFGA playground):</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*Pm3hT_qlXFIEIlflpaP5YQ.png" alt="OpenFGA Keycloak Authorization Model (new)"></p>
+<p>It is amazing that with this simple authorization model we can represent all the use cases.</p>
+<p>In this new version of the authorization model, I’ve used the feature of <a href="https://openfga.dev/docs/configuration-language#the-direct-relationship-type-restrictions">direct type restriction</a> to control the type of object allowed in the relation.</p>
+<p>Furthermore, OpenFGA supports <strong>implied relationships</strong>. This means that an implied (or computed) relationship R exists between user X and object Y if user X is related to an object Z that is in a direct or implied relationship with object Y, and the OpenFGA authorization model allows it. In other words, in our case OpenFGA knows the implicit roles the user has inherited by the direct assignment of a parent role or group.</p>
+<h3 id="openfga-sdk">OpenFGA SDK</h3>
+<p>It offers an HTTP API and has SDKs for programming languages including Node.js/ JavaScript, GoLang and Java (new). Here I will show an example how to perform a check request to determine whether a user has a certain relationship with an object.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>// Run a check</span></span>
+<span class="line"><span>const { allowed } = await fgaClient.check({</span></span>
+<span class="line"><span>  tuple_key: {</span></span>
+<span class="line"><span>    user: 'user:paula',</span></span>
+<span class="line"><span>    relation: 'assignee',</span></span>
+<span class="line"><span>    object: 'role:view-product',</span></span>
+<span class="line"><span>  },</span></span>
+<span class="line"><span>});ty</span></span>
+<span class="line"><span>// allowed = true</span></span></code></pre>
+<p>In my scenario, I have used the SDK in two different cases:</p>
+<ul>
+<li>API: When performing the access control check in the API.</li>
+<li>Keycloak extension: When parsing and synchronizing the events from Keycloak to OpenFGA</li>
+</ul>
+<h2 id="keycloak---identity-layer">Keycloak - Identity Layer</h2>
+<p>Open Source Identity and Access Management system, built and maintained by Red Hat. It provides single sign-on with strong session management capabilities. It means allowing users to access multiple applications, while only having to authenticate once. Keycloak builds on industry standard protocols supporting OAuth 2.0, OpenID Connect and SAML 2.0.</p>
+<h3 id="authentication">Authentication</h3>
+<p>In our scenario each application is integrated with Keycloak through OpenID Connect. This means that the application is delegating the authentication process to the SSO platform. On the other hand, OAuth 2.0 is a delegated authorization framework for REST / APIs. It enables apps to obtain limited access (scopes) to user’s data (without giving away a user’s password). After the user was authenticated the application receives two tokens, the id token as identity token includes information about the user and it is meant to be used by the application only. The access tokens are used to inform an API that the bearer of the token has been authorized to access the API and perform a predetermined set of actions.</p>
+<h3 id="keycloak-roles-model">Keycloak Roles Model</h3>
+<p>Keycloak supports role modeling and it also has different kinds of roles: Realm roles, Client roles and composite Roles:</p>
+<ul>
+<li>Realm Role: It is a global role, belonging to that specific realm. You can access it from any client and map to any user. Ex Role: ‘Global Admin, Admin’</li>
+<li>Client Role: It is a role which belongs only to that specific client. You cannot access that role from a different client. Ex Roles: Product Analyst, Customer’</li>
+<li>Composite Role: It is a role that has one or more roles (realm or client ones) associated with it.</li>
+</ul>
+<p>It also supports modeling Groups, which can hold users as members and roles.</p>
+<p>By implementing this model you can define the user’s access based on roles, groups or both. These operations produce events in Keycloak, for instance, when you assign a user to a role that you can “listen” to the event and decide which the next steps are. This functionality is used by the following custom extension.</p>
+<h2 id="keycloak-openfga-event-publisher-spi">Keycloak OpenFGA Event Publisher (SPI)</h2>
+<p>Keycloak has a series of Java Service Provider Interfaces (SPI) that allows adding new functionalities where needed. The main purpose of this SPI is to listen to the Keycloak events and publish these events to an OpenFGA solution. In this case, the extension listens to the Admin Events related to operation in Keycloak Identity, Role and Group model. So far, the extension proceeds with the following steps:</p>
+<p>Step 1) Parse and enrich the default Keycloak events in the following cases:</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*BO8DC94BIngsKzee5QOyfQ.png" alt="Article image"></p>
+<p>Step 2) Transform the Keycloak event into a OpenFGA tuple key based on the Keycloak Authorization Model (see section OpenFGA - Keycloak Authorization Model) using the OpenFGA SDK:</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*OrQGtv6CbvSYXYHm2_Le_Q.png" alt="Article image"></p>
+<p>Step 3) Publish the event to the OpenFGA solution:</p>
+<p>Publishes the Tuple Key as ClientWriteRequest object to the OpenFGA server over an HTTP request fgaClient.write(request) with the <a href="https://github.com/openfga/java-sdk">OpenFGA SDK client</a>.</p>
+<p>Here is a high level overview of the extension:</p>
+<p><img src="https://cdn-images-1.medium.com/max/320/1*N4oGnoL8ZzysqNlFDRQcfA.png" alt="Article image"></p>
+<p>The extension supports the discovery of the OpenFGA authorization model and uses it to determine which events are handled.</p>
+<p>Full details of the SPI component and the configuration is available in the <a href="https://github.com/embesozzi/keycloak-openfga-event-publisher">GitHub repo</a>.</p>
+<h2 id="use-case-how-does-it-work">Use case: How Does It Work?</h2>
+<h3 id="overview">Overview</h3>
+<p>As an example, we will implement an Product Catalog web application that has the following requirements:</p>
+<ul>
+<li>Only authenticated user with MFA can access to the application</li>
+<li>Product can be viewed by their Analyst</li>
+<li>Product can be edited by their Admin</li>
+<li>Global Admin users can view or edit any Product</li>
+</ul>
+<h3 id="involved-components">Involved Components</h3>
+<p>The PoC is available in the following GitHub repo:</p>
+<ul>
+<li><a href="https://github.com/embesozzi/keycloak-openfga-workshop">https://github.com/embesozzi/keycloak-openfga-workshop</a></li>
+</ul>
+<p>This repo describes how to deploy and configure the following components (some of them were describe before) running as containers: <em>Core:</em></p>
+<ul>
+<li><strong>Keycloak</strong> is responsible for handling the authentication with the standard OpenID Connect and is managing the user access with his Role Model</li>
+<li>Keycloak is configure with a custom extension <strong>keycloak-openfga-event-publisher</strong> which listens to the Keycloak events, parses this event into an OpenFGA tuple key and publishes the event to OpenFGA.</li>
+<li><strong>OpenFGA</strong> is configured with the Keycloak Authorization Model in the store called “keycloak”</li>
+</ul>
+<p><em>Apps:</em></p>
+<ul>
+<li>Product catalog web application is integrated with Keycloak to authenticate the users</li>
+<li>API product catalog is protected by OAuth and it utilizes the OpenFGA SDK to enforce relationship-based access control (ReBAC)</li>
+</ul>
+<p>All the components are detailed below:</p>
+<p><img src="https://cdn-images-1.medium.com/max/645/1*AaeSBST50z4Z-Wm_0PvxKA.png" alt="New Authorization Model (v2.0.0)"></p>
+<h3 id="step-1-deploy-and-configure-the-poc">Step 1) Deploy and configure the PoC</h3>
+<p>Follow the instructions detailed in the github repo <a href="https://github.com/embesozzi/keycloak-openfga-workshop">keycloak-openfga-workshop</a> to deploy and configure the components.</p>
+<p>As the result you will have up and running all the components described before. You will also have created all the users and role model, here are detailed below:</p>
+<p><em>Roles:</em></p>
+<ul>
+<li>Admin Catalog role (admin-catalog) is related to the roles: View (view-product) and Edit product (edit-product)</li>
+<li>Analyst Catalog role (analyst-catalog) is related to the role View product (view-product)</li>
+</ul>
+<p><em>Users:</em></p>
+<p><img src="https://cdn-images-1.medium.com/max/960/0*BbG0hIuJtOkNOR-e" alt="Keycloak Identity and Role Model"></p>
+<p>Once these steps are finished, the Keycloak OpenFGA Event Listener extension has to proceed to publish these events to the OpenFGA server using the SDK. Here are all tuples stored</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*eJOyKSJzHu9z1ZXZPaqtSg.png" alt="OpenFGA tuples"></p>
+<p>The users are identified by the value of the claim sub in the <a href="http://localhost:3000/playground">OpenFGA Playground</a>, see the Tuples tab.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*mJoNaqUgfBp5Tan0lJShAQ.png" alt="Article image"></p>
+<h3 id="step-21-try-it-out-check-user-access-thru-openfga-playground">Step 2.1) Try it Out: Check User Access thru OpenFGA Playground</h3>
+<p>The OpenFGA Playground can be accessed by opening a browser to <a href="http://localhost:3000/playground">http://localhost:3000/playground</a></p>
+<p>Click the Tuple Queries > section below the Types Previewer. Enter the following in the query prompt field and press the Enter key:</p>
+<p>In this case, OpenFGA is evaluating the relationships and evaluating true or false responses according to the authorization model and relationship tuples.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*RqK6XuxsTt1ANwkYIaPNkA.png" alt="Article image"></p>
+<p>For instance, the assertion #4 is True because Paula has implied relationships to the view-product role for having a direct relationship to the Analyst role.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*qJ2Kbh4K1E0kZgjXeJQmAQ.png" alt="Assertion #4"></p>
+<p>On the other hand, the assertion #3 is False because Paula does not have the edit-product role.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*8LFvKRv92OpP8lyjA_JGMQ.png" alt="Assertion #3"></p>
+<h3 id="step-2-try-it-out-run-the-full-demo">Step 2) Try it Out: Run the full demo</h3>
+<p>Here is an overview of the user cases.</p>
+<h3 id="use-case-1-access-to-the-store-for-managing-products-as-an-analyst-paula">Use case 1: Access to the Store for managing products as an Analyst (Paula)</h3>
+<ul>
+<li>Access to the <a href="http://store:9090">Store web application</a> and proceed to login with Paula (paula / demo1234!) in Keycloak</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*lSiX2HuGcwmDucwmykyIwg.png" alt="Store Web App"></p>
+<p>2.1 Keycloak will return the id_token and the access token to the application</p>
+<ol start="3">
+<li>The Store web application will show the product catalog</li>
+</ol>
+<p>3.1 The Store web application will call the product API sending the access token in the Authorization header</p>
+<p>3.2 The API will apply the following steps:</p>
+<p>3.3. It will validate the token following the OAuth 2.0 standard and it will extract the claim sub to identify the user</p>
+<p>3.4. Then it will call the OpenFGA API to check if the user has the view-product role with the relationship assignee</p>
+<p>3.5. OpenFGA will return the response “allowed”</p>
+<p>3.6. The API will return the product information and the store app will show the information to the user</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*MEcwWsT_WBK7BkjQTMoAVA.png" alt="Article image"></p>
+<ol start="4">
+<li>Try to publish a product by clicking the button “Publish” but you will see that Paula is not allowed</li>
+</ol>
+<p>4.1. The app will call the product API sending the access token in the Authorization header</p>
+<p>4.2. The API will apply the following steps:</p>
+<p>4.3. It will validate the token following the OAuth 2.0 standard and it will extract the claim sub to identify the user</p>
+<p>4.4. Then it will call the OpenFGA API to check if the user has the edit-product role with the relationship assignee</p>
+<p>4.5. OpenFGA will return the response “denied” and the app will show the error message “Unauthorized Access”.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*LRqfMjvUGQOpvPsMniR8sQ.png" alt="Article image"></p>
+<h3 id="use-case-2-access-to-the-store-for-managing-products-as-an-admin-richard">Use case 2: Access to the Store for managing products as an Admin (Richard)</h3>
+<ul>
+<li>Access to the <a href="http://store:9090">Store web application</a> and proceed to login with Richard (richard / demo1234!) in Keycloak</li>
+</ul>
+<ol start="2">
+<li>
+<p>Keycloak will return the id_token and the access token to the application</p>
+</li>
+<li>
+<p>The store web application will show the product catalog</p>
+</li>
+</ol>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*x5RImfYw0VXrmJ6fivRLQw.png" alt="Article image"></p>
+<ol start="4">
+<li>Try to publish a product by clicking the button “Publish” but you will see that Richard is allowed</li>
+</ol>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*qS6GxZShhtZk35cTNiwOQw.png" alt="Article image"></p>
+<h3 id="use-case-3-access-to-the-store-for-managing-products-as-an-regular-user-peter">Use case 3: Access to the Store for managing products as an Regular User (Peter)</h3>
+<ul>
+<li>Access to the <a href="http://store:9090">Store web application</a> and proceed to login with Peter (peter / demo1234!) in Keycloak</li>
+</ul>
+<ol start="2">
+<li>
+<p>Keycloak will return the id_token and the access token to the application</p>
+</li>
+<li>
+<p>The store web application will try to the products show but the user is not allowed</p>
+</li>
+</ol>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*SAZj_rPddLXwpkE5kQP8QA.png" alt="Unauthorized Access for viewing product as Peter"></p>
+<p>All the use cases are available <a href="https://github.com/embesozzi/keycloak-openfga-workshop">here</a>.</p>
+<h2 id="conclusions">Conclusions</h2>
+<p>I hope you’ve enjoyed the article. In my opinion, this approach solves several problems in the modern applications which have evolved and this makes fine-grained authorization a critical element in software. As I described in the article, the API is still protected by OAuth 2.0, since it requires an access token for accessing it. But the complex authorization rules are implemented into OpenFGA.</p>
+<p>Another point to have in mind is that nowadays it is all about scalability, so decoupling the authorization part from Keycloak and delegating it to OpenFGA (which was designed JUST for handling authorization at scale) it’s a good path to follow. Another thing to bear in mind is that the direct integration between AM and OpenFGA simplifies the authorization architecture. With the use of the SDK in the extension, it provides the possibility to adapt the integration based on the authorization model.</p>
+<p>Finally, this authorization architecture can evolve in many different ways, for instance, adding new components acting as PEPs (Proxy, API Gateway, etc) working in conjunction or not with OPA (Open Policy Agent), etc. Taking these points into consideration, I will continue talking about how to improve this for sure</p>
+<p>Please stay connected to get the updates if you are interested in this topic !</p>
+<p>That’s all for this post!</p>
+<p>Thank you for reading. If you like it, then share it!</p>
+<h2 id="reference">Reference:</h2>
+<ul>
+<li>Workshop: <a href="https://github.com/embesozzi/keycloak-openfga-workshop">https://github.com/embesozzi/keycloak-openfga-workshop</a></li>
+<li>Keycloak OpenFGA Event Publisher (new): <a href="https://github.com/embesozzi/keycloak-openfga-event-listener">https://github.com/embesozzi/keycloak-openfga-event-</a>publisher</li>
+<li>Keycloak OpenFGA Event Kafka: <a href="https://github.com/embesozzi/keycloak-openfga-event-listener">https://github.com/embesozzi/keycloak-openfga-event-</a>kafka (this was used in the first version of the PoC if you want to integrate the AM and OpenFGA server through <a href="https://github.com/embesozzi/keycloak-openfga-workshop/tree/main/kafka-integration">Kafka</a>)</li>
+</ul> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/openfga/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> openfga </a> </li><li> <a href="/tags/api/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> api </a> </li><li> <a href="/tags/keycloak/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> keycloak </a> </li><li> <a href="/tags/authorization/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-4"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> authorization </a> </li><li> <a href="/tags/auth0/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> auth0 </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://embesozzi.github.io/posts/martin-besozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-sc/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://www.facebook.com/sharer.php?u=https://embesozzi.github.io/posts/martin-besozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-sc/" title="Share this post on Facebook" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M7 10v4h3v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3V3h-3a5 5 0 0 0-5 5v2z" /></svg><span class="sr-only">Share this post on Facebook</span> </a><a href="https://x.com/intent/post?url=https://embesozzi.github.io/posts/martin-besozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-sc/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://embesozzi.github.io/posts/martin-besozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-sc/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="https://pinterest.com/pin/create/button/?url=https://embesozzi.github.io/posts/martin-besozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-sc/" title="Share this post on Pinterest" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m8 20 4-9M10.7 14c.437 1.263 1.43 2 2.55 2 2.071 0 3.75-1.554 3.75-4a5 5 0 1 0-9.7 1.7" /><path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0" /></svg><span class="sr-only">Share this post on Pinterest</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://embesozzi.github.io/posts/martin-besozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-sc/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/martin-besozzi/keycloak-workshop-for-step-up-with-mfa-biometrics-authentication-passkeys-and-passwordle/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>Previous Post</span> <div class="text-accent/85 text-sm">Keycloak Workshop for Step Up with MFA Biometrics Authentication (Passkeys) and Passwordless experience with Passkey autofill</div> </div> </a> <a href="/posts/martin-besozzi/keycloak-step-up-and-multi-factor-authentication-mfa-for-web-apps-and-api/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>Next Post</span> <div class="text-accent/85 text-sm">Keycloak Step-Up and Multi-factor Authentication (MFA) for Web Apps and API</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-wide-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>   <script type="module">const r="theme",o="light",m="dark";function a(){const e=localStorage.getItem(r);return e||o}let t=window.__theme?.value??a();function l(){localStorage.setItem(r,t),c()}function c(){document.firstElementChild?.setAttribute("data-theme",t),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const e=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",e)}function u(){c(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===o?m:o,l()})}u();document.addEventListener("astro:after-swap",u);document.addEventListener("astro:before-swap",e=>{const n=document.querySelector("meta[name='theme-color']")?.getAttribute("content");n&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",n)});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>
