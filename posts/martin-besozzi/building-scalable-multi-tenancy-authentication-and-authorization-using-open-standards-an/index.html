@@ -1,0 +1,510 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://embesozzi.medium.com/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-and-7341fcd87b64"><meta name="generator" content="Astro v6.4.2"><!-- Fonts --><style>@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/2015c3ee75fce6cd.woff") format("woff"), url("/_astro/fonts/186e6385d7852012.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/20302367397c05fa.woff") format("woff"), url("/_astro/fonts/b08a78609a8a086b.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/bb754429c8057718.woff") format("woff"), url("/_astro/fonts/610b113b74c3265a.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/29e2519b5d70ba84.woff") format("woff"), url("/_astro/fonts/c341830447fbbd1e.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/be84b35bcfc349e9.woff") format("woff"), url("/_astro/fonts/d57ed212a535d863.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/9f194d9b0de98159.woff") format("woff"), url("/_astro/fonts/7b8bc1ccb887754d.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/fdb5d17a23b6aa6e.woff") format("woff"), url("/_astro/fonts/3be34b09d07b7f66.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/39c158497c7c5a90.woff") format("woff"), url("/_astro/fonts/6a646b2f24236261.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/45ae197ec2801a42.woff") format("woff"), url("/_astro/fonts/c3fd635c00a11802.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/8a2dc10ea0fb4488.woff") format("woff"), url("/_astro/fonts/2f812678838d3545.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}:root{--font-inter:Inter-938b6d9a5b97ad60,"Inter-938b6d9a5b97ad60 fallback: Arial",sans-serif;}</style><style>@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/6014e528f57806f3.woff") format("woff"), url("/_astro/fonts/75d17da681d49dc0.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/31ac3931b90bfe7a.woff") format("woff"), url("/_astro/fonts/66c8f2a9e4b334e5.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/cec8ae6b731972f8.woff") format("woff"), url("/_astro/fonts/a0534acacfcf0885.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/334b4db9de3a5fe4.woff") format("woff"), url("/_astro/fonts/cf39180873795e06.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/9bf5aa116af20a93.woff") format("woff"), url("/_astro/fonts/be45d86507988f6b.ttf") format("truetype");font-display:swap;font-weight:800;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/4c0b37f553ec06f9.woff") format("woff"), url("/_astro/fonts/b5e86eb0a6ececd3.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/fdda611a1e41f26f.woff") format("woff"), url("/_astro/fonts/5fa68f67a95fdc63.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/167823ee192baf0f.woff") format("woff"), url("/_astro/fonts/16c9148d715a9889.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/d005e41eec063bbe.woff") format("woff"), url("/_astro/fonts/4f409386f6ffef9a.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/c68a8c249f10e302.woff") format("woff"), url("/_astro/fonts/5eeef7238f758dc8.ttf") format("truetype");font-display:swap;font-weight:800;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}:root{--font-jakarta:"Plus Jakarta Sans-69ff88703f9ba026","Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial",sans-serif;}</style><!-- Primary meta --><title>Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software | Martin Besozzi</title><meta name="title" content="Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software | Martin Besozzi"><meta name="description" content="How to build scalable multi-tenancy authentication and authorization for B2B platforms using Keycloak Organizations, OpenFGA ReBAC, and Apache APISIX."><meta name="author" content="Martin Besozzi"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Martin Besozzi"><meta property="og:title" content="Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software | Martin Besozzi"><meta property="og:description" content="How to build scalable multi-tenancy authentication and authorization for B2B platforms using Keycloak Organizations, OpenFGA ReBAC, and Apache APISIX."><meta property="og:url" content="https://embesozzi.medium.com/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-and-7341fcd87b64"><meta property="og:image" content="https://cdn-images-1.medium.com/max/1024/1*qvVR-SzMkeZU6b7JrC5_gA.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://embesozzi.medium.com/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-and-7341fcd87b64"><meta property="twitter:title" content="Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software | Martin Besozzi"><meta property="twitter:description" content="How to build scalable multi-tenancy authentication and authorization for B2B platforms using Keycloak Organizations, OpenFGA ReBAC, and Apache APISIX."><meta property="twitter:image" content="https://cdn-images-1.medium.com/max/1024/1*qvVR-SzMkeZU6b7JrC5_gA.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Martin Besozzi" href="https://embesozzi.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2024-12-08T17:53:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software | Martin Besozzi","image":"https://cdn-images-1.medium.com/max/1024/1*qvVR-SzMkeZU6b7JrC5_gA.png","datePublished":"2024-12-08T17:53:00.000Z","author":[{"@type":"Person","name":"Martin Besozzi","url":"https://www.linkedin.com/in/embesozzi/"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const theme = stored ?? "light";
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BPFdHnW-.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: openfga; }@layer astro { ::view-transition-old(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(openfga) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: keycloak; }@layer astro { ::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: authentication; }@layer astro { ::view-transition-old(authentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(authentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(authentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(authentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-4"] { view-transition-name: authorization; }@layer astro { ::view-transition-old(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(authorization) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-5"] { view-transition-name: multi-tenant; }@layer astro { ::view-transition-old(multi-tenant) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(multi-tenant) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(multi-tenant) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(multi-tenant) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-wide-layout"> <!--  items-start  --> <div class="border-border flex justify-between border-b pt-5 pb-4 sm:pt-6 sm:pb-5"> <!-- Identity: avatar + name + role + small socials --> <div class="flex items-center gap-2"> <a href="/" class="flex items-center gap-3 focus-visible:no-underline"> <img src="https://avatars.githubusercontent.com/u/25515681?v=4" alt="Martin Besozzi" class="border-border hidden size-14 shrink-0 rounded-full border object-cover sm:block" width="56" height="56"> <div> <span class="font-heading text-xl font-bold whitespace-nowrap sm:text-2xl"> Martin Besozzi </span> <span class="text-muted-foreground hidden text-xs sm:block">
+AI Security Architect · IAM Architect · CTO · Founder
+</span> </div> </a> </div> <!-- Socials outside the <a> to avoid invalid nested anchors --> <div class="hidden sm:flex [&_a]:!p-0.5 [&_svg]:!size-4.5 [&_svg]:!scale-100"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </div> <!-- Right side: desktop nav + controls --> <div class="flex items-center gap-4"> <!-- Nav links — desktop only --> <ul class="hidden sm:flex sm:items-center sm:gap-5
+               [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:transition-colors [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> </ul> <!-- Controls: search + theme + mobile hamburger --> <div class="flex items-center gap-0.5"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-9 p-2">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-9 p-2" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> <!-- Hamburger: mobile only --> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> </div> </div> </div> <!-- Mobile nav dropdown --> <nav id="nav-menu" class="sm:hidden"> <ul id="menu-items" class="hidden grid-cols-1 gap-0.5 pb-3 pt-2
+             [&>li>a]:block [&>li>a]:py-2 [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> <li class="pt-1"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </li> </ul> </nav> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-and-open-source-software" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2024-12-08T17:53:00.000Z"> 8 Dec, 2024 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <blockquote>
+<p>This article was originally published on <a href="https://embesozzi.medium.com/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-and-7341fcd87b64">Medium</a>.</p>
+</blockquote>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*qvVR-SzMkeZU6b7JrC5_gA.png" alt="Multi-tenancy Mickey Cake"></p>
+<p>In today’s interconnected digital ecosystem, businesses are increasingly adopting multi-tenancy to serve multiple organizations (or tenants) using a single instance of an Identity and Access Management (IAM) platform. This architecture offers significant benefits, including scalability, cost efficiency, and flexibility, by allowing multiple organizations to coexist within the same infrastructure. However, this approach introduces unique challenges in ensuring that authentication and authorization mechanisms can meet the diverse needs of each tenant.</p>
+<p>Let’s start at the beginning. As an IAM Architect, throughout this article, I will address each problem by following open standards and using an open-source software (OSS). This article builds on the principles and ideas detailed in the articles linked below. Feel free to review them to grasp the core concepts.</p>
+<ul>
+<li><a href="https://medium.com/@embesozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a">Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC)</a></li>
+<li><a href="https://medium.com/@embesozzi/mastering-access-control-implementing-low-code-authorization-based-on-rebac-and-decoupling-pattern-f6f54f70115e">Mastering Access Control: Low-Code Authorization with ReBAC, Decoupling Patterns and Policy as Code</a></li>
+</ul>
+<p>Here is a high-level diagram showing how you can connect all the pieces in IAM landscape with the related standards and open-source solutions. Usually, my approach is <strong>standards-first</strong>, and then we move to the platform-specific.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*pXPlJE8lNF6mZMAiGK5fZg.png" alt="Article image"></p>
+<p>Let’s dive explain each bubble adding some references to the multi-tenancy scenario - I will not add to much detail of the point described in the previous articles.</p>
+<p>Everything is related to the <strong>identity</strong> therefore we start from there. Then, we move to the <strong>authentication</strong> stage, where we implements OpenID Connect standard. <strong>Keycloak</strong>, acting as an Identity Provider (IdP), will be responsible for handling authentication as well as the identity, organization, and permission model. In relation to the last point, Keycloak offers a new feature called the <strong>Organizations</strong> feature, which facilitates Business-to-Business (B2B) scenarios. Thanks to this feature, we are now using the Organization model to represent each tenant - more details are described in the next sections.</p>
+<p>In the <strong>authorization</strong> stage, we follow the specifications provided by the OpenID <a href="https://openid.net/wg/authzen/">AuthZEN</a> working group. This is why we describe the architecture using “P*P” components and externalize authorization through an API served by the Policy Decision Point (PDP). This component is implemented using <strong>OpenFGA</strong>, an advanced fine-grained authorization platform that supports Relationship-Based Access Control (ReBAC).</p>
+<p>ReBAC enables dynamic access decisions based on relationships, such as “User X is a member of Organization Y” or “User Z has the role Auditor and is a member of Organization B”. With Keycloak’s new organization model, OpenFGA now supports handling the relationship between users and organizations. All event synchronization behind the scenes is managed by the <a href="https://github.com/embesozzi/keycloak-openfga-event-publisher">Keycloak OpenFGA Event Publisher</a> extension - how it works was described in previous articles.</p>
+<p>Finally, by adopting a decoupled authorization architecture and implementing Policy as Code, we leverage <strong>Apache APISIX</strong> - a cloud-native, identity-aware API gateway integrated with OpenFGA - to enforce ReBAC policies at the API level using the <a href="https://github.com/embesozzi/apisix-authz-openfga">Authorization OpenFGA plugin</a>.</p>
+<p>Based on the points described above, let’s begin by outlining a multi-tenant scenario to apply these concepts, followed by the workshop.</p>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#use-case-payment-platform-payplus-b2b-multi-tenant-scenario">Use Case: Payment Platform PayPlus B2B (Multi-Tenant Scenario)</a>
+<ul>
+<li><a href="#business-requirements">Business Requirements</a></li>
+</ul>
+</li>
+<li><a href="#workshop-architecture-payment-platform-payplus-b2b">Workshop Architecture: Payment Platform PayPlus B2B</a>
+<ul>
+<li><a href="#keycloak-new-organization-feature">Keycloak: New Organization Feature</a></li>
+<li><a href="#keycloak-openfga-extension-new-support-for-synchronizing-the-organization-model">Keycloak OpenFGA Extension: New Support for Synchronizing the Organization Model</a></li>
+<li><a href="#apache-apisix-authorization-openfga-plugin-new-support-for-multiples-policies-with-condition">Apache APISIX Authorization OpenFGA plugin: New support for multiples policies with condition</a></li>
+<li><a href="#demo-app-new-payplus-multi-tenant-app">Demo App: New PayPlus Multi-tenant app</a></li>
+</ul>
+</li>
+<li><a href="#hands-on-workshop-payment-platform-payplus-b2b">Hands-on Workshop: Payment Platform PayPlus B2B</a>
+<ul>
+<li><a href="#use-case-access-payplus-as-account-manager-for-organization-a">Use Case: Access PayPlus as Account Manager for Organization A</a></li>
+</ul>
+</li>
+<li><a href="#conclusions">Conclusions</a>
+<ul>
+<li><a href="#reference">Reference</a></li>
+</ul>
+</li>
+</ul>
+<p></p></details><p></p>
+<h2 id="use-case-payment-platform-payplus-b2b-multi-tenant-scenario">Use Case: Payment Platform PayPlus B2B (Multi-Tenant Scenario)</h2>
+<h3 id="business-requirements">Business Requirements</h3>
+<p>Consider a payment platform, PayPlus, which processes transactions for multiple customers (businesses). Each customer has its own set of users (e.g., employees, finance teams, auditor) with distinct authentication and authorization requirements.</p>
+<p>In this scenario, each customer is represented as an organization within Keycloak. Within these organizations, users are assigned to global roles, which define their access to platform features.</p>
+<p>One of the goals is to explore how to protect multi-tenant APIs by leveraging organizational and permission model relationships in authorization policies. For the sake of this use case, we are going to expose the transaction API (GET /api/orgs/{orgId}/transactions). Access to this endpoint will require that only organization members with the global role Account Manager are allowed to view the information.</p>
+<p>The integration of Keycloak and OpenFGA creates a scalable, secure, and flexible authentication and authorization system that adapts to each customer’s needs while ensuring consistent access control. Additionally, the protection based on ReBAC authorization rules by the API Gateway integrated with OpenFGA simplifies the overall authorization process.</p>
+<p><strong>Considerations</strong>: At the time of writing this article, Keycloak’s Organization feature had just been released. As a result, many features are still on the <a href="https://github.com/keycloak/keycloak/issues/30180">roadmap</a> for future implementation, such as support for assigning authentication flows per organization and the ability to create a new permission model tied to organizations. Once these features are supported by Keycloak, I plan to further enhance the workshop. For now, my goal is to provide a general overview of the current state and future possibilities.</p>
+<h2 id="workshop-architecture-payment-platform-payplus-b2b">Workshop Architecture: Payment Platform PayPlus B2B</h2>
+<p><img src="https://cdn-images-1.medium.com/max/686/1*u-9QZirXC-AMqZTt9tT_3Q.png" alt="Workshop Architecture"></p>
+<p>To review the integration between components, you can refer to the previous articles. Below, I will introduce the new features that support this multi-tenancy scenario.</p>
+<h3 id="keycloak-new-organization-feature">Keycloak: New Organization Feature</h3>
+<p>Simplifying the idea here, Keycloak introduce the feature Organization, where a user can be member either by invitation link, through identity brokering (which means you can associate the organization domain to an external IdP) or manually by an administration.</p>
+<p>Therefore, the administrator can manage the identity lifecycle and authentication per organization. Another point to keep in mind is that authentication is identity-first, and you can have organization-specific claims.</p>
+<p>Well, let’s jump into our example scenario: we created two organizations to represent each tenant - Org A and Org B - and assigned demo users as members in the PayPlus realm.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*jLwP8-8TNSL95onz1nk5Hg.png" alt="Keycloak Organization Model"></p>
+<p>Here is the organization member visualization of the the demo user called paula.smith.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*1Wk5uHSumZPphAp8dnk2AQ.png" alt="Org A members"></p>
+<p>We created a global role for the account manager that is related to the permission view:transaction:any resulting in this model.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*5LdP6ovKogs0XroGj7QxnQ.png" alt="Workshop Model"></p>
+<p>The authorization model is synchronized in real-time from Keycloak to the OpenFGA ReBAC model.</p>
+<h3 id="keycloak-openfga-extension-new-support-for-synchronizing-the-organization-model">Keycloak OpenFGA Extension: New Support for Synchronizing the Organization Model</h3>
+<p>To support the Keycloak Organization model, we extended the Keycloak OpenFGA Event Publisher to handle organization events. Therefore, when you assign an organization to a user in Keycloak, this event is synchronized to the new OpenFGA model.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*1h8rmkHnJLNrfhGP" alt="New OpenFGA Model with Support for Organizations Introduced"></p>
+<h3 id="apache-apisix-authorization-openfga-plugin-new-support-for-multiples-policies-with-condition">Apache APISIX Authorization OpenFGA plugin: New support for multiples policies with condition</h3>
+<p>We added a feature to support multiple authorization requests with conditional criteria, such as AND or OR. As a result, we can expose APIs with more complex authorization policies, such as a user having a relation to a role and being a member of an organization.</p>
+<p>In this case, the transaction API implements the authorization policy declared in the business requirements - no further explanation is needed, as it is super easy to understand.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*_K-Guw5TmVfj3sY-bMaveg.png" alt="API Gateway with ReBAC Policies"></p>
+<h3 id="demo-app-new-payplus-multi-tenant-app">Demo App: New PayPlus Multi-tenant app</h3>
+<p>This is another lovely ❤️ web application showcasing the use cases. It is integrated with OIDC via the Keycloak platform and displays both identity information and organization details. Additionally, it consumes the transaction API exposed by the API gateway to support multi-tenancy scenarios.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1017/1*he20MKj6MNi9cXBElAOGzQ.png" alt="Article image"></p>
+<h2 id="hands-on-workshop-payment-platform-payplus-b2b">Hands-on Workshop: Payment Platform PayPlus B2B</h2>
+<p>The demo is available in the GitHub repo, which deploys all the components with just one click.</p>
+<ul>
+<li><a href="https://github.com/embesozzi/keycloak-openfga-multitenancy-workshop">https://github.com/embesozzi/keycloak-openfga-multitenancy-workshop</a></li>
+</ul>
+<h3 id="use-case-access-payplus-as-account-manager-for-organization-a">Use Case: Access PayPlus as Account Manager for Organization A</h3>
+<ul>
+<li>Access the Pay Plus platform with Paula (<a href="mailto:paula.smith@orga.com">paula.smith@orga.com</a>) into the Pay Plus platform and click in the login button.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1017/1*he20MKj6MNi9cXBElAOGzQ.png" alt="PayPlus demo app"></p>
+<ol start="2">
+<li>Login in using credentials for paula.smith in Keycloak in identity-first experience.</li>
+</ol>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*KUqAsB2AQKUR-3JEGviX3w.png" alt="Article image"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*duS1XWBYLdj-wR0TsMAqxA.png" alt="Article image"></p>
+<ol start="3">
+<li>Pay plus demo shows the transaction information for the organization A.</li>
+</ol>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*mccZdqdDwrJx7GKHBV9EZw.png" alt="PayPlus Transactions"></p>
+<p>Let’s dive into what happened behind the scenes</p>
+<ul>
+<li>In the step 1 , the application integrated with OIDC and requested the organization scope to retrieve the organization information.</li>
+<li>In the step 3, here are several points to consider. First, the application displayed the user’s organization based on the organization claim within the identity token.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/992/1*2EAPV3rUZQdiBcnUM8EL_w.png" alt="Article image"></p>
+<ul>
+<li>Next, the application made a request to list transactions for Organization A (GET /api/orgs/org-a/transactions). The authorization policy enforced by the API Gateway, as defined below, validated the access token and checked that the user belongs to org-a and has the view:transaction:any permission using the OpenFGA platform.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/976/1*O-2cl-KhVIWb7sd6tKZonQ.png" alt="Authorization Policy"></p>
+<p>As you can see, the user is allowed because, in the OpenFGA authorization model detailed in the workshop below, Paula (sub claim value) is assigned to the account-manager role, which has the parent relation with the view:transaction:any permission, and she is a member of the Organization org-a. All of this model was synchronized from Keycloak to OpenFGA thanks to the custom extension ❤️.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*ZIYlvdxw95akiWB5zyUIOg.png" alt="OpenFGA Workshop model"></p>
+<h2 id="conclusions">Conclusions</h2>
+<p>Everything becomes easier when you follow open standards. You’ll achieve <strong>interoperability</strong>, avoid <strong>vendor lock-in</strong>, and, most importantly, <strong>not reinvent the wheel.</strong></p>
+<p>By leveraging <strong>open-source software</strong> (OSS)** <strong>such as <strong>Keycloak</strong>, <strong>OpenFGA</strong>, and <strong>Apache APISIX</strong>, along with the <a href="https://github.com/embesozzi/keycloak-openfga-event-publisher">Keycloak OpenFGA Event Publisher</a> extension and <a href="https://github.com/embesozzi/apisix-authz-openfga">Authorization OpenFGA plugin</a></strong> **we’ve developed and maintained, you gain several benefits:</p>
+<ul>
+<li><strong>Transparency and flexibility</strong>: You can inspect the code and ensure it meets your security and business requirements.</li>
+<li><strong>Community support</strong>: Active communities contribute improvements, fixes, and new features.</li>
+<li><strong>Cost efficiency</strong>: Avoid expensive vendor licenses and reduce the total cost of ownership.</li>
+</ul>
+<p>Lastly, as an Identity and Access Management Architect, I believe this is a straightforward approach for addressing a complex scenario like multi-tenancy, guided by a standards-first mindset, open-source software (OSS), and the KISS (Keep It Simple, Stupid) principle.</p>
+<p>By using modern standards and technologies described in this article, we can achieve:</p>
+<ul>
+<li><strong>Delegation of authentication</strong> to the Identity Provider: <strong>Keycloak.</strong></li>
+<li><strong>Delegation of fine-grained authorization</strong> to the OpenFGA platform.</li>
+<li><strong>Decoupling of authorization logic</strong> through the API Gateway**:** Apache APISIX).</li>
+</ul>
+<p>This makes the IAM and authorization landscape more flexible, scalable, and <strong>maintainable</strong>.</p>
+<p>Stay connected.</p>
+<p>That’s all for this post!</p>
+<p>Thank you for reading. If you like it, then share it!</p>
+<h3 id="reference">Reference</h3>
+<ul>
+<li>Github Multi-tenancy Workshop: <a href="https://github.com/embesozzi/keycloak-openfga-multitenancy-workshop">https://github.com/embesozzi/keycloak-openfga-multitenancy-workshop</a></li>
+<li>Keycloak Extension: <a href="https://github.com/embesozzi/keycloak-openfga-event-publisher">Keycloak OpenFGA Event Publisher</a> - new version soon.</li>
+<li>Apache APISIX plugin: <a href="https://github.com/embesozzi/apisix-authz-openfga">Authorization OpenFGA</a> - new version soon.</li>
+<li>Previous Article: <a href="https://medium.com/@embesozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a">Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC)</a></li>
+<li>Previous Article: <a href="https://medium.com/@embesozzi/mastering-access-control-implementing-low-code-authorization-based-on-rebac-and-decoupling-pattern-f6f54f70115e">Mastering Access Control: Low-Code Authorization with ReBAC, Decoupling Patterns and Policy as Code</a></li>
+</ul> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/openfga/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> openfga </a> </li><li> <a href="/tags/keycloak/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> keycloak </a> </li><li> <a href="/tags/authentication/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> authentication </a> </li><li> <a href="/tags/authorization/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-4"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> authorization </a> </li><li> <a href="/tags/multi-tenant/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> multi-tenant </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://embesozzi.github.io/posts/martin-besozzi/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-an/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://x.com/intent/post?url=https://embesozzi.github.io/posts/martin-besozzi/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-an/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://embesozzi.github.io/posts/martin-besozzi/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-an/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://embesozzi.github.io/posts/martin-besozzi/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-an/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/martin-besozzi/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-with-keycloak-mcp/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>Previous Post</span> <div class="text-accent/85 text-sm">Agentic AI Platform for Enterprise IAM: Secure Agent-Driven Governance with Keycloak MCP, Based on Zero-Trust Principles and Fine-Grained Authorization - From Vision to Implementation</div> </div> </a> <a href="/posts/martin-besozzi/deep-dive-into-enhancing-user-experience-with-native-authentication-oauth-2-0-for-first/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>Next Post</span> <div class="text-accent/85 text-sm">Deep Dive into Enhancing User Experience with Native Authentication (OAuth 2.0 for First-Party Apps) and Passkeys in Keycloak</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-wide-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>  <script type="module">
+    async function renderMermaid() {
+      const elements = document.querySelectorAll("div.mermaid");
+      if (!elements.length) return;
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      const { default: mermaid } = await import(
+        "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+      );
+
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" });
+
+      for (const el of elements) {
+        const code = el.textContent ?? "";
+        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
+        try {
+          const { svg } = await mermaid.render(id, code);
+          el.innerHTML = svg;
+        } catch (e) {
+          console.error("Mermaid render error:", e);
+        }
+      }
+    }
+
+    document.addEventListener("astro:page-load", renderMermaid);
+  </script>  <script type="module">const r="theme",o="light",m="dark";function a(){const e=localStorage.getItem(r);return e||o}let t=window.__theme?.value??a();function l(){localStorage.setItem(r,t),c()}function c(){document.firstElementChild?.setAttribute("data-theme",t),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const e=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",e)}function u(){c(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===o?m:o,l()})}u();document.addEventListener("astro:after-swap",u);document.addEventListener("astro:before-swap",e=>{const n=document.querySelector("meta[name='theme-color']")?.getAttribute("content");n&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",n)});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>

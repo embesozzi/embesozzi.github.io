@@ -1,0 +1,618 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://embesozzi.medium.com/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-based-on-zero-trust-289a52f42790"><meta name="generator" content="Astro v6.4.2"><!-- Fonts --><style>@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/2015c3ee75fce6cd.woff") format("woff"), url("/_astro/fonts/186e6385d7852012.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/20302367397c05fa.woff") format("woff"), url("/_astro/fonts/b08a78609a8a086b.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/bb754429c8057718.woff") format("woff"), url("/_astro/fonts/610b113b74c3265a.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/29e2519b5d70ba84.woff") format("woff"), url("/_astro/fonts/c341830447fbbd1e.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/be84b35bcfc349e9.woff") format("woff"), url("/_astro/fonts/d57ed212a535d863.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/9f194d9b0de98159.woff") format("woff"), url("/_astro/fonts/7b8bc1ccb887754d.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/fdb5d17a23b6aa6e.woff") format("woff"), url("/_astro/fonts/3be34b09d07b7f66.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/39c158497c7c5a90.woff") format("woff"), url("/_astro/fonts/6a646b2f24236261.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/45ae197ec2801a42.woff") format("woff"), url("/_astro/fonts/c3fd635c00a11802.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/8a2dc10ea0fb4488.woff") format("woff"), url("/_astro/fonts/2f812678838d3545.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}:root{--font-inter:Inter-938b6d9a5b97ad60,"Inter-938b6d9a5b97ad60 fallback: Arial",sans-serif;}</style><style>@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/6014e528f57806f3.woff") format("woff"), url("/_astro/fonts/75d17da681d49dc0.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/31ac3931b90bfe7a.woff") format("woff"), url("/_astro/fonts/66c8f2a9e4b334e5.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/cec8ae6b731972f8.woff") format("woff"), url("/_astro/fonts/a0534acacfcf0885.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/334b4db9de3a5fe4.woff") format("woff"), url("/_astro/fonts/cf39180873795e06.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/9bf5aa116af20a93.woff") format("woff"), url("/_astro/fonts/be45d86507988f6b.ttf") format("truetype");font-display:swap;font-weight:800;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/4c0b37f553ec06f9.woff") format("woff"), url("/_astro/fonts/b5e86eb0a6ececd3.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/fdda611a1e41f26f.woff") format("woff"), url("/_astro/fonts/5fa68f67a95fdc63.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/167823ee192baf0f.woff") format("woff"), url("/_astro/fonts/16c9148d715a9889.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/d005e41eec063bbe.woff") format("woff"), url("/_astro/fonts/4f409386f6ffef9a.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/c68a8c249f10e302.woff") format("woff"), url("/_astro/fonts/5eeef7238f758dc8.ttf") format("truetype");font-display:swap;font-weight:800;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}:root{--font-jakarta:"Plus Jakarta Sans-69ff88703f9ba026","Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial",sans-serif;}</style><!-- Primary meta --><title>Agentic AI Platform for Enterprise IAM: Secure Agent-Driven Governance with Keycloak MCP, Based on Zero-Trust Principles and Fine-Grained Authorization - From Vision to Implementation | Martin Besozzi</title><meta name="title" content="Agentic AI Platform for Enterprise IAM: Secure Agent-Driven Governance with Keycloak MCP, Based on Zero-Trust Principles and Fine-Grained Authorization - From Vision to Implementation | Martin Besozzi"><meta name="description" content="A comprehensive guide to building a secure enterprise IAM platform with Keycloak MCP, AuthZEN, and AI agents — covering architecture, open standards, and real-world implementation."><meta name="author" content="Martin Besozzi"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Martin Besozzi"><meta property="og:title" content="Agentic AI Platform for Enterprise IAM: Secure Agent-Driven Governance with Keycloak MCP, Based on Zero-Trust Principles and Fine-Grained Authorization - From Vision to Implementation | Martin Besozzi"><meta property="og:description" content="A comprehensive guide to building a secure enterprise IAM platform with Keycloak MCP, AuthZEN, and AI agents — covering architecture, open standards, and real-world implementation."><meta property="og:url" content="https://embesozzi.medium.com/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-based-on-zero-trust-289a52f42790"><meta property="og:image" content="https://cdn-images-1.medium.com/max/1024/1*UzJTq54_-Ku3UpK49VH6MQ.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://embesozzi.medium.com/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-based-on-zero-trust-289a52f42790"><meta property="twitter:title" content="Agentic AI Platform for Enterprise IAM: Secure Agent-Driven Governance with Keycloak MCP, Based on Zero-Trust Principles and Fine-Grained Authorization - From Vision to Implementation | Martin Besozzi"><meta property="twitter:description" content="A comprehensive guide to building a secure enterprise IAM platform with Keycloak MCP, AuthZEN, and AI agents — covering architecture, open standards, and real-world implementation."><meta property="twitter:image" content="https://cdn-images-1.medium.com/max/1024/1*UzJTq54_-Ku3UpK49VH6MQ.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Martin Besozzi" href="https://embesozzi.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2025-06-07T21:13:36.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Agentic AI Platform for Enterprise IAM: Secure Agent-Driven Governance with Keycloak MCP, Based on Zero-Trust Principles and Fine-Grained Authorization - From Vision to Implementation | Martin Besozzi","image":"https://cdn-images-1.medium.com/max/1024/1*UzJTq54_-Ku3UpK49VH6MQ.png","datePublished":"2025-06-07T21:13:36.000Z","author":[{"@type":"Person","name":"Martin Besozzi","url":"https://www.linkedin.com/in/embesozzi/"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const theme = stored ?? "light";
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BPFdHnW-.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: keycloak; }@layer astro { ::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: agentic-ai; }@layer astro { ::view-transition-old(agentic-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(agentic-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(agentic-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(agentic-ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: mcp-server; }@layer astro { ::view-transition-old(mcp-server) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(mcp-server) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(mcp-server) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(mcp-server) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-4"] { view-transition-name: ai; }@layer astro { ::view-transition-old(ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(ai) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-5"] { view-transition-name: ai-agent; }@layer astro { ::view-transition-old(ai-agent) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(ai-agent) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(ai-agent) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(ai-agent) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-wide-layout"> <!--  items-start  --> <div class="border-border flex justify-between border-b pt-5 pb-4 sm:pt-6 sm:pb-5"> <!-- Identity: avatar + name + role + small socials --> <div class="flex items-center gap-2"> <a href="/" class="flex items-center gap-3 focus-visible:no-underline"> <img src="https://avatars.githubusercontent.com/u/25515681?v=4" alt="Martin Besozzi" class="border-border hidden size-14 shrink-0 rounded-full border object-cover sm:block" width="56" height="56"> <div> <span class="font-heading text-xl font-bold whitespace-nowrap sm:text-2xl"> Martin Besozzi </span> <span class="text-muted-foreground hidden text-xs sm:block">
+AI Security Architect · IAM Architect · CTO · Founder
+</span> </div> </a> </div> <!-- Socials outside the <a> to avoid invalid nested anchors --> <div class="hidden sm:flex [&_a]:!p-0.5 [&_svg]:!size-4.5 [&_svg]:!scale-100"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </div> <!-- Right side: desktop nav + controls --> <div class="flex items-center gap-4"> <!-- Nav links — desktop only --> <ul class="hidden sm:flex sm:items-center sm:gap-5
+               [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:transition-colors [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> </ul> <!-- Controls: search + theme + mobile hamburger --> <div class="flex items-center gap-0.5"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-9 p-2">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-9 p-2" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> <!-- Hamburger: mobile only --> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> </div> </div> </div> <!-- Mobile nav dropdown --> <nav id="nav-menu" class="sm:hidden"> <ul id="menu-items" class="hidden grid-cols-1 gap-0.5 pb-3 pt-2
+             [&>li>a]:block [&>li>a]:py-2 [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> <li class="pt-1"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </li> </ul> </nav> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-with-keycloak-mcp-based-on-zero-trust-principles-and-fine-grained-authorization-from-vision-to-implementation" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Agentic AI Platform for Enterprise IAM: Secure Agent-Driven Governance with Keycloak MCP, Based on Zero-Trust Principles and Fine-Grained Authorization - From Vision to Implementation </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2025-06-07T21:13:36.000Z"> 7 Jun, 2025 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <blockquote>
+<p>This article was originally published on <a href="https://embesozzi.medium.com/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-based-on-zero-trust-289a52f42790">Medium</a>.</p>
+</blockquote>
+<p>The advent of Agentic AI platforms marks a significant leap in enterprise automation and intelligence. These platforms leverage AI Agents - software systems that use Artificial Intelligence (AI) to pursue goals and complete actions on behalf of users. At their core, these agents utilize large language models (LLMs) as reasoning engines. The ability of AI Agents to dynamically access and execute external tools and resources is facilitated thanks to the Model Context Protocol (MCP), an open protocol that enables AI Agents to interact with and access external tools and resources. While incredibly powerful, this capability also introduces new and complex security risks.</p>
+<p>At <a href="https://twogenidentity.com">TwoGenIdentity</a>, our journey began with an interactive AI Agent scenario - an exploration of how agents can act on behalf of users in enterprise environments. We then introduced our broader vision: the Agentic AI Platform, combining identity, security, and open standards.</p>
+<p>Now, we bring it all together to showcase how our <a href="https://twogenidentity.com/homes/identityaccessplus">Agentic AI Identity Access Plus Platform</a>, powered by the Oryon Agent, enables real-world implementations that follow open standards, enforce robust security, and elevate the user experience. This isn’t just theory -it’s a fully operational solution designed to address the growing complexity of enterprise Identity and Access Management (IAM).</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*UzJTq54_-Ku3UpK49VH6MQ.png" alt="Agent AI Identity Access Plus | Oryon AI Agent"></p>
+<p>In this scenario, the AI agent is integrated with our <a href="https://twogenidentity.com/homes/mcp/">Keycloak MCP Server</a>, enabling it to take secure actions within the IAM platform. This is made possible by our MCP server’s support for open standards and fine-grained authorization policies. With this integration, you can govern your IAM platform simply by chatting with the agent. We’ll cover more details about the Keycloak MCP Server in a separate article.</p>
+<p>What makes our approach innovative is the agent’s ability to orchestrate IAM processes, enforce dynamic authorization policies in real time, and control the authentication flow - what we call the OAuth Ceremony to strengthen security during critical operations. By integrating native passkey support and step-up authentication, we create a seamless and secure experience for users, all while maintaining full alignment with enterprise IAM standards and open protocols.</p>
+<p>In my view, we often overcomplicate things by introducing too many new concepts and complex standards - ones that may work well in theory but are difficult to implement in practice. That said, such standards can be valuable in complex scenarios, as long as we clearly define those scenarios. My approach is to keep things as simple as possible when the context allows. In this article, we shift from theory to practice in an enterprise context. We’ll demonstrate how open standards can be effectively used to build a secure Agentic AI architecture.</p>
+<p>While we use our own platform in the demonstration, the core concepts are transferable and can be applied to your own AI framework as well.</p>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#beyond-vision-what-we-want-to-enhance">Beyond Vision: What We Want to Enhance</a></li>
+<li><a href="#understanding-the-agentic-ai-ecosystem-in-the-mcp-scenario-the-theory">Understanding the Agentic AI Ecosystem in the MCP scenario (The Theory)</a></li>
+<li><a href="#our-iam-enterprise-scenario-interactive-ai-agent-in-a-single-trust-domain">Our IAM Enterprise Scenario: Interactive AI Agent in a Single-Trust Domain</a></li>
+<li><a href="#agentic-ai-identity-access-plus-platform-elevating-enterprise-security-through-innovation">Agentic AI Identity Access Plus Platform: Elevating Enterprise Security Through Innovation</a>
+<ul>
+<li><a href="#agentic-ai-identity-access-plus-platform">Agentic AI Identity Access Plus Platform</a></li>
+<li><a href="#ai-agent-oryon">AI Agent (Oryon)</a></li>
+<li><a href="#iam-keycloak-mcp-server-integration">IAM Keycloak MCP Server Integration</a></li>
+<li><a href="#keycloak-authentication--authorization-extensions">Keycloak Authentication / Authorization Extensions</a></li>
+</ul>
+</li>
+<li><a href="#simplified-agentic-ai-flow">Simplified Agentic AI Flow</a></li>
+<li><a href="#deep-dive-distributed-access-control-across-in-agentic-ai-components">Deep Dive: Distributed Access Control Across in Agentic AI Components</a>
+<ul>
+<li><a href="#access-control-architecture-overview">Access Control Architecture Overview</a></li>
+<li><a href="#diagram-walkthrough-applying-access-controls-in-practice">Diagram Walkthrough: Applying Access Controls in Practice</a></li>
+<li><a href="#agentic-ai-platform-built-on-open-standards">Agentic AI Platform: Built on Open Standards</a></li>
+</ul>
+</li>
+<li><a href="#showcasing-the-agentic-ai-identity-access-plus-platform">Showcasing the Agentic AI Identity Access Plus Platform</a></li>
+<li><a href="#wrapping-up-from-vision-to-execution">Wrapping Up: From Vision to Execution</a></li>
+<li><a href="#references">References</a>
+<ul>
+<li><a href="#articles">Articles</a></li>
+<li><a href="#conferences">Conferences</a></li>
+</ul>
+</li>
+</ul>
+<p></p></details><p></p>
+<h2 id="beyond-vision-what-we-want-to-enhance">Beyond Vision: What We Want to Enhance</h2>
+<p>Building an AI-driven platform for enterprise use is not just about having a powerful agent or just talking about MCP - it’s about doing it right: securely, scalably, and in alignment with existing enterprise policies and standards. To provide a complete picture, we implement all the AI components, ensuring we have the tools to apply access control at every step of the AI journey.</p>
+<p>Our implementation focuses on:</p>
+<ul>
+<li>Adhering to open standards such as OAuth 2.0 and OpenID Connect.</li>
+<li>Enabling dynamic, real-time authorization.</li>
+<li>Following OpenID AuthZen Guidelines for decoupling authorization and policy as code.</li>
+<li>Enforcing fine-grained policies based Relationship-Based Access Control (ReBAC).</li>
+</ul>
+<p>Innovations introduced through <a href="https://twogenidentity.com/">TwoGenIdentity</a> AI and IAM components include:</p>
+<ul>
+<li>Oryon, our AI agent, operates within an agentic framework to orchestrate authentication and dynamic authorization flows, delivering enhanced security and user experience through native authentication with passkeys. This approach leverages API-based authentication based on OAuth 2.0 for First-Party Applications, where the application controls the login experience and dynamically requests higher levels of assurance using information from the Identity Provider.</li>
+<li>Implement and enforce security at multiple stages of the AI journey using multiple Policy Enforcement Points (PEPs) across different layers of the AI ecosystem. Adopt a Zero-Trust-Ready Architecture that supports identity-centric Zero Trust principles, including continuous verification, least-privilege access, and adaptive security.</li>
+</ul>
+<p>Some of the topics - such as decoupling authorization and policy as code, Fine-Grained Authorization (FGA), and native authentication with passkeys - are subjects I’ve covered in conferences and written about. If you’d like to learn more, you’ll find references at the end of this article.</p>
+<h2 id="understanding-the-agentic-ai-ecosystem-in-the-mcp-scenario-the-theory">Understanding the Agentic AI Ecosystem in the MCP scenario (The Theory)</h2>
+<p><img src="https://cdn-images-1.medium.com/max/840/1*2CDHEw-WfLHvp9cpmIejvA.png" alt="MCP Architecture"></p>
+<p>To securely expose your Agentic AI ecosystem, it’s essential to have a clear understanding of all the components involved. In an Agentic Platform focused on implementing MCP, you typically have the following elements - I’m not going into the details, as there is already a lot of information available on this topic:</p>
+<ul>
+<li>The end user who interacts with the Agentic AI Platform (MCP Host) and the AI Agent.</li>
+<li>MCP Host: The local execution environment where the AI Agent operates and interacts with the AI model and the MCP server.</li>
+<li>AI Agent: The software agent that orchestrates actions, decides when to use tools, and manages conversations or workflows based on context.</li>
+<li>AI Model: the language model instance used for generating responses or processing user input.</li>
+<li>MCP Client (Remote): A module within the MCP Host that connects to a remote MCP Server. It fetches tools, resources, and prompts defined remotely for dynamic use.</li>
+<li>LLM Service: An external service providing access to large language models (LLMs). The AI Model communicates with this service to generate text-based responses.</li>
+<li>MCP Server: The remote service that stores and manages tools, resources, and prompts used by the AI Agent.It acts as a backend to extend the agent’s capabilities.</li>
+<li>MCP: is an open protocol that standardizes how applications provide context to LLMs.</li>
+<li>API: The interface used by the MCP Server to access data sources and resources - such as databases, knowledge graphs, or RESTful services.</li>
+</ul>
+<p>Before jumping into our scenario, it’s worth noting that the MCP Base Protocol now includes an Authorization section that recommends using OAuth 2.1. This provides a solid foundation to build upon. As a result, you’ll encounter several technical concepts related to the OAuth 2.1 standard.</p>
+<p>Here is a great <a href="https://aaronparecki.com/2025/04/03/15/oauth-for-model-context-protocol">article</a> by <a href="https://www.linkedin.com/in/aaronparecki/">Aaron Parecki</a> that clarifies the roles of the OAuth 2.0 Authorization Server and Resource Server in the MCP scenario, which will be used as a pillar here. So, check it out if those roles aren’t clear to you.</p>
+<p>Just to provide a bit of context before we continue, OAuth is an access delegation standard that enables an application (such as a service or agent, in our case) to securely obtain temporary permission to access a user’s resources without the user needing to share their actual credentials. After successful authentication, the Identity Provider issues a temporary access token to the application, allowing it to act on the user’s behalf securely and within a limited scope.</p>
+<h2 id="our-iam-enterprise-scenario-interactive-ai-agent-in-a-single-trust-domain">Our IAM Enterprise Scenario: Interactive AI Agent in a Single-Trust Domain</h2>
+<p>In the broad landscape of AI agents, many different scenarios exist. We specifically focus on one critical enterprise scenario: the interactive AI agent acting on behalf of the user to execute operations using enterprise tools, all within a single-trust domain in a first-party context. This means the enterprise retains full control over all AI components.</p>
+<p>This particular scenario addresses key enterprise requirements and concerns:</p>
+<ul>
+<li>No Dependency on third-party MCP Hosts or AI Agents: In some cases Enterprises do not want to rely on third-party MCP Hosts such as Claude, Cursor, or VS Code Copilot, especially those using fixed bearer tokens or static authorization. Instead, they want to deploy and manage their own Agents and MCP servers within their enterprise environment or private cloud.</li>
+<li>Integration with Enterprise Identity Providers (IdPs): MCP servers and AI agents must integrate seamlessly with the enterprise’s existing Identity Provider (e.g., Keycloak, Azure AD, Okta) using open standards like OAuth 2.0 or OIDC. This ensures that authentication and authorization flows are consistent with corporate security policies.</li>
+<li>Full Control Over Agents and LLMs: Enterprises demand complete control over which AI agents and LLM models are deployed, updated, and used.</li>
+<li>Add Layers of Fine-Grained Authorization (FGA) and dynamic authorization policies at multiple points.</li>
+</ul>
+<p>To provide further clarity for this case, we will outline some key premises relevant to this specific scenario. While many scenarios exist, these premises are crucial for real-world implementation, as we will guide you on a case-by-case basis. We will also introduce some technical aspects, which we will explain in more detail later</p>
+<p>a) First-Party Scenario within a Single Trust Domain: The enterprise controls and owns the MCP Host, Agent, MCPs, and Identity Provider. This classification approach was introduced by <a href="https://www.linkedin.com/in/gffletch">George Fletcher</a>, along with other members, during discussions of AI topics in the context of <a href="https://idpro.org/">IDPro</a>. If you want to know more about the delegation scenario, you MUST follow him, as he often publishes interesting articles about it.</p>
+<p>b) Single Agent, Single MCP Server: To simplify this case we have a single Agent that initializes the MCP Client, which communicates with one MCP Server, all operating within the same trust domain.</p>
+<p>c) Interactive AI Agent acting on behalf of a User: The interactive AI Agent acts on behalf of a user. In an access delegation scenario, OAuth 2.0 will be instrumental, as its fundamental purpose is to facilitate access delegation, and we can leverage scopes for granular access control. The MCP Base Protocol now includes an Authorization section that specifically recommends OAuth 2.1, thereby providing a robust foundation for this.</p>
+<p>f) AI Agent manages the authentication ceremony (OAuth 2.0 flow) in coordination with the Agentic AI Portal, to handle dynamic authorization. Identity Propagation via digital tokens is crucial for a secure and efficient interaction. It ensures that once you’ve successfully authenticated and authorized your access, your identity and granted permissions seamlessly follow your requests across the system. This not only verifies who you are to the MCP Server but also enforces exactly what you’re allowed to do.</p>
+<p>What we leave behind:</p>
+<ul>
+<li>This is explicitly not an agent-to-agent (A2A) scenario; we are dealing with a single Agent and a single MCP Server within one trust domain.</li>
+<li>There is only one Identity Provider (IdP) involved; we avoid multi-IdP complexity.</li>
+<li>We aim to avoid unnecessary architectural complexity and minimize the number of calls within the AI flow - no 100+ round trips! The goal is to keep things as simple and efficient as possible.</li>
+</ul>
+<p>Once we’ve explained the basics of this case, we can use the same framework to extend it to other scenarios as well.</p>
+<h2 id="agentic-ai-identity-access-plus-platform-elevating-enterprise-security-through-innovation">Agentic AI Identity Access Plus Platform: Elevating Enterprise Security Through Innovation</h2>
+<p>Our Agentic AI Identity Access Plus Platform directly addresses these pain points by offering a unified, intelligent, and highly secure environment for your enterprise applications and AI agents. We demonstrate a real-world implementation of how we securely approach this, focusing on an interactive AI Agent in a single-domain first-party scenario where the enterprise maintains full control over all AI components.</p>
+<p>Here’s how we transform the current scenario:</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*NNR58_fqAtSbPOKWF2-fQQ.png" alt="Agentic AI Identity Access Plus Platform Diagram"></p>
+<h3 id="agentic-ai-identity-access-plus-platform">Agentic AI Identity Access Plus Platform</h3>
+<p>The Agentic AI Identity Access Plus Platform is an enterprise-grade solution built on a robust foundation, offering complete control over AI agents. This unified platform addresses all your identity needs - streamlining operations, maximizing revenue, and enhancing security with AI-powered agents. It delivers advanced Identity Governance and Administration (IGA) capabilities through our intelligent AI Agent.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*9FpIfQ9EI5NaHtVz" alt="Agentic AI Identity Access Plus Platform | TwoGenIdentity"></p>
+<h3 id="ai-agent-oryon">AI Agent (Oryon)</h3>
+<p>At the heart of our platform is our proprietary Oryon AI Agent, which intelligently orchestrates security policies and understands the security policies. Oryon is fully integrated with the Keycloak MCP Server, enabling natural language interaction with Keycloak through secure protocols like OAuth 2.0 and the Model Context Protocol (MCP). This proactive intelligence is crucial for maintaining a strong security posture in dynamic enterprise environments.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*z1cGGqzbl1vuGATssu2ORA.png" alt="Oryon Agent connect with Keycloak MCP"></p>
+<p>As shown below, Oryon is able to detect interactive OAuth error responses from the MCP server to trigger additional actions -such as step-up authentication or just-in-time authorization step - to enforce dynamic authorization.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*b5uec6qclI1H9eeTjVF3DQ.png" alt="Oryon Agent Conversation Ceremony"></p>
+<h3 id="iam-keycloak-mcp-server-integration">IAM Keycloak MCP Server Integration</h3>
+<p>In our scenario, we use the <a href="https://twogenidentity.com/">TwoGenIdentity</a>** Keycloak MCP Server **as a reference implementation, but the approach can be extended to other MCP servers as well. Keycloak is an open-source identity and access management solution, and thanks to the MCP standard, we are exposing the tools for managing and monitoring the platform to the Agent.</p>
+<p>The MCP Server enforces access control rules for features such as step-up authentication and supports integration with <a href="https://openfga.dev/">OpenFGA</a> to enable fine-grained authorization (FGA) and enhance security through Relationship-Based Access Control (ReBAC) policies.</p>
+<p>It also includes support for approximately 31 Keycloak tools, spanning key areas like User, Client, Authentication Flows, Roles, Groups, Organizations, Events, and Cache Management, and we continue to evolve it. We thank to <a href="https://www.linkedin.com/in/osorionicolas95/">Nicolas Osorio</a> for participating in the evolution of this component.</p>
+<h3 id="keycloak-authentication--authorization-extensions">Keycloak Authentication / Authorization Extensions</h3>
+<p>At <a href="https://twogenidentity.com/">TwoGenIdentity</a>, we developed and maintained custom extensions (SPI ) to extend capabilities to the Keycloak platform to enhance both security and user experience (UX) by adopting the latest open standards, including Native Authentication with Passkeys. We also provide the OpenFGA Event Publisher Keycloak extension, which synchronizes authorization-relevant data between Keycloak and OpenFGA models -enabling seamless integration for the Fine-Grained Authorization (FGA) step.</p>
+<h2 id="simplified-agentic-ai-flow">Simplified Agentic AI Flow</h2>
+<ul>
+<li>User Authentication (User → Agentic AI Portal): The user logs in to the Agentic AI Portal (MCP Host) via OpenID Connect (OIDC).</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*_3ir8eXDq8El8eAo" alt="Agentic AI Identity Access Plus Login | TwoGenIdentity"></p>
+<ul>
+<li>During this process, the user gives consent for certain tools or capabilities to be accessed on their behalf by an Agent [AC1].</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*J73w4Vvet1Yui9977Xu6Zw.png" alt="Article image"></p>
+<ol start="2">
+<li>User to Agentic AI Portal (Agentic AI Portal → Agent API): Opens an AI Agent and requests an action based on the available tools.</li>
+</ol>
+<ul>
+<li>The Agentic AI Portal communicates with an Agent using an OAuth 2.0 access token, treating the Agent API as a OAuth 2.0 Resource Server.</li>
+<li>In this step we are applying access control based scoped and filtering the tools more the details in the next steps [AC2].</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*4dImMSiUnGmkmtz3" alt="Oryon Agent Chat | TwoGenIdentity"></p>
+<ol start="3">
+<li>Oryon Agent to MCP Server (MCP Client → MCP Server): The Agent initializes the MCP Client with an access token to call the MCP Server.</li>
+</ol>
+<ul>
+<li>The MCP Server acts as an OAuth 2.0 Resource Server that exposes the tools the Agent needs.</li>
+<li>Access token validation includes checking the required scope or identity claim for the tool to be executed [AC3].</li>
+<li>In this case, we can apply step-up or just-in-time authentication for executing critical tools if an interactive OAuth response is present [AC4]. See the diagrams below.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*IdBLcEhqB6nkuy1DzOEZIg.png" alt="AI Agent Step-Up or JIT Authorization Ceremony"></p>
+<ul>
+<li>[A] User: Human prompt related to tools execution</li>
+<li>[B] Agent: LLM prompt resolution and tool (MCP) selection</li>
+<li>[C] Agent (MCP client): Sends an MCP request for the specified tool</li>
+<li>[D] MCP Server: Returns an OAuth step-up response when the required authentication level is not met.</li>
+<li>[E] Agent: Detects when an interactive OAuth response is present and triggers an interruption to request step-up authentication.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*6jbTVVD8T_kUSAPb" alt="Oryon AI Agent"></p>
+<ul>
+<li>[F] Agentic AI Portal: The OAuth ceremony is initiated by the Agentic AI Portal (MCP Host) thanks to the information of the AI Agent. This is why we are able to secure the process while at the same time enhancing the user experience with native authentication.</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*ZnSKzrNzodROsZQV" alt="Article image"></p>
+<ul>
+<li>The resulting tokens are then propagated across the AI components (Agents and MCPs). These new tokens meet the security requirements of the MCP server.</li>
+</ul>
+<ol start="4">
+<li>MCP to FGA (MCP → FGA): The MCP can perform authorization checks based on a ReBAC policy in the context of the authenticated user, verifying whether the user has a direct or implied relationship with a specific tool. For example, to simplify our scenario, we used a roles model that links business roles to technical roles associated with the tools used by the client representing the MCP server.</li>
+</ol>
+<h2 id="deep-dive-distributed-access-control-across-in-agentic-ai-components">Deep Dive: Distributed Access Control Across in Agentic AI Components</h2>
+<p>In this section, we combine the core concepts of securing access to the Agentic AI components, the distributed enforcement of access control levels (PEPs), and concrete use cases demonstrating these mechanisms in action. By doing so, we present a cohesive and practical framework for implementing layered security in the Agentic AI platform.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*OlRJ3P6Lq-7nT0gsAqepRA.png" alt="Agentic AI platform Distributed Access Control"></p>
+<h3 id="access-control-architecture-overview">Access Control Architecture Overview</h3>
+<p>Our implementation follows a multi-layered approach, where Policy Enforcement Points (PEPs) are deployed across different AI components. These components include the Agentic AI Portal, the AI Agent (Oryon), and the MCP Server. This architecture allows fine-grained and dynamic authorization enforcement tailored to each context.</p>
+<p>We adopt the AuthZEN Working Group P*P architecture model:</p>
+<ul>
+<li>Authentication Server (AS): Keycloak acts as the OAuth 2.1 Authorization Server.</li>
+<li>Policy Decision Point (PDP): OpenFGA evaluates authorization decisions based on ReBAC / ABAC policies.</li>
+<li>Policy Enforcement Points (PEP): Distributed in the Agent, MCP, and portal.</li>
+</ul>
+<p>Simplified OAuth 2.1 role mappings:</p>
+<ul>
+<li>Enterprise Identity Provider → OAuth 2.0 Authorization Server.</li>
+<li>MCP Host (Agentic AI Portal) → OAuth 2.0 Client.</li>
+<li>AI Agent → Trusted component.</li>
+<li>AI Agent API and MCP Server → OAuth 2.0 Resource Servers.</li>
+</ul>
+<p>Each component applies access control as follows:</p>
+<p><strong>Access Delegation</strong></p>
+<ul>
+<li>[AD-AC1] User: gives consent to the agent based scopes. [AD-AC2] Agent: Policy Enforcement Point (PEP) is used for tool filtering.</li>
+<li>[AD-AC3] MCP Server: Enforces PEP-based scopes or claims for each tool.</li>
+</ul>
+<p><strong>Dynamic Authorization</strong></p>
+<ul>
+<li>[DA-AC4] MCP Server: Makes real-time access decisions based on identity claims (such as acr and amr), triggering an OAuth 2.0 step-up error response. The OAuth 2.0 flow is orchestrated by the AI agent. Step-up authentication is performed using OIDC and OAuth 2.0 for First-Party Apps (FiPA), implemented by the Agentic AI Portal to ensure a secure and seamless user experience.</li>
+</ul>
+<p><strong>Fine-Grained Authorization (FGA)</strong></p>
+<ul>
+<li>[AD-AC3] MCP Server: FGA based ReBAC (Relationship-Based Access Control) policies acting as Policy Decision Point (PDP) integrated with OpenFGA, following the principles of decoupled authorization as defined by the AuthZEN Working Group.</li>
+</ul>
+<h3 id="diagram-walkthrough-applying-access-controls-in-practice">Diagram Walkthrough: Applying Access Controls in Practice</h3>
+<p><strong>Case 1: Agentic AI → View IAM User Details</strong></p>
+<p>Here, the user logs into the Agentic AI Portal and chats with the Oryon AI Agent to list IGA users.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*A9_hohG3IqYOw5Gm" alt="Diagram Agentic AI View IAM User Details"></p>
+<p><strong>Case 2: Agentic AI → Delete IAM User</strong></p>
+<p>The user initiates a chat with the Oryon AI Agent to delete the IGA user Peter Michael. The MCP Server identifies insufficient assurance and responds with an OAuth step-up challenge. The Oryon Agent triggers a native biometric login (passkey), required for this critical operation.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/0*OYJBQpc-g2tmhL7P" alt="Diagram Agentic AI Delete IAM User"></p>
+<h3 id="agentic-ai-platform-built-on-open-standards">Agentic AI Platform: Built on Open Standards</h3>
+<p>The standards we build upon any secure Agentic AI implementation should follow:</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*sUjNHQdPS8axH0ionFglQg.png" alt="Open Standards"></p>
+<ul>
+<li>OAuth 2.0 / OAuth 2.1 (RFC 6749).</li>
+<li>OpenID Connect (OIDC).</li>
+<li>Bearer Token Usage (RFC 6750).</li>
+<li>Step-Up Authentication Challenge Protocol (RFC 9470).</li>
+<li>Authentication Method Reference (RFC 8176).</li>
+<li>OpenID AuthZEN specs.</li>
+<li>FGA with ReBAC based Zanzibar approach.</li>
+</ul>
+<p>What we leave behind for this case:</p>
+<ul>
+<li>There is no need for Dynamic Client Registration, as this is a first-party scenario, and the enterprise controls all OAuth 2.0 components, allowing clients to be pre-registered.</li>
+<li>No need for Token Exchange (RFC 8693), as all components operate within a single trust domain, meaning the AI Agent does not require its own OAuth client or token translation.</li>
+<li>No need for OAuth 2.0 Rich Authorization (RAR) → No need more complex things in the scenario we use FGA with ReBAC and ABAC features.</li>
+<li>No need for OAuth 2.0 Protected Resource Metadata (RFC 9728), as the MCP servers and their capabilities are known and managed internally.</li>
+<li>No need for Identity Assertion Authorization Grant or cross-IdP SSO, as we are not dealing with multiple Identity Providers or trust domains; a single IdP is used in this case.</li>
+</ul>
+<p>Just to clarify, for the purposes of this scenario, we are not using these standards. In future articles, as we explore additional AI scenarios, we’ll introduce them within our Agentic AI Framework where appropriate.</p>
+<h2 id="showcasing-the-agentic-ai-identity-access-plus-platform">Showcasing the Agentic AI Identity Access Plus Platform</h2>
+<p>As described earlier, access will be granted through our Agentic AI Identity Access Platform. In this showcase, you’ll see the Oryon AI Agent in action, performing real-world IAM tasks:</p>
+<p>🔐 Integration with our Keycloak MCP Server to manage the platform 🤖 Oryon AI-driven execution of: a) 🧑‍💻 Listing all Keycloak users b) 🧑‍💻 Retrieving Keycloak user details c) 🧑‍💻 Deleting a Keycloak user (biometric login required)</p>
+<p>In step c), things get more interesting: Oryon detects the need for step-up authentication or just-in-time authorization step, which is triggered by the MCP Server. It automatically initiates a native passkey flow within our Agentic AI Identity Access Plus platform. No redirects. No pop-ups. Just a secure, seamless user experience. This is a preview of what an AI Agent done right looks like - secure by design, user-friendly by default.</p>
+<iframe width="100%" height="420" src="https://www.youtube.com/embed/h7gQoCKnym8?start=4" title="Agentic AI Platform for Enterprise IAM Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<h2 id="wrapping-up-from-vision-to-execution">Wrapping Up: From Vision to Execution</h2>
+<p>What began as a theoretical vision for a secure, agent-driven enterprise platform has now become a reality. Through our <a href="https://twogenidentity.com/homes/identityaccessplus">Agentic AI Identity Access Plus Platform</a>, we demonstrated how enterprises can implement secure, standards-based access control across every layer of the AI agent flow - without compromising user experience.</p>
+<p>By leveraging open protocols such as OAuth 2.1 and the AuthZEN guidelines, we’ve implemented distributed access control through dynamic Policy Enforcement Points (PEPs) and integrated fine-grained authorization using Relationship-Based Access Control (ReBAC).</p>
+<p>Our innovation, Oryon, enables dynamic authorization at every step of the AI agent flow, enhancing security in line with Zero Trust principles.</p>
+<p>Agentic AI platforms are more than just hype - they represent a real opportunity. With the right identity and access strategy, they can unlock new levels of productivity, transparency, and control. As always, the key is not just building intelligent agents, but ensuring those agents act securely, transparently</p>
+<p>We’re excited to be part of this next chapter in identity innovation - and we’d love to hear from you. Whether you’re exploring agentic AI platforms, modern access control, or just beginning your journey, <a href="https://twogenidentity.com">TwoGenIdentity</a> is here to help. Let’s stay connected: follow us for insights, reach out with questions, or collaborate on building secure, user-centric identity solutions that scale with your needs. If you’re working on your own implementation, we hope this article provides a strong starting point - and we’re always open to connecting.</p>
+<p>Last but not least, if you are in the IAM space, we recommend joining <a href="https://idpro.org/">IDPro</a>, where you’ll have the opportunity to advance your skills alongside experts in the field.</p>
+<h2 id="references">References</h2>
+<h3 id="articles">Articles</h3>
+<ul>
+<li>TwoGenIdentity Blog Featuring Articles and Papers by Martin Besozzi: <a href="https://twogenidentity.com/blog/">https://twogenidentity.com/blog/</a></li>
+<li>Deep Dive into Enhancing User Experience with Native Authentication (OAuth 2.0 for First-Party Apps) and Passkeys in Keycloak: <a href="https://medium.com/@embesozzi/deep-dive-into-enhancing-user-experience-with-native-authentication-and-passkeys-in-keycloak-86fb72c64278">https://medium.com/@embesozzi/deep-dive-into-enhancing-user-experience-with-native-authentication-and-passkeys-in-keycloak-86fb72c64278</a></li>
+<li>Mastering Access Control: Low-Code Authorization with ReBAC, Decoupling Patterns and Policy as Code: <a href="https://medium.com/@embesozzi/mastering-access-control-implementing-low-code-authorization-based-on-rebac-and-decoupling-pattern-f6f54f70115e">https://medium.com/@embesozzi/mastering-access-control-implementing-low-code-authorization-based-on-rebac-and-decoupling-pattern-f6f54f70115e</a></li>
+<li>Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC): <a href="https://medium.com/@embesozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a">https://medium.com/@embesozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-scale-d3376de00f9a</a></li>
+</ul>
+<h3 id="conferences">Conferences</h3>
+<ul>
+<li>Enhancing User Experience with Native Authentication and Passkeys: <a href="https://www.youtube.com/watch?v=fY1sJ8AX1fg&#x26;t=32s">https://www.youtube.com/watch?v=fY1sJ8AX1fg&#x26;t=32s</a></li>
+</ul> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/keycloak/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> keycloak </a> </li><li> <a href="/tags/agentic-ai/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> agentic-ai </a> </li><li> <a href="/tags/mcp-server/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> mcp-server </a> </li><li> <a href="/tags/ai/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-4"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> ai </a> </li><li> <a href="/tags/ai-agent/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> ai-agent </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-with-keycloak-mcp/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://x.com/intent/post?url=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-with-keycloak-mcp/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-with-keycloak-mcp/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-platform-for-enterprise-iam-secure-agent-driven-governance-with-keycloak-mcp/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/martin-besozzi/authzen-standardized-authorization-for-api-and-ai-security/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>Previous Post</span> <div class="text-accent/85 text-sm">AuthZEN: Standardized Authorization for API and AI Security</div> </div> </a> <a href="/posts/martin-besozzi/building-scalable-multi-tenancy-authentication-and-authorization-using-open-standards-an/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>Next Post</span> <div class="text-accent/85 text-sm">Building Scalable Multi-Tenancy Authentication and Authorization using Open Standards and Open-Source Software</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-wide-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>  <script type="module">
+    async function renderMermaid() {
+      const elements = document.querySelectorAll("div.mermaid");
+      if (!elements.length) return;
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      const { default: mermaid } = await import(
+        "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+      );
+
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" });
+
+      for (const el of elements) {
+        const code = el.textContent ?? "";
+        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
+        try {
+          const { svg } = await mermaid.render(id, code);
+          el.innerHTML = svg;
+        } catch (e) {
+          console.error("Mermaid render error:", e);
+        }
+      }
+    }
+
+    document.addEventListener("astro:page-load", renderMermaid);
+  </script>  <script type="module">const r="theme",o="light",m="dark";function a(){const e=localStorage.getItem(r);return e||o}let t=window.__theme?.value??a();function l(){localStorage.setItem(r,t),c()}function c(){document.firstElementChild?.setAttribute("data-theme",t),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const e=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",e)}function u(){c(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===o?m:o,l()})}u();document.addEventListener("astro:after-swap",u);document.addEventListener("astro:before-swap",e=>{const n=document.querySelector("meta[name='theme-color']")?.getAttribute("content");n&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",n)});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>

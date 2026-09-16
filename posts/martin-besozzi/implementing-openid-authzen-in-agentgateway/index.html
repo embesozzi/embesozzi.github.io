@@ -1,0 +1,710 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/"><meta name="generator" content="Astro v6.4.2"><!-- Fonts --><style>@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/2015c3ee75fce6cd.woff") format("woff"), url("/_astro/fonts/186e6385d7852012.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/20302367397c05fa.woff") format("woff"), url("/_astro/fonts/b08a78609a8a086b.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/bb754429c8057718.woff") format("woff"), url("/_astro/fonts/610b113b74c3265a.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/29e2519b5d70ba84.woff") format("woff"), url("/_astro/fonts/c341830447fbbd1e.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/be84b35bcfc349e9.woff") format("woff"), url("/_astro/fonts/d57ed212a535d863.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/9f194d9b0de98159.woff") format("woff"), url("/_astro/fonts/7b8bc1ccb887754d.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/fdb5d17a23b6aa6e.woff") format("woff"), url("/_astro/fonts/3be34b09d07b7f66.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/39c158497c7c5a90.woff") format("woff"), url("/_astro/fonts/6a646b2f24236261.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/45ae197ec2801a42.woff") format("woff"), url("/_astro/fonts/c3fd635c00a11802.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/8a2dc10ea0fb4488.woff") format("woff"), url("/_astro/fonts/2f812678838d3545.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}:root{--font-inter:Inter-938b6d9a5b97ad60,"Inter-938b6d9a5b97ad60 fallback: Arial",sans-serif;}</style><style>@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/6014e528f57806f3.woff") format("woff"), url("/_astro/fonts/75d17da681d49dc0.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/31ac3931b90bfe7a.woff") format("woff"), url("/_astro/fonts/66c8f2a9e4b334e5.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/cec8ae6b731972f8.woff") format("woff"), url("/_astro/fonts/a0534acacfcf0885.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/334b4db9de3a5fe4.woff") format("woff"), url("/_astro/fonts/cf39180873795e06.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/9bf5aa116af20a93.woff") format("woff"), url("/_astro/fonts/be45d86507988f6b.ttf") format("truetype");font-display:swap;font-weight:800;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/4c0b37f553ec06f9.woff") format("woff"), url("/_astro/fonts/b5e86eb0a6ececd3.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/fdda611a1e41f26f.woff") format("woff"), url("/_astro/fonts/5fa68f67a95fdc63.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/167823ee192baf0f.woff") format("woff"), url("/_astro/fonts/16c9148d715a9889.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/d005e41eec063bbe.woff") format("woff"), url("/_astro/fonts/4f409386f6ffef9a.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/c68a8c249f10e302.woff") format("woff"), url("/_astro/fonts/5eeef7238f758dc8.ttf") format("truetype");font-display:swap;font-weight:800;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}:root{--font-jakarta:"Plus Jakarta Sans-69ff88703f9ba026","Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial",sans-serif;}</style><!-- Primary meta --><title>Implementing OpenID AuthZEN in Agent Gateway: MCP Tool Authorization | Martin Besozzi</title><meta name="title" content="Implementing OpenID AuthZEN in Agent Gateway: MCP Tool Authorization | Martin Besozzi"><meta name="description" content="A hands-on walkthrough of enforcing OpenID AuthZEN authorization for MCP tool calls, using Agent Gateway as the Policy Enforcement Point and Keycloak as both the OpenID Provider and Policy Decision Point (PDP)."><meta name="author" content="Martin Besozzi"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Martin Besozzi"><meta property="og:title" content="Implementing OpenID AuthZEN in Agent Gateway: MCP Tool Authorization | Martin Besozzi"><meta property="og:description" content="A hands-on walkthrough of enforcing OpenID AuthZEN authorization for MCP tool calls, using Agent Gateway as the Policy Enforcement Point and Keycloak as both the OpenID Provider and Policy Decision Point (PDP)."><meta property="og:url" content="https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/"><meta property="og:image" content="https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/index.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/"><meta property="twitter:title" content="Implementing OpenID AuthZEN in Agent Gateway: MCP Tool Authorization | Martin Besozzi"><meta property="twitter:description" content="A hands-on walkthrough of enforcing OpenID AuthZEN authorization for MCP tool calls, using Agent Gateway as the Policy Enforcement Point and Keycloak as both the OpenID Provider and Policy Decision Point (PDP)."><meta property="twitter:image" content="https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/index.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Martin Besozzi" href="https://embesozzi.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2026-09-15T12:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Implementing OpenID AuthZEN in Agent Gateway: MCP Tool Authorization | Martin Besozzi","image":"https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/index.png","datePublished":"2026-09-15T12:00:00.000Z","author":[{"@type":"Person","name":"Martin Besozzi","url":"https://www.linkedin.com/in/embesozzi/"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const theme = stored ?? "light";
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BPFdHnW-.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: authzen; }@layer astro { ::view-transition-old(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: mcp; }@layer astro { ::view-transition-old(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: keycloak; }@layer astro { ::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-4"] { view-transition-name: zero-trust; }@layer astro { ::view-transition-old(zero-trust) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(zero-trust) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(zero-trust) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(zero-trust) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-5"] { view-transition-name: security; }@layer astro { ::view-transition-old(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-6"] { view-transition-name: agent-gateway; }@layer astro { ::view-transition-old(agent-gateway) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(agent-gateway) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(agent-gateway) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(agent-gateway) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-wide-layout"> <!--  items-start  --> <div class="border-border flex justify-between border-b pt-5 pb-4 sm:pt-6 sm:pb-5"> <!-- Identity: avatar + name + role + small socials --> <div class="flex items-center gap-2"> <a href="/" class="flex items-center gap-3 focus-visible:no-underline"> <img src="https://avatars.githubusercontent.com/u/25515681?v=4" alt="Martin Besozzi" class="border-border hidden size-14 shrink-0 rounded-full border object-cover sm:block" width="56" height="56"> <div> <span class="font-heading text-xl font-bold whitespace-nowrap sm:text-2xl"> Martin Besozzi </span> <span class="text-muted-foreground hidden text-xs sm:block">
+AI Security Architect · IAM Architect · CTO · Founder
+</span> </div> </a> </div> <!-- Socials outside the <a> to avoid invalid nested anchors --> <div class="hidden sm:flex [&_a]:!p-0.5 [&_svg]:!size-4.5 [&_svg]:!scale-100"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </div> <!-- Right side: desktop nav + controls --> <div class="flex items-center gap-4"> <!-- Nav links — desktop only --> <ul class="hidden sm:flex sm:items-center sm:gap-5
+               [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:transition-colors [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> </ul> <!-- Controls: search + theme + mobile hamburger --> <div class="flex items-center gap-0.5"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-9 p-2">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-9 p-2" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> <!-- Hamburger: mobile only --> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> </div> </div> </div> <!-- Mobile nav dropdown --> <nav id="nav-menu" class="sm:hidden"> <ul id="menu-items" class="hidden grid-cols-1 gap-0.5 pb-3 pt-2
+             [&>li>a]:block [&>li>a]:py-2 [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> <li class="pt-1"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </li> </ul> </nav> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:implementing-openid-authzen-in-agent-gateway-mcp-tool-authorization" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Implementing OpenID AuthZEN in Agent Gateway: MCP Tool Authorization </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2026-09-15T12:00:00.000Z"> 15 Sep, 2026 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <p>A companion piece to <a href="/posts/martin-besozzi/mastering-secure-apis-and-ai-agents-with-zero-trust-and-fine-grained-authorization-based">Mastering Secure APIs and AI Agents with Zero Trust and Fine-Grained Authorization Based on OpenID AuthZEN</a>, this article walks through a concrete, runnable implementation.</p>
+<p>The example shows how to enforce OpenID AuthZEN authorization decisions for MCP tool calls using <a href="https://agentgateway.dev/">Agent Gateway</a> as the Policy Enforcement Point (PEP) and Keycloak as both the OpenID Provider and Policy Decision Point (PDP).</p>
+<p>The implementation is available in <a href="https://github.com/agentgateway/agentgateway/pull/3478"><strong>agentgateway/agentgateway#3478</strong></a>, which adds an <code>examples/mcp-authzen</code> example to the project.</p>
+<h2 id="the-problem">The problem</h2>
+<p>Traditional authorization approaches struggle with three fundamental problems:</p>
+<ol>
+<li><strong>Poor interoperability, leading to vendor lock-in.</strong> Each authorization system speaks its own language, so switching PDPs or integrating across platforms means significant rework.</li>
+<li><strong>Growing complexity that doesn’t scale.</strong> As systems expand, authorization rules multiply. Logic embedded in application code becomes unmaintainable and inconsistent across services.</li>
+<li><strong>Tight coupling of authorization logic in application code.</strong> When policies live inside application code, every policy change requires a development cycle, testing, and a deployment, a recipe for security drift and technical debt.</li>
+</ol>
+<h2 id="why-authzen">Why AuthZEN?</h2>
+<p>If you’re new to OpenID AuthZEN, the simplest way to think about it is:</p>
+<blockquote>
+<p>AuthZEN standardizes how an application asks an external authorization service whether an operation is allowed.</p>
+</blockquote>
+<p><a href="https://openid.net/specs/openid-authzen-authorization-api-1_0-ID1.html">OpenID AuthZEN</a> addresses this by standardizing a common interface between two components:</p>
+<ul>
+<li><strong>Policy Enforcement Point (PEP)</strong> the component receiving the request and enforcing the authorization decision.</li>
+<li><strong>Policy Decision Point (PDP)</strong> the component that evaluates the request against authorization policy and returns the decision.</li>
+</ul>
+<p>In this implementation, <strong>Agent Gateway is the PEP</strong> and <strong>Keycloak is the PDP</strong>.</p>
+<p>Instead of embedding authorization logic in every application, you externalize the decision to a dedicated policy engine. Agent Gateway does not need to understand how the authorization policy is implemented. It only needs to construct an AuthZEN authorization request and enforce the resulting decision.</p>
+<h2 id="what-does-an-authzen-request-look-like">What does an AuthZEN request look like?</h2>
+<p>AuthZEN defines a standard request model based on four main concepts:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "subject"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">user</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">alice</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "properties"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {}}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "resource"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tool</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">approve_payment</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "properties"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {}}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "action"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tools/call</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "properties"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {}}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "context"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {}</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span></code></pre>
+<p>In simple terms:</p>
+<ul>
+<li><strong><code>subject</code></strong>: who is requesting the operation.</li>
+<li><strong><code>resource</code></strong>: what the subject wants to access.</li>
+<li><strong><code>action</code></strong>: what operation they want to perform.</li>
+<li><strong><code>context</code></strong>: additional information that may influence the decision.</li>
+</ul>
+<p>The PDP evaluates that request against its policies and replies with a <strong>Decision Response</strong>: <code>{"decision": true}</code> or <code>{"decision": false}</code>.
+The PEP does not need to know whether the PDP uses roles, attributes, relationships, or another authorization model internally. That policy logic stays outside the application enforcing the request.</p>
+<h3 id="core-benefits">Core benefits</h3>
+<ul>
+<li><strong>Interoperability</strong>: connect any AuthZEN-compliant PDP without changing the authorization interface in the enforcing application.</li>
+<li><strong>Decoupled authorization</strong>: policy decisions are separated from enforcement logic.</li>
+<li><strong>Flexibility</strong>: the same interface can support different authorization models, including ReBAC, PBAC, and ABAC.</li>
+<li><strong>Policy independence</strong>: the PEP does not need to know how authorization policies are implemented.</li>
+<li><strong>Dynamic evaluation</strong>: decisions can use runtime context rather than relying only on permissions established when a token was issued.</li>
+</ul>
+<h3 id="why-is-this-useful-for-mcp">Why is this useful for MCP?</h3>
+<p>MCP introduces a dynamic tool invocation model. An agent can discover tools and invoke them at runtime, so authentication alone does not answer an important question:</p>
+<blockquote>
+<p>Is this caller allowed to invoke this particular tool right now?</p>
+</blockquote>
+<p>AuthZEN fills that gap as a dynamic, externalized authorization layer alongside OAuth. For protected tool calls, the authorization decision is evaluated at request time against the current policy rather than relying solely on permissions established when the session was created.</p>
+<p>This article stays focused on MCP, but nothing about the PEP/PDP contract is MCP-specific. The same evaluation request shape (<code>subject</code>, <code>resource</code>, <code>action</code>, <code>context</code>) works for a plain REST API, which is the point: one standard, one PDP integration, enforced consistently across APIs, MCP servers, and whatever else sits in the request path. The <a href="/posts/martin-besozzi/mastering-secure-apis-and-ai-agents-with-zero-trust-and-fine-grained-authorization-based">prior article</a> covers the API and MCP Apps cases in more depth.</p>
+<p>The same architecture can later be extended to fine-grained authorization, where the decision also depends on the arguments of the tool call, such as the payment amount or destination account.</p>
+<h2 id="architecture">Architecture</h2>
+<p>The example has four components:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Component</th><th>Role</th></tr></thead><tbody><tr><td>MCP client</td><td>Calls the Payments MCP tools</td></tr><tr><td>Agentgateway</td><td>MCP gateway and AuthZEN Policy Enforcement Point</td></tr><tr><td>Keycloak</td><td>OpenID Provider and AuthZEN Policy Decision Point</td></tr><tr><td>Payments MCP server</td><td>Backend exposing the payment tools</td></tr></tbody></table>
+<p>Agent Gateway sits between the MCP client and the Payments MCP server. For a tools/call request, it validates the caller’s token, constructs an AuthZEN evaluation request, sends it to Keycloak, and enforces the resulting decision.</p>
+<p>Keycloak plays two roles in this example:</p>
+<p>1 It issues the OAuth access token used by the MCP client.<br>
+2.It evaluates the AuthZEN authorization request as the PDP.</p>
+<p>The resulting flow is:</p>
+<div class="mermaid">sequenceDiagram
+    participant Client
+    participant GW as Agent Gateway &#x3C;br> AuthZEN PEP
+    participant KC as Keycloak &#x3C;br> AuthZEN PDP
+    participant MCP as Payments MCP server
+
+    Client->>GW: tools/call + Bearer JWT (mcp-client)
+    GW->>GW: jwtAuth validates the token
+    GW->>KC: RFC 8693 token exchange&#x3C;br/>(subject=inbound JWT, audience=mcp_proxy)
+    KC-->>GW: token minted for mcp_proxy
+    GW->>KC: POST /access/v1/evaluation&#x3C;br/>&#x3C;br/>Authorization: Bearer &#x3C;mcp_proxy token>
+    KC-->>GW: 200 {"decision": true|false}
+    alt decision == true
+        GW->>MCP: Forward tools/call
+        MCP-->>GW: Result
+        GW-->>Client: Result
+    else decision == false
+        GW-->>Client: 403 Forbidden
+    end</div>
+<p>The token exchange step is Keycloak-specific plumbing. It authenticates the gateway to Keycloak’s protected AuthZEN evaluation endpoint. It is not part of the AuthZEN protocol itself.</p>
+<p>A different AuthZEN-compliant PDP could use a different authentication mechanism without changing the basic PEP/PDP model.</p>
+<h2 id="the-agentgateway-config-block-by-block">The Agentgateway config, block by block</h2>
+<p>Everything below comes from the working example in <a href="https://github.com/agentgateway/agentgateway/pull/3478">agentgateway/agentgateway#3478</a>, which adds <code>examples/mcp-authzen</code> to the project.
+This is the authorization-relevant part of the example’s <code>config.yaml</code>, walked through step by step.</p>
+<p><strong>1. Validate the inbound session token</strong></p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">mcp</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  port</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C"> 3000</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  policies</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">    jwtAuth</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">      issuer</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> http://localhost:7080/realms/mcp</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">      audiences</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> [</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">mcp_proxy</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">]</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">      jwks</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        url</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> http://localhost:7080/realms/mcp/protocol/openid-connect/certs</span></span></code></pre>
+<p>Standard JWT validation against Keycloak’s <code>mcp</code> realm: this validates the caller’s token and establishes the identity and claims used by the authorization flow.</p>
+<p><strong>2. Only invoke the PDP for tool calls</strong></p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">    extAuthz</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">      conditional</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">      - </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">condition</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> has(mcp.tool)</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        host</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> localhost:7080</span></span></code></pre>
+<p><strong><code>mcp.tool</code></strong> is only populated on a <strong><code>tools/call</code></strong> request. <strong><code>initialize</code></strong>, <strong><code>tools/list</code></strong>, and other MCP requests never invoke the PDP. The gate is a single CEL expression, so there’s no additional authorization overhead for MCP operations that don’t require an authorization decision.</p>
+<p><strong>3. Authenticate the gateway to the AuthZEN endpoint (Keycloak-specific)</strong></p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        policies</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">          backendAuth</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">            oauthTokenExchange</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              host</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> localhost:7080</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              path</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> /realms/mcp/protocol/openid-connect/token</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              subjectToken</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">                source</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">                  header</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">                    name</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> x-token-exchange-subject</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              audiences</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> [</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">mcp_proxy</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">]</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              clientAuth</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">                clientId</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> mcp_proxy</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">                clientSecret</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> mcp-proxy-secret</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">                method</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> clientSecretBasic</span></span></code></pre>
+<p>This is the RFC 8693 token exchange from the sequence diagram: the gateway trades the caller’s validated token for one issued to <code>mcp_proxy</code>, which is what’s actually authorized to call Keycloak’s AuthZEN evaluation endpoint. A PDP that exposes its evaluation endpoint differently wouldn’t need this block.</p>
+<p><strong>4. Build the AuthZEN evaluation request</strong></p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">        protocol</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">          http</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">            path</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> '</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">"/realms/mcp/authzen/access/v1/evaluation"</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">'</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">            addRequestHeaders</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              content-type</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> '</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">"application/json"</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">'</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              :method</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> '</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">"POST"</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">'</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              x-token-exchange-subject</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> jwt.rawToken.unredacted()</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">            body</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#D32F2F;--shiki-light-font-style:inherit;--shiki-dark:#C792EA;--shiki-dark-font-style:italic"> |</span></span>
+<span class="line"><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">              {</span></span>
+<span class="line"><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">                "subject": {"type": "user", "id": jwt.sub},</span></span>
+<span class="line"><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">                "resource": {"type": "tool", "id": mcp.tool.name},</span></span>
+<span class="line"><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">                "action": {"name": "tools/call"},</span></span>
+<span class="line"><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">                "context": {"agent": jwt.azp}</span></span>
+<span class="line"><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D">              }</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">            metadata</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">              decision</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D"> json(response.body).decision</span></span></code></pre>
+<p>This is where the MCP request becomes an AuthZEN authorization request:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>AuthZEN field</th><th>Source</th><th>Example</th></tr></thead><tbody><tr><td><code>subject.id</code></td><td><code>jwt.sub</code></td><td><code>alice</code></td></tr><tr><td><code>resource.id</code></td><td><code>mcp.tool.name</code></td><td><code>approve_payment</code></td></tr><tr><td><code>action.name</code></td><td>fixed value</td><td><code>tools/call</code></td></tr><tr><td><code>context.agent</code></td><td><code>jwt.azp</code></td><td><code>mcp-client</code></td></tr></tbody></table>
+<p>This mapping follows a general model of <a href="https://openid.github.io/authzen/authzen-coaz-mcp-binding-1_0.html">AuthZEN CoAZ MCP binding</a>.</p>
+<p>In this example, authorization is intentionally tool-level to keep the implementation simple. The same approach can be extended to fine-grained authorization (FGA) by including tool arguments or other context in the authorization request.</p>
+<p><strong>5. Enforce the decision</strong></p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="yaml"><code><span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">    authorization</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">      rules</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">      - </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">require</span><span style="--shiki-light:#D32F2F;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> '</span><span style="--shiki-light:#22863A;--shiki-dark:#ECC48D">!has(mcp.tool) || extauthz.decision == true</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">'</span></span></code></pre>
+<p>One line: if this isn’t a tool call, let it through; if it is, require <code>decision == true</code>. Everything upstream exists to make this expression answerable.</p>
+<h2 id="running-it">Running it</h2>
+<p>The example can be run locally from the Agent Gateway repository.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="bash"><code><span class="line"><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic"># Start Keycloak, bootstrap the mcp realm, start the Payments MCP server</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">docker</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> compose</span><span style="--shiki-light:#2B5581;--shiki-dark:#82AAFF"> -f</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> examples/mcp-authzen/docker-compose.yaml</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> up</span><span style="--shiki-light:#2B5581;--shiki-dark:#82AAFF"> -d</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic"># Start agentgateway with the example config</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">cargo</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> run</span><span style="--shiki-light:#2B5581;--shiki-dark:#82AAFF"> --</span><span style="--shiki-light:#2B5581;--shiki-dark:#82AAFF"> -f</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> examples/mcp-authzen/config.yaml</span></span></code></pre>
+<p>The <code>keycloak/bootstrap-authzen.sh</code> script provisions the mcp realm, including the users, roles, OAuth clients, and authorization resources and policies used by the example.</p>
+<h3 id="how-the-keycloak-policies-work">How the Keycloak policies work</h3>
+<p>The example uses Keycloak’s authorization model to map the MCP tools to authorization resources and scopes. Policies then associate the <code>payments_user</code>, <code>payments_manager</code>, and <code>payments_admin</code> roles with the resources and scopes they are allowed to access. For example, <code>approve_payment</code> is protected so that managers and admins can invoke it, while <code>payments_user</code> cannot.</p>
+<p>When Agent Gateway sends an AuthZEN evaluation request, Keycloak evaluates the request against these policies using the subject, resource, and action from the request. This is why Alice receives <code>{"decision": false}</code> when calling <code>approve_payment</code>, while Bob receives <code>{"decision": true}</code>.</p>
+<p>The mock Payments MCP server exposes five tools (<code>list_accounts</code>, <code>get_account</code>, <code>create_payment</code>, <code>approve_payment</code>, <code>cancel_payment</code>), and access varies by role:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Role</th><th align="center">list_accounts</th><th align="center">get_account</th><th align="center">create_payment</th><th align="center">approve_payment</th><th align="center">cancel_payment</th></tr></thead><tbody><tr><td><code>payments_user</code></td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✗</td><td align="center">✗</td></tr><tr><td><code>payments_manager</code></td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td><td align="center">✓</td></tr></tbody></table>
+<h2 id="seeing-it-work">Seeing it work</h2>
+<p>This example includes <a href="https://github.com/embesozzi/agentgateway/blob/feat/mcp-authzen-example/examples/mcp-authzen/cli-tests.sh"><code>cli-tests.sh</code></a> which drives an MCP tool call end to end. It authenticates a user, establishes an MCP session, and invokes the requested tool.</p>
+<h3 id="alice-payments_user">Alice (<code>payments_user</code>)</h3>
+<p>Alice can list and create a payment, but she cannot approve one:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="bash"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">./cli-tests.sh</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> alice</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> list_accounts</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">      # 200 - allowed</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">./cli-tests.sh</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> alice</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> create_payment</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">     # 200 - allowed, creates pay-1</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">./cli-tests.sh</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> alice</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> approve_payment</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">    # 403 - denied</span></span></code></pre>
+<p>Alice can create a payment because that’s within her role. <code>approve_payment</code> requires <code>payments_manager</code>, which she doesn’t hold, so agentgateway sends Keycloak this evaluation request for the <code>approve_payment</code> attempt:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "subject"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">user</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">alice</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "resource"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tool</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">approve_payment</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "action"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tools/call</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "context"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"agent"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">mcp-client</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span></code></pre>
+<p>and gets back <code>{"decision": false}</code>. Agentgateway’s <code>authorization</code> rule rejects the call before it ever reaches the Payments MCP server.</p>
+<h3 id="bob-payments_user">Bob (<code>payments_user</code>)</h3>
+<p>Bob has the required has everything alice has, plus approval authority.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="bash"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">./cli-tests.sh</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> bob</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> approve_payment</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">      # 200 - allowed, approves pay-1</span></span></code></pre>
+<p>The evaluation request agentgateway sends is identical in shape, just with <code>bob</code>’s subject:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "subject"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">user</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">bob</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "resource"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tool</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">approve_payment</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "action"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tools/call</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "context"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> {</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"agent"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">mcp-client</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span></code></pre>
+<p>This time Keycloak returns <code>{"decision": true}</code>, and the call goes through. Same code path, same config, same <code>extAuthz</code> call; the only thing that changed is the AuthZEN decision Keycloak returned.</p>
+<p>A few things worth noticing in that pair of runs:</p>
+<ul>
+<li>The <code>403</code> for alice never reaches the payments server. It’s rejected by agentgateway’s <code>authorization</code> rule directly from Keycloak’s <code>decision: false</code>, before the request is proxied anywhere.</li>
+<li>Every tool call, allowed or denied, goes through the identical authorization path. Nothing tool-specific is hardcoded in Agent Gateway’s config; the only thing that varies is the PDP’s answer.</li>
+<li><code>initialize</code> and <code>tools/list</code> always succeed regardless of role, since <code>extAuthz</code> only fires when <code>mcp.tool</code> is set, i.e., only on <code>tools/call</code>.</li>
+</ul>
+<h2 id="where-this-goes-next-from-cga-to-fga">Where this goes next: from CGA to FGA</h2>
+<p>What’s implemented here is coarse-grained authorization (CGA) at the tool level: <strong>is this subject allowed to call this tool?</strong> This keeps the example focused on the core PEP/PDP integration.</p>
+<p>The same architecture can also support fine-grained authorization (FGA), where the decision depends on the specific arguments of the call, such as the payment amount, account, or recipient, rather than just the tool name. I’ll cover these extensions in future articles and workshops as the OpenID AuthZEN Working Group’s formal MCP binding draft matures.</p>
+<p>Beyond FGA, authorization can also consider the user’s intent and the agent’s planned actions, rather than evaluating each tool call in isolation. I explore this model in <a href="https://embesozzi.github.io/posts/martin-besozzi/intent-agent-native-authorization-agentic-profiles/">Intent Agent Native Authorization</a>, where authorization is tied to the intent behind an agentic workflow and can be combined with explicit user approval for sensitive actions.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This example demonstrates how OpenID AuthZEN can be used to externalize authorization for MCP tool calls.</p>
+<p>Agent Gateway acts as the Policy Enforcement Point, Keycloak acts as the Policy Decision Point, and AuthZEN provides the standardized interface between them.</p>
+<p>The current implementation performs coarse-grained authorization at the tool level:</p>
+<blockquote>
+<p>Can this subject call this MCP tool?</p>
+</blockquote>
+<p>It deliberately does not yet make decisions based on tool arguments.</p>
+<p>That provides a simple foundation for extending the same architecture toward fine-grained authorization, where the PDP can evaluate the specific operation being requested.</p>
+<p>The key idea is simple:</p>
+<blockquote>
+<p>Agent Gateway enforces the decision. Keycloak makes the decision. AuthZEN connects them.</p>
+</blockquote>
+<p>The PR adding this example, <a href="https://github.com/agentgateway/agentgateway/pull/3478">agentgateway/agentgateway#3478</a>, is still open at the time of writing. Until it merges, the same branch is also available on my fork: <a href="https://github.com/embesozzi/agentgateway/tree/feat/mcp-authzen-example">github.com/embesozzi/agentgateway/tree/feat/mcp-authzen-example</a>.</p>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://openid.net/specs/openid-authzen-authorization-api-1_0-ID1.html">AuthZEN Authorization API 1.0</a></li>
+<li><a href="https://openid.net/wg/authzen/">OpenID Foundation AuthZEN Working Group</a></li>
+<li><a href="/posts/martin-besozzi/mastering-secure-apis-and-ai-agents-with-zero-trust-and-fine-grained-authorization-based">Mastering Secure APIs and AI Agents with Zero Trust and Fine-Grained Authorization Based on OpenID AuthZEN</a></li>
+</ul> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/authzen/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> AuthZEN </a> </li><li> <a href="/tags/mcp/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> MCP </a> </li><li> <a href="/tags/keycloak/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Keycloak </a> </li><li> <a href="/tags/zero-trust/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-4"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Zero Trust </a> </li><li> <a href="/tags/security/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Security </a> </li><li> <a href="/tags/agent-gateway/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-6"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Agent Gateway </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://x.com/intent/post?url=https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://embesozzi.github.io/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2">  <a href="/posts/martin-besozzi/verifiable-credentials-keycloak-native-passkey-recovery/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>Next Post</span> <div class="text-accent/85 text-sm">Your Passkey Is Gone. Now What? Native Passkey Recovery with Verifiable Credentials and Keycloak</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-wide-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>  <script type="module">
+    async function renderMermaid() {
+      const elements = document.querySelectorAll("div.mermaid");
+      if (!elements.length) return;
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      const { default: mermaid } = await import(
+        "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+      );
+
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" });
+
+      for (const el of elements) {
+        const code = el.textContent ?? "";
+        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
+        try {
+          const { svg } = await mermaid.render(id, code);
+          el.innerHTML = svg;
+        } catch (e) {
+          console.error("Mermaid render error:", e);
+        }
+      }
+    }
+
+    document.addEventListener("astro:page-load", renderMermaid);
+  </script>  <script type="module">const r="theme",o="light",m="dark";function a(){const e=localStorage.getItem(r);return e||o}let t=window.__theme?.value??a();function l(){localStorage.setItem(r,t),c()}function c(){document.firstElementChild?.setAttribute("data-theme",t),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const e=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",e)}function u(){c(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===o?m:o,l()})}u();document.addEventListener("astro:after-swap",u);document.addEventListener("astro:before-swap",e=>{const n=document.querySelector("meta[name='theme-color']")?.getAttribute("content");n&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",n)});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>

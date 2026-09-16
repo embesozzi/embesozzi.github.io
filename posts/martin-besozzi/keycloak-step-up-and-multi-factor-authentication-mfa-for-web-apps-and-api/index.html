@@ -1,0 +1,505 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://embesozzi.medium.com/keycloak-step-up-authentication-for-web-and-api-3ef4c9f25d42"><meta name="generator" content="Astro v6.4.2"><!-- Fonts --><style>@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/2015c3ee75fce6cd.woff") format("woff"), url("/_astro/fonts/186e6385d7852012.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/20302367397c05fa.woff") format("woff"), url("/_astro/fonts/b08a78609a8a086b.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/bb754429c8057718.woff") format("woff"), url("/_astro/fonts/610b113b74c3265a.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/29e2519b5d70ba84.woff") format("woff"), url("/_astro/fonts/c341830447fbbd1e.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/be84b35bcfc349e9.woff") format("woff"), url("/_astro/fonts/d57ed212a535d863.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/9f194d9b0de98159.woff") format("woff"), url("/_astro/fonts/7b8bc1ccb887754d.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/fdb5d17a23b6aa6e.woff") format("woff"), url("/_astro/fonts/3be34b09d07b7f66.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/39c158497c7c5a90.woff") format("woff"), url("/_astro/fonts/6a646b2f24236261.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/45ae197ec2801a42.woff") format("woff"), url("/_astro/fonts/c3fd635c00a11802.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/8a2dc10ea0fb4488.woff") format("woff"), url("/_astro/fonts/2f812678838d3545.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}:root{--font-inter:Inter-938b6d9a5b97ad60,"Inter-938b6d9a5b97ad60 fallback: Arial",sans-serif;}</style><style>@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/6014e528f57806f3.woff") format("woff"), url("/_astro/fonts/75d17da681d49dc0.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/31ac3931b90bfe7a.woff") format("woff"), url("/_astro/fonts/66c8f2a9e4b334e5.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/cec8ae6b731972f8.woff") format("woff"), url("/_astro/fonts/a0534acacfcf0885.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/334b4db9de3a5fe4.woff") format("woff"), url("/_astro/fonts/cf39180873795e06.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/9bf5aa116af20a93.woff") format("woff"), url("/_astro/fonts/be45d86507988f6b.ttf") format("truetype");font-display:swap;font-weight:800;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/4c0b37f553ec06f9.woff") format("woff"), url("/_astro/fonts/b5e86eb0a6ececd3.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/fdda611a1e41f26f.woff") format("woff"), url("/_astro/fonts/5fa68f67a95fdc63.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/167823ee192baf0f.woff") format("woff"), url("/_astro/fonts/16c9148d715a9889.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/d005e41eec063bbe.woff") format("woff"), url("/_astro/fonts/4f409386f6ffef9a.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/c68a8c249f10e302.woff") format("woff"), url("/_astro/fonts/5eeef7238f758dc8.ttf") format("truetype");font-display:swap;font-weight:800;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}:root{--font-jakarta:"Plus Jakarta Sans-69ff88703f9ba026","Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial",sans-serif;}</style><!-- Primary meta --><title>Keycloak Step-Up and Multi-factor Authentication (MFA) for Web Apps and API | Martin Besozzi</title><meta name="title" content="Keycloak Step-Up and Multi-factor Authentication (MFA) for Web Apps and API | Martin Besozzi"><meta name="description" content="How to implement step-up authentication and Multi-Factor Authentication (MFA) for web apps and APIs using Keycloak, with ACR levels and OPA policy enforcement."><meta name="author" content="Martin Besozzi"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Martin Besozzi"><meta property="og:title" content="Keycloak Step-Up and Multi-factor Authentication (MFA) for Web Apps and API | Martin Besozzi"><meta property="og:description" content="How to implement step-up authentication and Multi-Factor Authentication (MFA) for web apps and APIs using Keycloak, with ACR levels and OPA policy enforcement."><meta property="og:url" content="https://embesozzi.medium.com/keycloak-step-up-authentication-for-web-and-api-3ef4c9f25d42"><meta property="og:image" content="https://cdn-images-1.medium.com/max/1024/1*h5LIQBjEEkc8IFbEXs7UyA.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://embesozzi.medium.com/keycloak-step-up-authentication-for-web-and-api-3ef4c9f25d42"><meta property="twitter:title" content="Keycloak Step-Up and Multi-factor Authentication (MFA) for Web Apps and API | Martin Besozzi"><meta property="twitter:description" content="How to implement step-up authentication and Multi-Factor Authentication (MFA) for web apps and APIs using Keycloak, with ACR levels and OPA policy enforcement."><meta property="twitter:image" content="https://cdn-images-1.medium.com/max/1024/1*h5LIQBjEEkc8IFbEXs7UyA.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Martin Besozzi" href="https://embesozzi.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2022-01-19T01:22:11.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Keycloak Step-Up and Multi-factor Authentication (MFA) for Web Apps and API | Martin Besozzi","image":"https://cdn-images-1.medium.com/max/1024/1*h5LIQBjEEkc8IFbEXs7UyA.png","datePublished":"2022-01-19T01:22:11.000Z","author":[{"@type":"Person","name":"Martin Besozzi","url":"https://www.linkedin.com/in/embesozzi/"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const theme = stored ?? "light";
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BPFdHnW-.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: openid-connect; }@layer astro { ::view-transition-old(openid-connect) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(openid-connect) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(openid-connect) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(openid-connect) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: keycloak; }@layer astro { ::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: multifactorauthentication; }@layer astro { ::view-transition-old(multifactorauthentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(multifactorauthentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(multifactorauthentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(multifactorauthentication) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-4"] { view-transition-name: api; }@layer astro { ::view-transition-old(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(api) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-5"] { view-transition-name: oauth2; }@layer astro { ::view-transition-old(oauth2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(oauth2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(oauth2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(oauth2) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-wide-layout"> <!--  items-start  --> <div class="border-border flex justify-between border-b pt-5 pb-4 sm:pt-6 sm:pb-5"> <!-- Identity: avatar + name + role + small socials --> <div class="flex items-center gap-2"> <a href="/" class="flex items-center gap-3 focus-visible:no-underline"> <img src="https://avatars.githubusercontent.com/u/25515681?v=4" alt="Martin Besozzi" class="border-border hidden size-14 shrink-0 rounded-full border object-cover sm:block" width="56" height="56"> <div> <span class="font-heading text-xl font-bold whitespace-nowrap sm:text-2xl"> Martin Besozzi </span> <span class="text-muted-foreground hidden text-xs sm:block">
+AI Security Architect · IAM Architect · CTO · Founder
+</span> </div> </a> </div> <!-- Socials outside the <a> to avoid invalid nested anchors --> <div class="hidden sm:flex [&_a]:!p-0.5 [&_svg]:!size-4.5 [&_svg]:!scale-100"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </div> <!-- Right side: desktop nav + controls --> <div class="flex items-center gap-4"> <!-- Nav links — desktop only --> <ul class="hidden sm:flex sm:items-center sm:gap-5
+               [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:transition-colors [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> </ul> <!-- Controls: search + theme + mobile hamburger --> <div class="flex items-center gap-0.5"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-9 p-2">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-9 p-2" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> <!-- Hamburger: mobile only --> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> </div> </div> </div> <!-- Mobile nav dropdown --> <nav id="nav-menu" class="sm:hidden"> <ul id="menu-items" class="hidden grid-cols-1 gap-0.5 pb-3 pt-2
+             [&>li>a]:block [&>li>a]:py-2 [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> <li class="pt-1"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </li> </ul> </nav> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:keycloak-step-up-and-multi-factor-authentication-mfa-for-web-apps-and-api" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Keycloak Step-Up and Multi-factor Authentication (MFA) for Web Apps and API </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2022-01-19T01:22:11.000Z"> 18 Jan, 2022 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <blockquote>
+<p>This article was originally published on <a href="https://embesozzi.medium.com/keycloak-step-up-authentication-for-web-and-api-3ef4c9f25d42">Medium</a>.</p>
+</blockquote>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#in-short">In Short</a>
+<ul>
+<li><a href="#update-july-21-2023-">Update: July 21, 2023 😀</a></li>
+<li><a href="#update-january-4-2024">Update: January 4, 2024</a></li>
+<li><a href="#update-january-26-2024">Update: January 26, 2024</a></li>
+<li><a href="#new-features">New features</a></li>
+<li><a href="#clients-acr-to-level-of-authentication-mapping">Clients: ACR to Level of Authentication Mapping</a></li>
+<li><a href="#flow-condition---level-of-authentication">Flow: Condition - Level Of Authentication</a></li>
+</ul>
+</li>
+<li><a href="#example-step-up-use-case">Example Step-Up Use Case</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+</ul>
+<p></p></details><p></p>
+<h2 id="in-short">In Short</h2>
+<p>The focus of the article is to announce that finally Keycloak (Identity and Access Management) <strong>will support step-up authentication</strong>. With step-up authentication, Web Applications or APIs that allow access to different types of resources can require users to authenticate with a stronger authentication mechanism to access sensitive resources.</p>
+<h3 id="update-july-21-2023-">Update: July 21, 2023 😀</h3>
+<p>Now you have access to the workshop for **Keycloak Workshop for Step Up with MFA Biometrics Authentication (Passkeys) and Passwordless login experience **on <a href="https://github.com/embesozzi/keycloak-workshop-stepup-mfa-biometrics">Github</a>, which includes the use cases described in this article. Additionally, there is a new <a href="https://medium.com/@embesozzi/keycloak-workshop-for-step-up-with-mfa-biometrics-authentication-passkeys-b7020ea9ae1b">article</a> 🙌 with more information and cool new use cases, such as, how to implement Step-up Authentication based on OAuth 2.0 Step-up Authentication Challenge Protocol and Passkeys for 1 or 2-factor (MFA).</p>
+<h3 id="update-january-4-2024">Update: January 4, 2024</h3>
+<p>I have updated the article to include the use of the A<strong>uthentication Methods Reference</strong> because it will be supported in 🙌 Keycloak version 24. Since this version has not been released yet (the PR was merge into the main branch), I have built Keycloak from source in order to test the functionality for the article.</p>
+<h3 id="update-january-26-2024">Update: January 26, 2024</h3>
+<p>There is a new way to handle the authentication and step-up experience with native authentication in Keycloak. It’s an API-based approach that enhances the UX by delegating the control of the authentication steps to the application. If you are interested, here is my new <a href="https://medium.com/@embesozzi/deep-dive-into-enhancing-user-experience-with-native-authentication-and-passkeys-in-keycloak-86fb72c64278">article</a> that shows this approach in detail.</p>
+<p>I won’t dive deep into the explanation about step-up authentication or the standard involved because there is a lot of information available. I will just described a high-level overview technical points:</p>
+<ul>
+<li>An Authentication Context Class (acr claim) specifies a set of business rules that authentications are being requested to be satisfied. ACR is referred to as the level of assurance (LoA) or Authenticator Assurance Level (AAL). Authentication Requests using the acr_values parameter request that the specified Authentication Context will be used.</li>
+<li>Authentication Methods Reference (amr claim) is an JSON array of strings that are identifiers for authentication methods used in the authentication. According to the <a href="https://www.rfc-editor.org/rfc/rfc8176.html">RFC 8176</a>, you can specify for instance the authentication method such as pwd (password), otp, user, etc to give more information to the application after the authentication process has concluded.</li>
+<li>To fully support the step-up, a client should be able to force re-authentication even when the IdP considers that a user is authenticated to an acceptable level. In the OpenID Connect standard, this is done with the prompt=login optional parameter.</li>
+</ul>
+<p>At the moment I was writing the article the PR <a href="https://github.com/keycloak/keycloak/pull/7897">keycloak-847</a> was approved and merged into main repository. Now, it’s officially available.</p>
+<h3 id="new-features">New features</h3>
+<h3 id="clients-acr-to-level-of-authentication-mapping">Clients: ACR to Level of Authentication Mapping</h3>
+<p><em>Clients > Advance Settings > ACR to Level of Authentication Mapping</em></p>
+<p>You can define which Authentication Context Class Reference (ACR) value is mapped to which Level of Authentication (LoA). The acr claim will be included in the access token and ID token.</p>
+<p>For instance:</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*h5LIQBjEEkc8IFbEXs7UyA.png" alt="ACR to LoA mapping"></p>
+<p>In this example the acr aal1 is related to one-factor authentication, therefore, the user authenticates with username and password. On the other hand, the acr aal2 is related to two-factor authentication, so it requires the authentication with password and TOTP or Passkeys.</p>
+<p>I choose these values to simplify the demo, but for specifying MFA you can use the value<a href="http://schemas.openid.net/pape/policies/2007/06/multi-factor">http://schemas.openid.net/pape/policies/2007/06/multi-factor</a> (based on <a href="https://openid.net/specs/openid-provider-authentication-policy-extension-1_0-05.html">OpenID Provider Authentication Policy Extension</a>) or <a href="http://schemas.openid.net/policies/modrna/multi-factor">http://schemas.openid.net/policies/modrna/multi-factor</a> (based on <a href="https://openid.net/specs/openid-connect-modrna-authentication-1_0.html#rfc.section.4">OpenID Connect MODRNA Authentication Profile 1.0</a>).</p>
+<h3 id="flow-condition---level-of-authentication">Flow: Condition - Level Of Authentication</h3>
+<p><em>Realm > Flows > Condition - Level Of Authentication</em></p>
+<p>Based on the browser login which is an authentication flow you can use the new flow “Condition - Level Of Authentication” in order to require or not the defined authentication step based on the value of parameters acr_values specified by the application. By doing so, the client could specify the authentication level of a user.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*RTyRx8plL8U3GHkith0crg.png" alt="Keycloak authentication flow MFA"></p>
+<p>I have also associated the authentication mechanism reference with the desired amr claim values to provide the application with more context about the login process. In this case: Password Form → amr: <strong>pwd</strong>, OTP Form → amr: <strong>otp</strong>, and WebAuthn → amr: <strong>user</strong>. Here is an example for the OTP form.</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*H9yofOBEPSfgazXAv6dk2w.png" alt="Keycloak AMR configuration for OTP step"></p>
+<h2 id="example-step-up-use-case">Example Step-Up Use Case</h2>
+<p>In this scenario I’ve registered a demo realm and I’ve created an OAuth Client for the OIDC demo Bank Portal. I’ve also followed the step-up configuration described before.</p>
+<p>In the following sequence diagram you will see that the Bank portal for the sign-in processs will require one factor authentication (username and password) and for managing the bank accounts two factor authentication (mfa).</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*QpjxArnrRzaIuG1KdT-dZg.png" alt="Sequence Diagram for Step-Up process"></p>
+<p><strong>STEP #1:</strong> In this case the web application wants to authenticate the user with username and password (one factor authentication). The application is configured to authenticate with OpenID Connect and it will implement the OAuth Flow Authorization Code.</p>
+<p>To initiate the authentication process the web application must send the authentication request specifying the required acr_values, in this example, aal1.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>https:/idp/auth/realms/Demo/protocol/openid-connect/auth?</span></span>
+<span class="line"><span>  response_type=code&#x26;</span></span>
+<span class="line"><span>  client_id=spa&#x26;</span></span>
+<span class="line"><span>  scope=openid%20profile&#x26;</span></span>
+<span class="line"><span>  state=Xvg9WF-dpnoLGWDocd35PWRf7pHmqpc&#x26;</span></span>
+<span class="line"><span>  redirect_uri=https://webapp/callback&#x26;</span></span>
+<span class="line"><span>  nonce=Gwh7EDGaKUnOa1CYLJXwNTlufGLqKU&#x26;</span></span>
+<span class="line"><span>  acr_values=aal1</span></span></code></pre>
+<p>Keycloak based on the configuration that I’ve described before will follow these authentication steps:</p>
+<ul>
+<li>Prompt for username</li>
+<li>Prompt for password (one factor authentication)</li>
+<li>Skip second factor authentication step</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*MWjVEh_Fi736up5DAtBNZQ.png" alt="Sign In with 1 factor (ACR value = aal1)"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*IGzV6_7pFy5UoLUACbhw4Q.png" alt="1 Factor - Prompt Username"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*dBO6JF36s5hLijYnKEa2bg.png" alt="1 Factor - Prompt Password"></p>
+<p>Keycloak after the successful authentication will return the authorization code to the application and then the application will negotiate the tokens.</p>
+<p>Here is an example with id_token (payload decoded):</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*p6VxQWWFFFREx3pjNvDjPw.png" alt="ID token information"></p>
+<p>Based on the acr claim it will know the level of assurance of the authenticated user and the authentication mechanism amr claim.</p>
+<p>**STEP #2: **If the application wants to do a step-up authentication for requiring two-factor authentication it must send the acr_values with the value aal2 - it also could specify the parameter prompt_login with the value true to force the authentication. Here’s an example:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>https:/idp/auth/realms/Demo/protocol/openid-connect/auth?</span></span>
+<span class="line"><span>  response_type=code&#x26;</span></span>
+<span class="line"><span>  client_id=spa&#x26;</span></span>
+<span class="line"><span>  scope=openid%20profile&#x26;</span></span>
+<span class="line"><span>  state=Lll923-dpnoLGWDocd35PWRf7pHmqpc-DxQNdTEdy-U%3D&#x26;</span></span>
+<span class="line"><span>  redirect_uri=https://webapp/callback</span></span>
+<span class="line"><span>  nonce=Gwh7EDGaKUnOa1CYLJXwNTlufGLqKUkB1URdJBFbClg&#x26;</span></span>
+<span class="line"><span>  acr_values=aal2&#x26;</span></span>
+<span class="line"><span>  prompt_login=true</span></span></code></pre>
+<p>Keycloak will follow these authentication steps:</p>
+<ul>
+<li>Prompt for username</li>
+<li>Prompt for password (first factor authentication)</li>
+<li>Prompt for otp (second factor authentication)</li>
+</ul>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*HXqAdVDxuJ0nW3kdfmcgiw.png" alt="Sign In with 2 factor (ACR value = aal2)"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*IGzV6_7pFy5UoLUACbhw4Q.png" alt="1 Factor - Prompt Username"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*dBO6JF36s5hLijYnKEa2bg.png" alt="1 Factor - Prompt Password"></p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*0Tgp5_1rx7-1scFADpjOXw.png" alt="2 Factor - Prompt for OTP"></p>
+<p>Here is an example with id_token:</p>
+<p><img src="https://cdn-images-1.medium.com/max/1024/1*0HPYnPkrmkd_YCugEKi8og.png" alt="ID token information"></p>
+<p>Based on the acrclaim, it will indicate the level of assurance of the authenticated user; in this case, ‘aal2,’ and the amr claim that contains ‘otp’ indicating the use of the second factor.”</p>
+<p>UPDATED: When I originally wrote this article, I used OTP as the second factor, but nowadays, you can use Passkeys that trigger Touch or Face ID. If you want to know more about it, check out the new <a href="https://medium.com/@embesozzi/keycloak-workshop-for-step-up-with-mfa-biometrics-authentication-passkeys-b7020ea9ae1b">article</a> 🙌.</p>
+<p><strong>BONUS:</strong> Step-Up authentication for API</p>
+<p>You can also implement step-up authentication to your API protected by OAuth. For instance, the API can verify that the user has logged in using MFA and, if not, require the user to step-up to access certain resources. Therefore, you can use the acr claim which is also available in the access token.</p>
+<p>In this example, for second factor authentication the access token has the acr claim with the value aal2:</p>
+<p><img src="https://cdn-images-1.medium.com/max/588/1*TO63Ql31-nckF7ajxGEn2A.png" alt="Article image"></p>
+<p>The API will validate if the acr claim is equal to the value aal2 in the access token received in the Authorization Header with format: Bearer {access-token} based on <a href="https://datatracker.ietf.org/doc/html/rfc6750">RFC 6750</a>.</p>
+<p>Here is an authorization rule in Rego language for <a href="https://www.openpolicyagent.org/">Open Policy Agen</a>t. OPA is an open-source policy engine that provides a simple API for delegating policy decisions to it. General-purpose policy engine that unifies policy enforcement across the stack. In this example the policy requires multi-factor authentication (claim is equal to aal2) for payment operations (POST /api/v1/payment).</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>package http.authz</span></span>
+<span class="line"><span>default allow = false</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>## Check if claim acr is equal to 'aal2' for POST payments</span></span>
+<span class="line"><span>allow {</span></span>
+<span class="line"><span> input.method == "POST"</span></span>
+<span class="line"><span> input.path[_] == "payment"</span></span>
+<span class="line"><span> token.payload.acr == "aal2"</span></span>
+<span class="line"><span>}</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>## Decode and extract JWT payload</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>token = {"payload": payload }{</span></span>
+<span class="line"><span> auth_header := input.headers.authorization</span></span>
+<span class="line"><span> startswith(auth_header, "Bearer ")</span></span>
+<span class="line"><span> bearer_token := substring(auth_header, count("Bearer "), -1)</span></span>
+<span class="line"><span> [_, payload, _] := io.jwt.decode(bearer_token)</span></span>
+<span class="line"><span>}</span></span></code></pre>
+<p>UPDATED: Nowadays, the <a href="https://datatracker.ietf.org/doc/draft-ietf-oauth-step-up-authn-challenge/">OAuth 2.0 Step-up Authentication Challenge Protocol</a> standard (RFC 9470) is available - thanks to 🖤 Vittorio. This enables the API to implement step-up authentication by understanding the required Authentication Context Level (acr). If the level is not sufficient, the API informs the client that it needs to trigger step-up authentication. If you want to know more, check out the new <a href="https://medium.com/@embesozzi/keycloak-workshop-for-step-up-with-mfa-biometrics-authentication-passkeys-b7020ea9ae1b">article</a> <strong>Step Up with MFA Biometrics Authentication (Passkeys) and Passwordless login experience.</strong></p>
+<h2 id="conclusion">Conclusion</h2>
+<p>At first sight the implementation looks very promising and you can implement step-up for Web Apps and API without any problem. I’ve reviewed this feature in other IAM platforms and Keycloak is one of the first ones to implement the <a href="https://www.rfc-editor.org/rfc/rfc9068.html">RFC 9068</a> in order to have the acr claim present in the access token. It is the key for applying access control based on the authentication level of assurance in the API scenario.</p>
+<p>Thanks to Keycloak’s support for the Authentication Methods Reference (amr claim) in complex use cases, it is helpful to indicate to the application the authentication method used. For complex login journeys, you can use the amr claim with the value ‘mfa,’ confirming to the application that the user went through a 2-step authentication process.</p>
+<p>Finally, with the <a href="https://datatracker.ietf.org/doc/draft-ietf-oauth-step-up-authn-challenge/">OAuth 2.0 Step-up Authentication Challenge Protocol</a>, you can improve the security and user experience on the API side by using the acr and amr claims to check the desire level of authentication. If the level is not sufficient, you can trigger the step-up process following the step-up challenge standard RFC 9470.</p>
+<p>That’s all for this post!</p>
+<p>Thank you for reading. If you like it, then share it!</p>
+<p>👉 Lastly, check the new <a href="https://medium.com/@embesozzi/keycloak-workshop-for-step-up-with-mfa-biometrics-authentication-passkeys-b7020ea9ae1b">article</a> and <a href="https://github.com/embesozzi/keycloak-workshop-stepup-mfa-biometrics">github workshop</a> about <strong>Step Up with MFA Biometrics Authentication (Passkeys) and Passwordless login experience.</strong></p> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/openid-connect/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> openid-connect </a> </li><li> <a href="/tags/keycloak/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> keycloak </a> </li><li> <a href="/tags/multifactorauthentication/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> multifactorauthentication </a> </li><li> <a href="/tags/api/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-4"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> api </a> </li><li> <a href="/tags/oauth2/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> oauth2 </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://embesozzi.github.io/posts/martin-besozzi/keycloak-step-up-and-multi-factor-authentication-mfa-for-web-apps-and-api/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://x.com/intent/post?url=https://embesozzi.github.io/posts/martin-besozzi/keycloak-step-up-and-multi-factor-authentication-mfa-for-web-apps-and-api/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://embesozzi.github.io/posts/martin-besozzi/keycloak-step-up-and-multi-factor-authentication-mfa-for-web-apps-and-api/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://embesozzi.github.io/posts/martin-besozzi/keycloak-step-up-and-multi-factor-authentication-mfa-for-web-apps-and-api/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/martin-besozzi/keycloak-integration-with-openfga-based-on-zanzibar-for-fine-grained-authorization-at-sc/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>Previous Post</span> <div class="text-accent/85 text-sm">Keycloak integration with OpenFGA (based on Zanzibar) for Fine-Grained Authorization at Scale (ReBAC)</div> </div> </a>  </div> </main> <footer class="app-wide-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>  <script type="module">
+    async function renderMermaid() {
+      const elements = document.querySelectorAll("div.mermaid");
+      if (!elements.length) return;
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      const { default: mermaid } = await import(
+        "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+      );
+
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" });
+
+      for (const el of elements) {
+        const code = el.textContent ?? "";
+        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
+        try {
+          const { svg } = await mermaid.render(id, code);
+          el.innerHTML = svg;
+        } catch (e) {
+          console.error("Mermaid render error:", e);
+        }
+      }
+    }
+
+    document.addEventListener("astro:page-load", renderMermaid);
+  </script>  <script type="module">const r="theme",o="light",m="dark";function a(){const e=localStorage.getItem(r);return e||o}let t=window.__theme?.value??a();function l(){localStorage.setItem(r,t),c()}function c(){document.firstElementChild?.setAttribute("data-theme",t),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const e=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",e)}function u(){c(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===o?m:o,l()})}u();document.addEventListener("astro:after-swap",u);document.addEventListener("astro:before-swap",e=>{const n=document.querySelector("meta[name='theme-color']")?.getAttribute("content");n&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",n)});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>

@@ -1,0 +1,432 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://www.linkedin.com/pulse/security-design-securing-our-keycloak-mcp-app-authzen-martin-besozzi-zu5me"><meta name="generator" content="Astro v6.4.2"><!-- Fonts --><style>@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/2015c3ee75fce6cd.woff") format("woff"), url("/_astro/fonts/186e6385d7852012.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/20302367397c05fa.woff") format("woff"), url("/_astro/fonts/b08a78609a8a086b.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/bb754429c8057718.woff") format("woff"), url("/_astro/fonts/610b113b74c3265a.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/29e2519b5d70ba84.woff") format("woff"), url("/_astro/fonts/c341830447fbbd1e.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/be84b35bcfc349e9.woff") format("woff"), url("/_astro/fonts/d57ed212a535d863.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/9f194d9b0de98159.woff") format("woff"), url("/_astro/fonts/7b8bc1ccb887754d.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/fdb5d17a23b6aa6e.woff") format("woff"), url("/_astro/fonts/3be34b09d07b7f66.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/39c158497c7c5a90.woff") format("woff"), url("/_astro/fonts/6a646b2f24236261.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/45ae197ec2801a42.woff") format("woff"), url("/_astro/fonts/c3fd635c00a11802.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/8a2dc10ea0fb4488.woff") format("woff"), url("/_astro/fonts/2f812678838d3545.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}:root{--font-inter:Inter-938b6d9a5b97ad60,"Inter-938b6d9a5b97ad60 fallback: Arial",sans-serif;}</style><style>@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/6014e528f57806f3.woff") format("woff"), url("/_astro/fonts/75d17da681d49dc0.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/31ac3931b90bfe7a.woff") format("woff"), url("/_astro/fonts/66c8f2a9e4b334e5.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/cec8ae6b731972f8.woff") format("woff"), url("/_astro/fonts/a0534acacfcf0885.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/334b4db9de3a5fe4.woff") format("woff"), url("/_astro/fonts/cf39180873795e06.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/9bf5aa116af20a93.woff") format("woff"), url("/_astro/fonts/be45d86507988f6b.ttf") format("truetype");font-display:swap;font-weight:800;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/4c0b37f553ec06f9.woff") format("woff"), url("/_astro/fonts/b5e86eb0a6ececd3.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/fdda611a1e41f26f.woff") format("woff"), url("/_astro/fonts/5fa68f67a95fdc63.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/167823ee192baf0f.woff") format("woff"), url("/_astro/fonts/16c9148d715a9889.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/d005e41eec063bbe.woff") format("woff"), url("/_astro/fonts/4f409386f6ffef9a.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/c68a8c249f10e302.woff") format("woff"), url("/_astro/fonts/5eeef7238f758dc8.ttf") format("truetype");font-display:swap;font-weight:800;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}:root{--font-jakarta:"Plus Jakarta Sans-69ff88703f9ba026","Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial",sans-serif;}</style><!-- Primary meta --><title>Agentic AI Security: Protecting Interactive Keycloak MCP App with OpenID AuthZEN Gateway for FGA | Martin Besozzi</title><meta name="title" content="Agentic AI Security: Protecting Interactive Keycloak MCP App with OpenID AuthZEN Gateway for FGA | Martin Besozzi"><meta name="description" content="How the TwoGenIdentity AuthZEN MCP Gateway protects an interactive Keycloak MCP App with standardized, externalized fine-grained authorization."><meta name="author" content="Martin Besozzi"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Martin Besozzi"><meta property="og:title" content="Agentic AI Security: Protecting Interactive Keycloak MCP App with OpenID AuthZEN Gateway for FGA | Martin Besozzi"><meta property="og:description" content="How the TwoGenIdentity AuthZEN MCP Gateway protects an interactive Keycloak MCP App with standardized, externalized fine-grained authorization."><meta property="og:url" content="https://www.linkedin.com/pulse/security-design-securing-our-keycloak-mcp-app-authzen-martin-besozzi-zu5me"><meta property="og:image" content="https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway/index.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://www.linkedin.com/pulse/security-design-securing-our-keycloak-mcp-app-authzen-martin-besozzi-zu5me"><meta property="twitter:title" content="Agentic AI Security: Protecting Interactive Keycloak MCP App with OpenID AuthZEN Gateway for FGA | Martin Besozzi"><meta property="twitter:description" content="How the TwoGenIdentity AuthZEN MCP Gateway protects an interactive Keycloak MCP App with standardized, externalized fine-grained authorization."><meta property="twitter:image" content="https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway/index.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Martin Besozzi" href="https://embesozzi.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2026-01-28T12:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Agentic AI Security: Protecting Interactive Keycloak MCP App with OpenID AuthZEN Gateway for FGA | Martin Besozzi","image":"https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway/index.png","datePublished":"2026-01-28T12:00:00.000Z","author":[{"@type":"Person","name":"Martin Besozzi","url":"https://www.linkedin.com/in/embesozzi/"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const theme = stored ?? "light";
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.BPFdHnW-.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: ai-agents; }@layer astro { ::view-transition-old(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: iam; }@layer astro { ::view-transition-old(iam) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(iam) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(iam) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(iam) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: authzen; }@layer astro { ::view-transition-old(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-wide-layout"> <!--  items-start  --> <div class="border-border flex justify-between border-b pt-5 pb-4 sm:pt-6 sm:pb-5"> <!-- Identity: avatar + name + role + small socials --> <div class="flex items-center gap-2"> <a href="/" class="flex items-center gap-3 focus-visible:no-underline"> <img src="https://avatars.githubusercontent.com/u/25515681?v=4" alt="Martin Besozzi" class="border-border hidden size-14 shrink-0 rounded-full border object-cover sm:block" width="56" height="56"> <div> <span class="font-heading text-xl font-bold whitespace-nowrap sm:text-2xl"> Martin Besozzi </span> <span class="text-muted-foreground hidden text-xs sm:block">
+AI Security Architect · IAM Architect · CTO · Founder
+</span> </div> </a> </div> <!-- Socials outside the <a> to avoid invalid nested anchors --> <div class="hidden sm:flex [&_a]:!p-0.5 [&_svg]:!size-4.5 [&_svg]:!scale-100"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </div> <!-- Right side: desktop nav + controls --> <div class="flex items-center gap-4"> <!-- Nav links — desktop only --> <ul class="hidden sm:flex sm:items-center sm:gap-5
+               [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:transition-colors [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> </ul> <!-- Controls: search + theme + mobile hamburger --> <div class="flex items-center gap-0.5"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-9 p-2">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-9 p-2" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> <!-- Hamburger: mobile only --> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> </div> </div> </div> <!-- Mobile nav dropdown --> <nav id="nav-menu" class="sm:hidden"> <ul id="menu-items" class="hidden grid-cols-1 gap-0.5 pb-3 pt-2
+             [&>li>a]:block [&>li>a]:py-2 [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> <li class="pt-1"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </li> </ul> </nav> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway-for-fga" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Agentic AI Security: Protecting Interactive Keycloak MCP App with OpenID AuthZEN Gateway for FGA </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2026-01-28T12:00:00.000Z"> 28 Jan, 2026 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <blockquote>
+<p>This article was originally published on <a href="https://www.linkedin.com/pulse/security-design-securing-our-keycloak-mcp-app-authzen-martin-besozzi-zu5me">LinkedIn</a>.</p>
+</blockquote>
+<video controls preload="metadata" poster="https://media.licdn.com/dms/image/v2/D4E12AQHlBEk9rAPKDA/videocover-high/B4EZwFhP6rGoBc-/0/1769619139489?e=2147483647&#x26;v=beta&#x26;t=RtfVCWQg8a0IOXWcXEPDIAx0wT-t5pNXJcpEE6-ndmE">
+  <source src="https://dms.licdn.com/playlist/vid/v2/D4E12AQHlBEk9rAPKDA/mp4-720p-30fp-crf28/B4EZwFhP6rGoAs-/0/1769619146715?e=2147483647&#x26;v=beta&#x26;t=AcjT1wA4ooXwLpwuo2z6bwylK5flXWCnK0ZtUScGzc8" type="video/mp4">
+  Agentic AI Security: Protecting Interactive Keycloak MCP App with OpenID AuthZEN Gateway for FGA
+</video>
+<p>Today, I am excited to announce a first look at the <a href="https://www.linkedin.com/company/twogenidentity">TwoGenIdentity</a> <strong><a href="https://twogenidentity.com/homes/apisixauthzen/">AuthZEN MCP Gateway</a></strong> for our new <strong>Keycloak MCP app</strong> implementation. The focus of this work is demonstrating how to implement security standards to protect AI-driven interactions.</p>
+<p>Following up on my previous articles, we have added support for the MCP App extension to our Keycloak MCP Server. This enables interactive and structured UI experiences for managing Keycloak IAM with an AI assistant. We also expose it through our AuthZEN MCP Gateway to provide standardized and decoupled authorization using an external AuthZEN-compliant PDP.</p>
+<p>In the <a href="https://youtu.be/V_gmPXFE_JU">demo</a> with <a href="https://www.linkedin.com/showcase/claude/">Claude</a>, the AI assistant interacts with the Keycloak MCP app to securely manage identities and authentication flows via the MCP Gateway where authorization policies are enforced in a standardized way. The authenticated user can list and view identities but is not authorized to delete them. Authentication flows are also exposed (easter egg for Keycloak users: beautiful flow visualizations).</p>
+<iframe width="100%" height="420" src="https://www.youtube.com/embed/V_gmPXFE_JU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+<p><img src="https://media.licdn.com/dms/image/v2/D4E12AQF7lODApRgk1A/article-inline_image-shrink_1000_1488/B4EZwFqYmQJ8AQ-/0/1769621524100?e=2147483647&#x26;v=beta&#x26;t=Zt8tOlURhkjR5SCxl4DsI0BwTDknmwc1JhTWb2GohcU" alt="Multiple PEPs in the AI Journey"></p>
+<p>There is a lot to unpack, but I would like to try to summarize the main points.</p>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#security-is-the-product">Security Is the Product</a></li>
+<li><a href="#open-security-standards-are-not-optional">Open Security Standards Are Not Optional</a></li>
+<li><a href="#what-changed-with-our-authzen-mcp-gateway">What Changed with our AuthZEN MCP Gateway</a></li>
+<li><a href="#what-changed-with-the-keycloak-mcp-app">What Changed with the Keycloak MCP App</a>
+<ul>
+<li><a href="#the-bring-your-own-era">The “Bring Your Own” Era</a></li>
+</ul>
+</li>
+<li><a href="#why-this-is-more-than-a-demo">Why This Is More Than a Demo</a></li>
+<li><a href="#whats-next">What’s Next</a></li>
+</ul>
+<p></p></details><p></p>
+<h2 id="security-is-the-product">Security Is the Product</h2>
+<p>My focus - and the services I work on - are fundamentally about security. AI, MCP, and MCP Apps are accelerators, but:</p>
+<blockquote>
+<p><strong>Security remains the product, not a side effect</strong>.</p>
+</blockquote>
+<p>This work is driven by concrete security requirements:</p>
+<ul>
+<li>Enforcing least privilege in dynamic AI workflows</li>
+<li>Separating policy decisions from execution</li>
+<li>Maintaining auditability and compliance as interactions become conversational and UI-driven</li>
+<li>Supporting multiple authorization models without locking into a single vendor or engine</li>
+<li>Implement open standards</li>
+</ul>
+<p>This is why AuthZEN is central:</p>
+<ul>
+<li>It standardizes how Policy Enforcement Points (PEPs) talk to Policy Decision Points (PDPs)</li>
+<li>It allows security teams to govern authorization independently of application code</li>
+<li>It supports true policy-as-code governance across APIs, MCP servers, and MCP Apps</li>
+</ul>
+<h2 id="open-security-standards-are-not-optional">Open Security Standards Are Not Optional</h2>
+<p>The most important aspect of this work is not the demo itself.</p>
+<p>It is that the entire approach is built on open security standards:</p>
+<p>🟩 Baseline flow - Core Standard (green arrows), focused on OAuth 2.1 / 2.0 specs, the adopted security standards in the MCP space.</p>
+<p>🟨 Enhanced security flow: OpenID AuthZEN specification to externalize and standardize authorization, starting with the communication between the Policy Enforcement Point (PEP) and the Policy Decision Point (PDP). Once authorization is standardized, you can adopt different authorization models such as ReBAC or PBAC in a consistent and interoperable way.</p>
+<p><img src="https://media.licdn.com/dms/image/v2/D4D12AQGv7HsMBl2y1w/article-inline_image-shrink_400_744/B4DZwQzFcnIsAY-/0/1769808354160?e=2147483647&#x26;v=beta&#x26;t=sbl_EojrBf9S2qF7RT97GmoyS85jKgMRnXKHptUF34Y" alt="AI Agent MCP Case Security Standards"></p>
+<p>This ensures:</p>
+<ul>
+<li>Interoperability across tools and vendors</li>
+<li>No proprietary authorization silos</li>
+<li>The ability to evolve architectures without rewriting security logic</li>
+</ul>
+<p>In an AI-driven world, closed security models do not scale.</p>
+<h2 id="what-changed-with-our-authzen-mcp-gateway">What Changed with our AuthZEN MCP Gateway</h2>
+<p>MCP Apps unlock a new interaction model, but they also raise a critical security question:</p>
+<blockquote>
+<p>How do we secure AI-driven interactions without vendor-locked security or authorization models?</p>
+</blockquote>
+<p>The answer, for me, is <strong>standardization</strong>.</p>
+<p>With the AuthZEN MCP Gateway:</p>
+<ul>
+<li>OAuth / JWT Security supported integration</li>
+<li>Act as standardized AuthZEN Policy Enforcement Points (PEPs)</li>
+<li>Authorization decisions are delegated to external, AuthZEN-compliant PDPs such as OpenFGA, Cerbos, etc</li>
+<li>Policies are evaluated dynamically using MCP context, along with authorization and authentication context</li>
+</ul>
+<p>This is the key point:</p>
+<blockquote>
+<p>Authorization logic is no longer embedded in MCP tools or AI workflows. It is externalized, standardized, and governed.</p>
+</blockquote>
+<p>Therefore, you can enable the MCP security configuration as follows:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{ </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"pdp"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"host"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">http://authzen-pdp:3593</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "mcp"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"enforce_on"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"methods"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> [</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tools/call</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">] } }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "subject"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">user</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">claim::preferred_username</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "properties"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> [ { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">roles</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">realm_access.roles</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tenant</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">organization</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">acr</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">acr</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">amr</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">amr</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> } ] }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "resource"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">mcp</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">keycloak:iam</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "action"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">mcp::tool::name</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> } }</span></span></code></pre>
+<p>Using Dynamic JWT Context Extraction, the gateway then extracts relevant context from the OAuth access token, including the username (preferred_username), roles, tenant information, Authentication Context Class Reference ( <code>acr</code> ), and Authentication Methods References ( <code>amr</code> ).</p>
+<p>Thanks to Dynamic MCP Request Mapping, in this example the gateway extracts the MCP tool name ( <code>mcp::tool::name</code> ), for example <code>keycloak_delete_user</code>. Authorization policies are enforced only on the tools/call MCP method.</p>
+<p>These attributes are forwarded to the PDP in the resulting AuthZEN evaluation request. For example:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{ </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"subject"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">identity</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">embesozzi</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "properties"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> [ { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">roles</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">admin</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tenant</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tenant-1</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">acr</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">inherence</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"key"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">amr</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "claim"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">passkeys</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> } ] }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "resource"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">mcp</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">keycloak:iam</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "action"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">keycloak_delete_user</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> } }</span></span></code></pre>
+<p>The AuthZEN PDP can then use this information directly in authorization policies. For example, you can enforce that only admin users authenticated with phishing-resistant authentication, such as an <code>acr</code> claim value of <code>inherence</code> and an <code>amr</code> claim value of <code>passkeys</code>, are allowed to delete users.</p>
+<p>Finally, based on the AuthZEN evaluation response, the MCP gateway enforces the decision.</p>
+<h2 id="what-changed-with-the-keycloak-mcp-app">What Changed with the Keycloak MCP App</h2>
+<p>The interaction model fundamentally changes:</p>
+<ul>
+<li>The app exposes interactive, structured UIs directly inside AI conversations</li>
+<li>AI assistants move beyond scripts and text into real, guided workflows</li>
+<li>Users interact with capabilities, not dashboards</li>
+</ul>
+<p>Imagine building custom UIs or help desk modules, forcing users to log in to a platform, or showcasing MCP for IAM commercial platforms using only plain-text interactions. That’s old school 🙂.</p>
+<p>Check out the demo to see how this works across several use cases.</p>
+<h3 id="the-bring-your-own-era">The “Bring Your Own” Era</h3>
+<p>When you combine MCP App with the AuthZEN MCP Gateway, you enter what I call the Bring Your Own era.</p>
+<p><strong>FROM:</strong></p>
+<ul>
+<li>Log in to your IAM SaaS or IAM platform</li>
+<li>Hardcode authorization rules inside MCP servers or APIs</li>
+</ul>
+<p><strong>TO:</strong></p>
+<ul>
+<li>Bring your AI assistant and interact through the Keycloak MCP App</li>
+<li>Bring your authorization policies (your AuthZEN PDP) and connect through the MCP Gateway</li>
+</ul>
+<p>This enables:</p>
+<ul>
+<li>AI assistants as first-class enterprise clients</li>
+<li>MCP Apps delivering the right UI at the right moment</li>
+<li>Authorization enforced consistently, regardless of where the action originates</li>
+</ul>
+<p>Security becomes portable, not embedded.</p>
+<h2 id="why-this-is-more-than-a-demo">Why This Is More Than a Demo</h2>
+<p>This first look is intentionally focused on security and concrete architecture patterns, not features.</p>
+<p>It demonstrates:</p>
+<blockquote>
+<p>How to implement open security standard to protect AI-driven interactions</p>
+</blockquote>
+<h2 id="whats-next">What’s Next</h2>
+<p>Future articles will explore:</p>
+<ul>
+<li>Describing multi-PEP architectures in greater detail within AI-driven workflows</li>
+<li>Combining RBAC and ReBAC using AuthZEN PEPs</li>
+<li>And yes - taking a little time to breathe as well:)</li>
+</ul>
+<p>This article does not go into depth on all topics related to OIDC, OAuth, and passkeys (some of which I’ve covered in other articles). New topics will be covered in future releases. It’s also worth noting that both AuthZEN and the MCP app extension are still in early stages and offer significant room for further exploration.</p>
+<p>If you care about AI security, IAM, and open standards, I’m always happy to exchange ideas. And if you’re interested in adding new and interesting use cases to the MCP app, feel free to reach out.</p> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/ai-agents/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> AI Agents </a> </li><li> <a href="/tags/iam/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> IAM </a> </li><li> <a href="/tags/authzen/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> AuthZEN </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://x.com/intent/post?url=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://embesozzi.github.io/posts/martin-besozzi/agentic-ai-security-protecting-interactive-keycloak-mcp-app-with-openid-authzen-gateway/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2"> <a href="/posts/martin-besozzi/mastering-secure-apis-and-ai-agents-with-zero-trust-and-fine-grained-authorization-based/" class="flex w-full gap-1 hover:opacity-75"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <div> <span>Previous Post</span> <div class="text-accent/85 text-sm">Mastering Secure APIs and AI Agents with Zero Trust and Fine-Grained Authorization Based on OpenID AuthZEN</div> </div> </a> <a href="/posts/martin-besozzi/securing-mcp-apps-with-the-authzen-mcp-gateway-fine-grained-authorization-for-interactiv/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>Next Post</span> <div class="text-accent/85 text-sm">Securing MCP Apps with the AuthZEN MCP Gateway: Fine-Grained Authorization for Interactive AI Experiences</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-wide-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>  <script type="module">
+    async function renderMermaid() {
+      const elements = document.querySelectorAll("div.mermaid");
+      if (!elements.length) return;
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      const { default: mermaid } = await import(
+        "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+      );
+
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" });
+
+      for (const el of elements) {
+        const code = el.textContent ?? "";
+        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
+        try {
+          const { svg } = await mermaid.render(id, code);
+          el.innerHTML = svg;
+        } catch (e) {
+          console.error("Mermaid render error:", e);
+        }
+      }
+    }
+
+    document.addEventListener("astro:page-load", renderMermaid);
+  </script>  <script type="module">const r="theme",o="light",m="dark";function a(){const e=localStorage.getItem(r);return e||o}let t=window.__theme?.value??a();function l(){localStorage.setItem(r,t),c()}function c(){document.firstElementChild?.setAttribute("data-theme",t),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const e=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",e)}function u(){c(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===o?m:o,l()})}u();document.addEventListener("astro:after-swap",u);document.addEventListener("astro:before-swap",e=>{const n=document.querySelector("meta[name='theme-color']")?.getAttribute("content");n&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",n)});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>
