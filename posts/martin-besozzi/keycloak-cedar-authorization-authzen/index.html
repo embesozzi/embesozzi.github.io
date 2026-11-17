@@ -1,0 +1,876 @@
+<!DOCTYPE html><html dir="ltr" lang="en" class="overflow-y-scroll scroll-smooth"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="icon" href="/favicon.ico"><link rel="canonical" href="https://embesozzi.github.io/posts/martin-besozzi/keycloak-cedar-authorization-authzen/"><meta name="generator" content="Astro v6.4.2"><!-- Fonts --><style>@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/2015c3ee75fce6cd.woff") format("woff"), url("/_astro/fonts/186e6385d7852012.ttf") format("truetype");font-display:swap;font-weight:300;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/20302367397c05fa.woff") format("woff"), url("/_astro/fonts/b08a78609a8a086b.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/bb754429c8057718.woff") format("woff"), url("/_astro/fonts/610b113b74c3265a.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/29e2519b5d70ba84.woff") format("woff"), url("/_astro/fonts/c341830447fbbd1e.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/be84b35bcfc349e9.woff") format("woff"), url("/_astro/fonts/d57ed212a535d863.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/9f194d9b0de98159.woff") format("woff"), url("/_astro/fonts/7b8bc1ccb887754d.ttf") format("truetype");font-display:swap;font-weight:300;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/fdb5d17a23b6aa6e.woff") format("woff"), url("/_astro/fonts/3be34b09d07b7f66.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/39c158497c7c5a90.woff") format("woff"), url("/_astro/fonts/6a646b2f24236261.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/45ae197ec2801a42.woff") format("woff"), url("/_astro/fonts/c3fd635c00a11802.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:Inter-938b6d9a5b97ad60;src:url("/_astro/fonts/8a2dc10ea0fb4488.woff") format("woff"), url("/_astro/fonts/2f812678838d3545.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:300;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}@font-face{font-family:"Inter-938b6d9a5b97ad60 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.6955%;ascent-override:91.6548%;descent-override:22.8213%;line-gap-override:0%;}:root{--font-inter:Inter-938b6d9a5b97ad60,"Inter-938b6d9a5b97ad60 fallback: Arial",sans-serif;}</style><style>@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/6014e528f57806f3.woff") format("woff"), url("/_astro/fonts/75d17da681d49dc0.ttf") format("truetype");font-display:swap;font-weight:400;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/31ac3931b90bfe7a.woff") format("woff"), url("/_astro/fonts/66c8f2a9e4b334e5.ttf") format("truetype");font-display:swap;font-weight:500;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/cec8ae6b731972f8.woff") format("woff"), url("/_astro/fonts/a0534acacfcf0885.ttf") format("truetype");font-display:swap;font-weight:600;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/334b4db9de3a5fe4.woff") format("woff"), url("/_astro/fonts/cf39180873795e06.ttf") format("truetype");font-display:swap;font-weight:700;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/9bf5aa116af20a93.woff") format("woff"), url("/_astro/fonts/be45d86507988f6b.ttf") format("truetype");font-display:swap;font-weight:800;font-style:italic;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/4c0b37f553ec06f9.woff") format("woff"), url("/_astro/fonts/b5e86eb0a6ececd3.ttf") format("truetype");font-display:swap;font-weight:400;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/fdda611a1e41f26f.woff") format("woff"), url("/_astro/fonts/5fa68f67a95fdc63.ttf") format("truetype");font-display:swap;font-weight:500;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/167823ee192baf0f.woff") format("woff"), url("/_astro/fonts/16c9148d715a9889.ttf") format("truetype");font-display:swap;font-weight:600;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/d005e41eec063bbe.woff") format("woff"), url("/_astro/fonts/4f409386f6ffef9a.ttf") format("truetype");font-display:swap;font-weight:700;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026";src:url("/_astro/fonts/c68a8c249f10e302.woff") format("woff"), url("/_astro/fonts/5eeef7238f758dc8.ttf") format("truetype");font-display:swap;font-weight:800;font-style:normal;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:italic;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:400;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:500;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:600;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:700;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}@font-face{font-family:"Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial";src:local("Arial");font-display:swap;font-weight:800;font-style:normal;size-adjust:105.4283%;ascent-override:98.4556%;descent-override:21.057%;line-gap-override:0%;}:root{--font-jakarta:"Plus Jakarta Sans-69ff88703f9ba026","Plus Jakarta Sans-69ff88703f9ba026 fallback: Arial",sans-serif;}</style><!-- Primary meta --><title>Cedar Policy Engine in Keycloak: Fine-Grained Authorization for Users and AI Agents via AuthZEN | Martin Besozzi</title><meta name="title" content="Cedar Policy Engine in Keycloak: Fine-Grained Authorization for Users and AI Agents via AuthZEN | Martin Besozzi"><meta name="description" content="A practical guide to integrating Cedar into Keycloak Authorization Services through AuthZEN with our open-source extension."><meta name="author" content="Martin Besozzi"><link rel="sitemap" href="/sitemap-index.xml"><!-- Open Graph --><meta property="og:type" content="website"><meta property="og:site_name" content="Martin Besozzi"><meta property="og:title" content="Cedar Policy Engine in Keycloak: Fine-Grained Authorization for Users and AI Agents via AuthZEN | Martin Besozzi"><meta property="og:description" content="A practical guide to integrating Cedar into Keycloak Authorization Services through AuthZEN with our open-source extension."><meta property="og:url" content="https://embesozzi.github.io/posts/martin-besozzi/keycloak-cedar-authorization-authzen/"><meta property="og:image" content="https://embesozzi.github.io/_astro/keycloak-authzen-cedar-flow.CklKyAsV.png"><!-- Twitter / X --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://embesozzi.github.io/posts/martin-besozzi/keycloak-cedar-authorization-authzen/"><meta property="twitter:title" content="Cedar Policy Engine in Keycloak: Fine-Grained Authorization for Users and AI Agents via AuthZEN | Martin Besozzi"><meta property="twitter:description" content="A practical guide to integrating Cedar into Keycloak Authorization Services through AuthZEN with our open-source extension."><meta property="twitter:image" content="https://embesozzi.github.io/_astro/keycloak-authzen-cedar-flow.CklKyAsV.png"><!-- RSS autodiscovery --><link rel="alternate" type="application/rss+xml" title="Martin Besozzi" href="https://embesozzi.github.io/rss.xml/"><!-- Filled at runtime by theme.ts to match the current background colour --><meta name="theme-color" content=""><!-- Extra head content injected by child layouts (e.g. JSON-LD, article meta) -->  <meta property="og:type" content="article"> <meta property="article:published_time" content="2026-11-13T12:00:00.000Z"><script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Cedar Policy Engine in Keycloak: Fine-Grained Authorization for Users and AI Agents via AuthZEN | Martin Besozzi","image":"https://embesozzi.github.io/_astro/keycloak-authzen-cedar-flow.CklKyAsV.png","datePublished":"2026-11-13T12:00:00.000Z","author":[{"@type":"Person","name":"Martin Besozzi","url":"https://www.linkedin.com/in/embesozzi/"}]}</script> <!--
+      Inline FOUC-prevention script: sets data-theme on <html> before
+      the browser paints. Runs synchronously, no defer/async.
+    --><script>
+      (function () {
+        const stored = localStorage.getItem("theme");
+        const theme = stored ?? "light";
+        document.firstElementChild?.setAttribute("data-theme", theme);
+        // Expose value so theme.ts can skip re-detection.
+        window.__theme = { value: theme };
+      })();
+    </script><meta name="astro-view-transitions-enabled" content="true"><meta name="astro-view-transitions-fallback" content="animate"><script type="module" src="/_astro/ClientRouter.astro_astro_type_script_index_0_lang.CAqDO0tx.js"></script><link rel="stylesheet" href="/_astro/Footer.xUqSBECP.css">
+<style>@keyframes astroFadeInOut{0%{opacity:1}to{opacity:0}}@keyframes astroFadeIn{0%{opacity:0;mix-blend-mode:plus-lighter}to{opacity:1;mix-blend-mode:plus-lighter}}@keyframes astroFadeOut{0%{opacity:1;mix-blend-mode:plus-lighter}to{opacity:0;mix-blend-mode:plus-lighter}}@keyframes astroSlideFromRight{0%{transform:translate(100%)}}@keyframes astroSlideFromLeft{0%{transform:translate(-100%)}}@keyframes astroSlideToRight{to{transform:translate(100%)}}@keyframes astroSlideToLeft{to{transform:translate(-100%)}}@media(prefers-reduced-motion){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}[data-astro-transition-scope]{animation:none!important}}
+</style><style>[data-astro-transition-scope="astro-36ssibgs-1"] { view-transition-name: cedar; }@layer astro { ::view-transition-old(cedar) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(cedar) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(cedar) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(cedar) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-1"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-1"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-2"] { view-transition-name: authzen; }@layer astro { ::view-transition-old(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(authzen) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-2"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-2"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-3"] { view-transition-name: keycloak; }@layer astro { ::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(keycloak) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-3"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-3"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-4"] { view-transition-name: ai-agents; }@layer astro { ::view-transition-old(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(ai-agents) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-4"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-4"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-5"] { view-transition-name: mcp; }@layer astro { ::view-transition-old(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(mcp) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-5"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-5"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style><style>[data-astro-transition-scope="astro-36ssibgs-6"] { view-transition-name: security; }@layer astro { ::view-transition-old(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }::view-transition-new(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back]::view-transition-old(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back]::view-transition-new(security) { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; } }[data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }[data-astro-transition=back][data-astro-transition-fallback="old"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="old"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeOut; }[data-astro-transition=back][data-astro-transition-fallback="new"] [data-astro-transition-scope="astro-36ssibgs-6"],
+			[data-astro-transition=back][data-astro-transition-fallback="new"][data-astro-transition-scope="astro-36ssibgs-6"] { 
+	animation-duration: 180ms;
+	animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+	animation-fill-mode: both;
+	animation-name: astroFadeIn; }</style></head> <body class="bg-background font-app text-foreground selection:bg-accent/75 selection:text-accent-foreground flex min-h-svh flex-col">    <a id="skip-to-content" href="#main-content" class="bg-background text-accent absolute inset-s-16 -top-full z-50 px-3 py-2 backdrop-blur-lg transition-all focus:top-4"> Skip to content </a> <header class="app-wide-layout"> <!--  items-start  --> <div class="border-border flex justify-between border-b pt-5 pb-4 sm:pt-6 sm:pb-5"> <!-- Identity: avatar + name + role + small socials --> <div class="flex items-center gap-2"> <a href="/" class="flex items-center gap-3 focus-visible:no-underline"> <img src="https://avatars.githubusercontent.com/u/25515681?v=4" alt="Martin Besozzi" class="border-border hidden size-14 shrink-0 rounded-full border object-cover sm:block" width="56" height="56"> <div> <span class="font-heading text-xl font-bold whitespace-nowrap sm:text-2xl"> Martin Besozzi </span> <span class="text-muted-foreground hidden text-xs sm:block">
+AI Security Architect · IAM Architect · CTO · Founder
+</span> </div> </a> </div> <!-- Socials outside the <a> to avoid invalid nested anchors --> <div class="hidden sm:flex [&_a]:!p-0.5 [&_svg]:!size-4.5 [&_svg]:!scale-100"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </div> <!-- Right side: desktop nav + controls --> <div class="flex items-center gap-4"> <!-- Nav links — desktop only --> <ul class="hidden sm:flex sm:items-center sm:gap-5
+               [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:transition-colors [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> </ul> <!-- Controls: search + theme + mobile hamburger --> <div class="flex items-center gap-0.5"> <a href="/search/" title="Search" aria-label="Search" class="group inline-flex items-center gap-1 hover:text-accent focus-outline relative size-9 p-2">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-1/2 left-1/2 size-5 -translate-x-1/2 -translate-y-1/2" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 10a7 7 0 1 0 14 0 7 7 0 1 0-14 0M21 21l-6-6" /></svg> <span class="sr-only">Search</span>  </a> <button id="theme-btn" class="focus-outline hover:[&>svg]:stroke-accent relative size-9 p-2" title="Toggle theme" aria-label="auto" aria-live="polite"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 3h.393a7.5 7.5 0 0 0 7.92 12.446A9 9 0 1 1 12 2.992z" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="absolute top-[50%] left-[50%] translate-[-50%] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M14.828 14.828a4 4 0 1 0-5.656-5.656 4 4 0 0 0 5.656 5.656M6.343 17.657l-1.414 1.414M6.343 6.343 4.929 4.929M17.657 6.343l1.414-1.414M17.657 17.657l1.414 1.414M4 12H2M12 4V2M20 12h2M12 20v2" /></svg> </button> <!-- Hamburger: mobile only --> <button id="menu-btn" class="focus-outline p-2 sm:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="menu-items" data-label-open="Open menu" data-label-close="Close menu"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="hidden" viewBox="0 0 24 24" id="close-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M18 6 6 18M6 6l12 12" /></svg> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="icon icon-tabler icons-tabler-outline icon-tabler-menu-deep" viewBox="0 0 24 24" id="menu-icon"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 6h16M7 12h13M10 18h10" /></svg> </button> </div> </div> </div> <!-- Mobile nav dropdown --> <nav id="nav-menu" class="sm:hidden"> <ul id="menu-items" class="hidden grid-cols-1 gap-0.5 pb-3 pt-2
+             [&>li>a]:block [&>li>a]:py-2 [&>li>a]:text-xs [&>li>a]:font-semibold [&>li>a]:tracking-widest [&>li>a]:uppercase [&>li>a]:hover:text-accent"> <li> <a href="/posts/" class="active-nav"> Posts </a> </li> <li> <a href="/tags/"> Tags </a> </li> <li> <a href="/about/"> About </a> </li> <li> <a href="/archives/"> Archives </a> </li> <li class="pt-1"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> </li> </ul> </nav> </header> <script type="module">function c(){const e=document.querySelector("#menu-btn"),t=document.querySelector("#menu-items"),n=document.querySelector("#menu-icon"),s=document.querySelector("#close-icon");if(!e||!t||!n||!s)return;const a=e.dataset.labelOpen??"Open menu",l=e.dataset.labelClose??"Close menu";e.addEventListener("click",()=>{const o=e.getAttribute("aria-expanded")==="true";e.setAttribute("aria-expanded",o?"false":"true"),e.setAttribute("aria-label",o?a:l),t.classList.toggle("hidden"),t.classList.toggle("grid"),n.classList.toggle("hidden"),s.classList.toggle("hidden")})}c();document.addEventListener("astro:after-swap",c);</script> <div class="app-layout flex items-center justify-start"><a id="back-button" href="/" class="group inline-flex items-center gap-1 hover:text-accent focus-outline hover:text-foreground/75 -ms-2 mt-8 mb-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 6-6 6 6 6" /></svg><span>Go back</span> </a></div><script type="module">function o(){const t=document.querySelector("#back-button"),e=sessionStorage.getItem("backUrl");e&&t&&(t.href=e)}document.addEventListener("astro:page-load",o);o();</script> <main id="main-content" class="app-layout" data-pagefind-body> <h1 style="view-transition-name:cedar-policy-engine-in-keycloak-fine-grained-authorization-for-users-and-ai-agents-via-authzen" class="text-accent inline-block text-2xl font-bold sm:text-3xl"> Cedar Policy Engine in Keycloak: Fine-Grained Authorization for Users and AI Agents via AuthZEN </h1> <div class="my-2 flex items-center gap-2"> <div class="text-muted-foreground flex items-center gap-x-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 min-w-5.5" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M4 7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM16 3v4M8 3v4M4 11h16M7 14h.013M10.01 14h.005M13.01 14h.005M16.015 14h.005M13.015 17h.005M7.01 17h.005M10.01 17h.005" /></svg>  <time class="text-sm sm:text-base" datetime="2026-11-13T12:00:00.000Z"> 13 Nov, 2026 </time> </div> <span aria-hidden="true" class="text-muted-foreground max-sm:hidden hidden">
+|
+</span>  </div> <article id="article" class="mt-8 w-full app-prose max-w-app prose-pre:bg-(--shiki-light-bg) dark:prose-pre:bg-(--shiki-dark-bg)"> <p><img alt="Keycloak AuthZEN Cedar" loading="lazy" decoding="async" width="1774" height="887" src="/_astro/keycloak-authzen-cedar-flow.CklKyAsV_Z1MtfCs.webp" srcset=""></p>
+<p><a href="https://www.keycloak.org/">Keycloak</a> provides identity management and authorization services. With its experimental support for <a href="https://openid.net/specs/authorization-api-1_0.html">OpenID AuthZEN</a>, it can also act as a standardized Policy Decision Point (PDP), allowing external Policy Enforcement Points (PEPs) to request authorization decisions.</p>
+<p>But how are those decisions evaluated?</p>
+<p>AuthZEN intentionally does not define that. The policy model, the policy language and the decision engine remain implementation choices.</p>
+<p>We built an open source extension that integrates <a href="https://www.cedarpolicy.com/">Cedar</a>, an open source policy language and authorization engine, into Keycloak Authorization Services as a native policy type. Keycloak can then evaluate fine grained authorization policies for users and AI agents with Cedar, while PEPs such as <a href="https://agentgateway.dev/"><strong>Agent Gateway</strong></a>, an open source, AI first gateway for APIs and AI workloads, including LLM, MCP and A2A traffic, enforce its decisions through the standard AuthZEN interface.</p>
+<blockquote>
+<p>AuthZEN standardizes how the question is asked. Cedar provides an open, analyzable language for the answer. Keycloak connects both, with the identities, roles and agents it already manages.</p>
+</blockquote>
+<p>This article covers that combination, <strong>OpenID AuthZEN + Cedar + Keycloak</strong>, and what each part contributes. Broader topics such as agent authentication, workload identity federation, delegated authorization, and multi agent security will be explored in separate articles.</p>
+<p>The extension is open source at <a href="https://github.com/embesozzi/keycloak-cedar-authorization"><strong>embesozzi/keycloak-cedar-authorization</strong></a>. You can try it in two ways (see <a href="#try-it-yourself">Try it yourself</a>):</p>
+<ul>
+<li><strong>Keycloak only</strong>: the extension’s demo, where a test script sends the AuthZEN requests of the use cases in this article.</li>
+<li><strong>Keycloak with Agent Gateway</strong>: a lab where Agent Gateway acts as the PEP in front of an MCP server, as in <a href="/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway">Implementing OpenID AuthZEN in Agent Gateway</a>.</li>
+</ul>
+<p>For the background and internal design, see the research article <a href="https://twogenidentity.com/research/keycloak-cedar-policy-engine/">Keycloak Cedar Policy Engine</a>.</p>
+<h2 id="table-of-contents">Table of contents</h2>
+<p></p><details><summary>Open Table of contents</summary><p></p>
+<ul>
+<li><a href="#why-authzen-and-cedar">Why AuthZEN and Cedar?</a></li>
+<li><a href="#cedar-in-five-minutes">Cedar in five minutes</a>
+<ul>
+<li><a href="#the-parc-model">The PARC model</a></li>
+<li><a href="#permit-forbid-and-default-deny">permit, forbid and default deny</a></li>
+<li><a href="#schemas-and-validation">Schemas and validation</a></li>
+</ul>
+</li>
+<li><a href="#authzen-and-cedar-in-keycloak">AuthZEN and Cedar in Keycloak</a>
+<ul>
+<li><a href="#from-an-authzen-request-to-a-cedar-request">From an AuthZEN request to a Cedar request</a></li>
+</ul>
+</li>
+<li><a href="#use-cases">Use cases</a>
+<ul>
+<li><a href="#1-users-by-role">1. Users by role</a></li>
+<li><a href="#2-passkey-login-required-to-write">2. Passkey login required to write</a></li>
+<li><a href="#3-an-ai-agent-identified-by-its-workload-identity">3. An AI agent identified by its workload identity</a></li>
+<li><a href="#4-an-ai-agent-calling-mcp-tools">4. An AI agent calling MCP tools</a></li>
+</ul>
+</li>
+<li><a href="#how-an-ai-agent-is-identified">How an AI agent is identified</a></li>
+<li><a href="#verifiable-policies-as-code">Verifiable policies as code</a></li>
+<li><a href="#try-it-yourself">Try it yourself</a>
+<ul>
+<li><a href="#option-1-keycloak-only">Option 1: Keycloak only</a></li>
+<li><a href="#option-2-keycloak-with-agent-gateway">Option 2: Keycloak with Agent Gateway</a></li>
+</ul>
+</li>
+<li><a href="#considerations">Considerations</a></li>
+<li><a href="#conclusion">Conclusion</a>
+<ul>
+<li><a href="#references">References</a></li>
+</ul>
+</li>
+</ul>
+<p></p></details><p></p>
+<h2 id="why-authzen-and-cedar">Why AuthZEN and Cedar?</h2>
+<p>Authorization logic tends to end up in application code, gateway configuration, or proprietary policy formats. Each approach makes it harder to answer simple questions: who can do what, why was a request allowed, and what changes when a policy is updated?</p>
+<p>Combining AuthZEN and Cedar changes that:</p>
+<ul>
+<li><strong>Decoupled authorization</strong>: Applications, gateways, and agents enforce decisions without embedding authorization policies.</li>
+<li><strong>Policy as code</strong>: Policies are versioned, reviewed, and tested like any other software artifact.</li>
+<li><strong>Fine-grained decisions</strong>: Identity, roles, resource attributes, and authentication context can be evaluated together.</li>
+<li><strong>A standard interface</strong>: PEPs use the same AuthZEN authorization API, whether protecting an application API, an MCP server, or an agent.</li>
+<li><strong>Auditability</strong>: Policy evaluation is separated from enforcement, making authorization decisions easier to inspect and explain.</li>
+</ul>
+<p>This also enables a Zero Trust approach: enforce authorization at multiple layers, not just at the API gateway. You can deploy PEPs at both the gateway and individual API levels, adding defense in depth, and with OpenID AuthZEN all of them use the same standard to ask for decisions (see <a href="#considerations">Considerations</a> for what each layer should decide).</p>
+<blockquote>
+<p>Centralized policy decisions. Distributed enforcement. Interoperability.</p>
+</blockquote>
+<p>OAuth 2.0 and OpenID Connect for identity, AuthZEN for the authorization decision API, and Cedar for policy definition and evaluation.</p>
+<p>Open standards, open-source technologies, and no need to reinvent the wheel.</p>
+<h2 id="cedar-in-five-minutes">Cedar in five minutes</h2>
+<p>Cedar was created by AWS and is designed for fine grained access control. Its design goals are readability, safety and analyzability, and its semantics are formally specified and verified. The details are in the paper <a href="https://arxiv.org/abs/2403.04651">Cedar: A New Language for Expressive, Fast, Safe, and Analyzable Authorization</a>.</p>
+<h3 id="the-parc-model">The PARC model</h3>
+<p>Every Cedar request has four parts, often called PARC:</p>
+<ul>
+<li><strong>Principal</strong>: who is asking (a user, an agent).</li>
+<li><strong>Action</strong>: what they want to do (<code>read</code>, <code>write</code>, <code>call</code>).</li>
+<li><strong>Resource</strong>: what they want to act on (a document, an MCP tool).</li>
+<li><strong>Context</strong>: facts about the request (how the user logged in, the token scopes).</li>
+</ul>
+<p>A policy grants or denies access for a combination of these:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>@id("document-readers-read")</span></span>
+<span class="line"><span>permit (</span></span>
+<span class="line"><span>  principal in Keycloak::Role::"document-reader",</span></span>
+<span class="line"><span>  action == Documents::Action::"read",</span></span>
+<span class="line"><span>  resource is Documents::Document</span></span>
+<span class="line"><span>);</span></span></code></pre>
+<h3 id="permit-forbid-and-default-deny">permit, forbid and default deny</h3>
+<p>Cedar has three simple rules for combining policies:</p>
+<ol>
+<li>If no policy matches, the request is <strong>denied</strong> (default deny).</li>
+<li>If any <code>permit</code> matches and no <code>forbid</code> matches, the request is <strong>allowed</strong>.</li>
+<li>If any <code>forbid</code> matches, the request is <strong>denied</strong>, even if a permit also matches.</li>
+</ol>
+<p>That last rule is what makes guardrails easy: a single <code>forbid</code> can block a dangerous action even if another team later writes a broad <code>permit</code>.</p>
+<h3 id="schemas-and-validation">Schemas and validation</h3>
+<p>A Cedar <a href="https://docs.cedarpolicy.com/schema/human-readable-schema.html">schema</a> declares the entity types, actions and context a policy may use. Policies are validated against it, so a typo in an attribute name or a comparison between the wrong types is caught before the policy is used, not at request time.</p>
+<p>Here is the schema of the demo’s <code>documents-api</code> resource server (trimmed):</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>namespace Documents {</span></span>
+<span class="line"><span>  entity Document = { name: String, type: String } tags Set&#x3C;String>;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  type RequestContext = {</span></span>
+<span class="line"><span>    acr?: String,        // authentication context</span></span>
+<span class="line"><span>    amr?: Set&#x3C;String>,   // authentication methods</span></span>
+<span class="line"><span>    scope?: Set&#x3C;String>, // token scopes</span></span>
+<span class="line"><span>  };</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  action read, write appliesTo {</span></span>
+<span class="line"><span>    principal: [Keycloak::User, Keycloak::Client],</span></span>
+<span class="line"><span>    resource: [Document],</span></span>
+<span class="line"><span>    context: RequestContext,</span></span>
+<span class="line"><span>  };</span></span>
+<span class="line"><span>}</span></span></code></pre>
+<p>You can try Cedar policies and schemas in the browser with the playground on <a href="https://www.cedarpolicy.com/">cedarpolicy.com</a>, and read the full language reference in the <a href="https://docs.cedarpolicy.com/">Cedar documentation</a>.</p>
+<h2 id="authzen-and-cedar-in-keycloak">AuthZEN and Cedar in Keycloak</h2>
+<p>The extension registers <code>cedar</code> as a native policy type in Keycloak Authorization Services. Cedar policies participate in Keycloak’s existing resource, scope and permission model. Cedar runs inside Keycloak through <a href="https://github.com/cedar-policy/cedar-java">cedar-java</a>, so no external PDP is required.</p>
+<div class="mermaid">sequenceDiagram
+    participant PEP as PEP &#x3C;br/> (API Gateway, Agent Gateway &#x3C;br/> or MCP Server)
+    participant KC as Keycloak &#x3C;br/> (AuthZEN endpoint)
+    participant AS as Authorization Services
+    participant CP as Cedar policy provider
+
+    PEP->>KC: POST /realms/{realm}/authzen/access/v1/evaluation
+    KC->>AS: Evaluate resource + scope for the subject
+    AS->>CP: Evaluate the permission's Cedar policy
+    CP->>CP: Build the Cedar request from Keycloak's data and the schema
+    CP-->>AS: grant / deny
+    AS-->>KC: decision
+    KC-->>PEP: { "decision": true | false }</div>
+<ol>
+<li>The <strong>PEP</strong> sends an AuthZEN evaluation request to Keycloak.</li>
+<li><strong>Keycloak</strong> maps it to its Authorization Services: the resource, the scope and the subject.</li>
+<li>The <strong>Cedar policy provider</strong> builds the Cedar request and evaluates the resource server’s policies.</li>
+<li>The PEP enforces the decision: forward the request, or reject it.</li>
+</ol>
+<h3 id="from-an-authzen-request-to-a-cedar-request">From an AuthZEN request to a Cedar request</h3>
+<p>Each part of the AuthZEN request becomes part of the Cedar request:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>AuthZEN</th><th>Keycloak</th><th>Cedar</th></tr></thead><tbody><tr><td><code>subject</code></td><td>User, or the service account of a client</td><td><code>Keycloak::User</code> / <code>Keycloak::Client</code></td></tr><tr><td><code>resource</code></td><td>Resource (type and name)</td><td><code>Documents::Document::"document-1"</code></td></tr><tr><td><code>action</code></td><td>Authorization scope</td><td><code>Documents::Action::"read"</code></td></tr><tr><td><code>context</code></td><td>Evaluation context</td><td><code>context</code>, declared keys only</td></tr></tbody></table>
+<p>Two design choices matter here:</p>
+<ul>
+<li><strong>The principal comes from Keycloak.</strong> The subject’s roles, groups and attributes are read from Keycloak, never taken from the request. A caller cannot grant itself a role.</li>
+<li><strong>The context comes from the PEP.</strong> Facts only the PEP knows, such as how the user logged in or which scopes the token carries, are sent in the AuthZEN <code>context</code>. Cedar receives only the keys the schema declares, with their declared types.</li>
+</ul>
+<p>Other properties of the extension:</p>
+<ul>
+<li><strong>One policy set per resource server</strong>: all its Cedar policies decide together, so a <code>forbid</code> in any of them overrides every <code>permit</code>.</li>
+<li><strong>Validation on write</strong>: a policy that does not match the schema is rejected by the Admin API, with Cedar’s error message.</li>
+<li><strong>Fail closed</strong>: any error results in a deny, never in an allow.</li>
+</ul>
+<h2 id="use-cases">Use cases</h2>
+<p>The demo realm has three users, one AI agent and two resource servers: <code>documents-api</code> for documents and <code>mcp-server</code> for MCP tools. The main scenarios are covered by automated tests, including end to end AuthZEN evaluations against the demo realm.</p>
+<h3 id="1-users-by-role">1. Users by role</h3>
+<p><strong>Scenario:</strong> readers may read documents, writers may write them.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>@id("document-readers-read")</span></span>
+<span class="line"><span>permit (</span></span>
+<span class="line"><span>  principal in Keycloak::Role::"document-reader",</span></span>
+<span class="line"><span>  action == Documents::Action::"read",</span></span>
+<span class="line"><span>  resource is Documents::Document</span></span>
+<span class="line"><span>);</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>@id("document-writers-write")</span></span>
+<span class="line"><span>permit (</span></span>
+<span class="line"><span>  principal in Keycloak::Role::"document-writer",</span></span>
+<span class="line"><span>  action == Documents::Action::"write",</span></span>
+<span class="line"><span>  resource is Documents::Document</span></span>
+<span class="line"><span>);</span></span></code></pre>
+<p>The PEP asks:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "subject"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">  { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">user</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">alice</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "resource"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">Document</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">document-1</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "action"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">   { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">read</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subject</th><th>Action</th><th>Decision</th></tr></thead><tbody><tr><td><code>alice</code> (<code>document-reader</code>)</td><td><code>read</code></td><td><code>true</code></td></tr><tr><td><code>alice</code></td><td><code>write</code></td><td><code>false</code></td></tr><tr><td><code>bob</code> (<code>document-writer</code>)</td><td><code>write</code></td><td><code>true</code></td></tr><tr><td><code>alice</code>, sending <code>"properties": { "roles": "document-writer" }</code></td><td><code>write</code></td><td><code>false</code></td></tr></tbody></table>
+<p>The last row is the important one: Keycloak resolves the user’s effective roles (direct, composite and inherited from groups), so a role claimed in the request is ignored.</p>
+<p><strong>AuthZEN</strong> carries the question, <strong>Keycloak</strong> supplies the roles, <strong>Cedar</strong> states the rule.</p>
+<h3 id="2-passkey-login-required-to-write">2. Passkey login required to write</h3>
+<p><strong>Scenario:</strong> editors may change a document only when they logged in with a passkey. A password login is not enough.</p>
+<p>How the user logged in is known by the application and its token (<code>acr</code>, <code>amr</code>), so the PEP passes it in the AuthZEN <code>context</code>, and the policy checks it:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>@id("editors-write-with-passkey")</span></span>
+<span class="line"><span>permit (</span></span>
+<span class="line"><span>  principal in Keycloak::Role::"document-editor",</span></span>
+<span class="line"><span>  action == Documents::Action::"write",</span></span>
+<span class="line"><span>  resource is Documents::Document</span></span>
+<span class="line"><span>)</span></span>
+<span class="line"><span>when</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>  context has acr &#x26;&#x26;</span></span>
+<span class="line"><span>  context.acr == "inherence" &#x26;&#x26;</span></span>
+<span class="line"><span>  context has amr &#x26;&#x26;</span></span>
+<span class="line"><span>  context.amr.contains("passkeys")</span></span>
+<span class="line"><span>};</span></span></code></pre>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "subject"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">  { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">user</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">carol</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "resource"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"type"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">Document</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">document-1</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "action"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">   { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">write</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> }</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "context"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">  { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"acr"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">inherence</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "amr"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> [</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">passkeys</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">mfa</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">] }</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subject</th><th>Context</th><th>Decision</th></tr></thead><tbody><tr><td><code>carol</code> (<code>document-editor</code>)</td><td><code>acr</code> <code>inherence</code>, <code>amr</code> <code>["passkeys", "mfa"]</code></td><td><code>true</code></td></tr><tr><td><code>carol</code></td><td><code>acr</code> <code>inherence</code>, <code>amr</code> <code>["pwd"]</code></td><td><code>false</code></td></tr></tbody></table>
+<p>These <code>acr</code> and <code>amr</code> values are configured in this demo; they are not standard registered values.</p>
+<p>This combines authorization and authentication context in a single, readable rule: <strong>AuthZEN</strong> carries the login facts in <code>context</code>, <strong>Keycloak</strong> supplies the role, <strong>Cedar</strong> checks both with typed values. For more on stronger authentication at the moment of a sensitive action, see <a href="/posts/martin-besozzi/keycloak-step-up-and-multi-factor-authentication-mfa-for-web-apps-and-api">Keycloak Step Up and MFA for Web Apps and APIs</a>.</p>
+<h3 id="3-an-ai-agent-identified-by-its-workload-identity">3. An AI agent identified by its workload identity</h3>
+<p><strong>Scenario:</strong> only one specific agent, the planner agent, may read documents.</p>
+<p>The agent is registered in Keycloak as a client whose <code>clientId</code> is its <a href="https://spiffe.io/">SPIFFE</a> ID. Cedar represents it as a <code>Keycloak::Client</code> principal, allowing policies to reference that identity:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>@id("planner-agent-read")</span></span>
+<span class="line"><span>permit (</span></span>
+<span class="line"><span>  principal is Keycloak::Client,</span></span>
+<span class="line"><span>  action == Documents::Action::"read",</span></span>
+<span class="line"><span>  resource is Documents::Document</span></span>
+<span class="line"><span>)</span></span>
+<span class="line"><span>when { principal.clientId == "spiffe://example.org/ns/agents/sa/planner-agent" };</span></span></code></pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Subject</th><th>Action</th><th>Decision</th></tr></thead><tbody><tr><td>planner agent</td><td><code>read</code></td><td><code>true</code></td></tr><tr><td>planner agent</td><td><code>write</code></td><td><code>false</code></td></tr></tbody></table>
+<p><strong>Keycloak</strong> holds the agent registration, <strong>Cedar</strong> references the agent’s client identity, and <strong>AuthZEN</strong> gives authorized PEPs a standard way to ask about it. How the agent is sent as the AuthZEN subject is explained in <a href="#how-an-ai-agent-is-identified">How an AI agent is identified</a>.</p>
+<h3 id="4-an-ai-agent-calling-mcp-tools">4. An AI agent calling MCP tools</h3>
+<p><strong>Scenario:</strong> a gateway in front of an MCP server checks every <code>tools/call</code> with Keycloak. Support agents may call the customer read tools when their token grants <code>mcp:tools</code>, and no agent may ever delete a customer.</p>
+<p>Each MCP tool is a Keycloak resource of type <code>Tool</code>, named after the tool, with the scope <code>call</code>:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>// Support agents may call the customer read tools, when their token grants mcp:tools.</span></span>
+<span class="line"><span>@id("support-agents-call-customer-read-tools")</span></span>
+<span class="line"><span>permit (</span></span>
+<span class="line"><span>  principal is Keycloak::Client,</span></span>
+<span class="line"><span>  action == Mcp::Action::"call",</span></span>
+<span class="line"><span>  resource is Mcp::Tool</span></span>
+<span class="line"><span>)</span></span>
+<span class="line"><span>when</span></span>
+<span class="line"><span>{</span></span>
+<span class="line"><span>  resource in [Mcp::Tool::"get_customer", Mcp::Tool::"list_customers"] &#x26;&#x26;</span></span>
+<span class="line"><span>  principal.roles.contains("support-agent") &#x26;&#x26;</span></span>
+<span class="line"><span>  context has scope &#x26;&#x26;</span></span>
+<span class="line"><span>  context.scope.contains("mcp:tools")</span></span>
+<span class="line"><span>};</span></span></code></pre>
+<p>When the agent sends this MCP request:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="json"><code><span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">{</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "jsonrpc"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">2.0</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#1976D2;--shiki-dark:#F78C6C"> 3</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "method"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">tools/call</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span></span>
+<span class="line"><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">  "params"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"name"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">get_customer</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">,</span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA"> "arguments"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> { </span><span style="--shiki-light:#D32F2F;--shiki-dark:#7FDBCA">"id"</span><span style="--shiki-light:#212121;--shiki-dark:#D6DEEB">:</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD"> "</span><span style="--shiki-light:#22863A;--shiki-dark:#C789D6">cust-12345</span><span style="--shiki-light:#22863A;--shiki-dark:#D9F5DD">"</span><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB"> } }</span></span>
+<span class="line"><span style="--shiki-light:#24292EFF;--shiki-dark:#D6DEEB">}</span></span></code></pre>
+<p>the gateway asks Keycloak, through AuthZEN, whether this agent may <code>call</code> the tool <code>get_customer</code>, and passes the token’s scopes in the <code>context</code>: <code>{ "scope": ["mcp:tools"] }</code>. Cedar evaluates the request with the agent as the principal (<code>Keycloak::Client</code>).</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Agent role</th><th>Tool</th><th><code>scope</code> in context</th><th>Decision</th><th>Decided by</th></tr></thead><tbody><tr><td><code>support-agent</code></td><td><code>get_customer</code>, <code>list_customers</code></td><td><code>["mcp:tools"]</code></td><td><code>true</code></td><td><code>support-agents-call-customer-read-tools</code></td></tr><tr><td><code>support-agent</code></td><td><code>get_customer</code></td><td>missing</td><td><code>false</code></td><td>no permit matches</td></tr><tr><td><code>support-agent</code></td><td><code>delete_customer</code></td><td><code>["mcp:tools"]</code></td><td><code>false</code></td><td>no permit matches (default deny)</td></tr></tbody></table>
+<p><strong>AuthZEN</strong> gives the MCP gateway one standard call per <code>tools/call</code>, <strong>Keycloak</strong> models each tool as a resource, and <strong>Cedar</strong> expresses the allow list; anything not listed is denied by default.</p>
+<p>In the extension’s demo, a test script plays the gateway’s role and sends these requests. To see Cedar decisions enforced by a real gateway, see <a href="#try-it-yourself">Try it yourself</a>.</p>
+<h2 id="how-an-ai-agent-is-identified">How an AI agent is identified</h2>
+<p>In this demo, AI agents authenticate using OAuth 2.0 client credentials. The extension resolves the authenticated agent to its associated Keycloak client and represents it as a <code>Keycloak::Client</code> principal in Cedar. This allows Cedar policies to authorize agents using their client identity, including workload identifiers such as <a href="https://spiffe.io/">SPIFFE</a> IDs.</p>
+<p>In Keycloak, a client using client credentials can have an associated service account, represented as a user. The PEP therefore sends the service account user ID with subject type <code>user</code>. The extension resolves the associated client and represents the agent as a <code>Keycloak::Client</code> principal in Cedar.</p>
+<p>In delegated authorization scenarios, where an agent acts on behalf of a user (On Behalf Of, or OBO), the agent’s identity can be represented by a token claim such as <code>act</code> (actor), when using <a href="https://www.rfc-editor.org/rfc/rfc8693">OAuth 2.0 Token Exchange (RFC 8693)</a>. These scenarios, including token exchange and delegated identity, will be explored in a separate article.</p>
+<h2 id="verifiable-policies-as-code">Verifiable policies as code</h2>
+<p>Cedar policies are more than code in a repository: they are verifiable. Each resource server’s schema and policies live in Git, and every policy can be validated in CI against the same schema Keycloak uses, as the extension repository does, and is validated again by Keycloak when it is saved. An invalid policy never reaches a decision.</p>
+<p>In the demo, each <code>.cedar</code> file becomes one Keycloak policy, so a decision in the logs, such as <code>documents#document-readers-read</code>, points directly to its file and statement.</p>
+<h2 id="try-it-yourself">Try it yourself</h2>
+<p>Both options run Keycloak with the Cedar extension. They differ in what sends the AuthZEN requests to Keycloak:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>In front of Keycloak (the PEP)</th><th>What you see</th></tr></thead><tbody><tr><td><strong>Option 1: Keycloak only</strong></td><td>A test script, sending AuthZEN requests with <code>curl</code></td><td>The four use cases of this article</td></tr><tr><td><strong>Option 2: Keycloak with Agent Gateway</strong></td><td>Agent Gateway, before every MCP <code>tools/call</code> to a Payments MCP server</td><td>A different MCP example: users calling Payments tools through a real gateway</td></tr></tbody></table>
+<h3 id="option-1-keycloak-only">Option 1: Keycloak only</h3>
+<p>This is the quickest way to see the Cedar policies decide. It runs Keycloak with the Cedar extension and a <code>demo</code> realm (the users, the agent and both resource servers of this article). A test script plays the PEP: it sends the AuthZEN requests of every use case above and checks each decision. It requires Java 17, Maven, Docker, <code>curl</code> and <code>jq</code>.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sh"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">git</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> clone</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> https://github.com/embesozzi/keycloak-cedar-authorization</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#C5E478;--shiki-dark-font-style:italic">cd</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> keycloak-cedar-authorization</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">make</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> up</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">              # build, start Keycloak on http://localhost:8082, configure the demo realm</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">make</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> test-e2e-run</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">    # run the AuthZEN checks of the use cases</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">make</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> down</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">            # stop Keycloak and delete its data</span></span></code></pre>
+<p>The demo credentials are fixed values for local use only.</p>
+<h3 id="option-2-keycloak-with-agent-gateway">Option 2: Keycloak with Agent Gateway</h3>
+<p>The <a href="https://github.com/embesozzi/agentic-security-labs/tree/v1.1.0/mcp-authzen">agentic-security-labs</a> repository runs Keycloak with the Cedar extension with a real PEP: Agent Gateway sits in front of a Payments MCP server and asks Keycloak before every <code>tools/call</code>. Keycloak evaluates the decision with Cedar policies.</p>
+<p>This lab runs a different MCP example from Use case 4: instead of an AI agent calling customer tools, users (<code>alice</code>, <code>bob</code> and <code>carol</code>) call Payments tools, and Cedar policies authorize them by their roles.</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="sh"><code><span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">git</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> clone</span><span style="--shiki-light:#2B5581;--shiki-dark:#82AAFF"> --branch</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> v1.1.0</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> https://github.com/embesozzi/agentic-security-labs.git</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#C5E478;--shiki-dark-font-style:italic">cd</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> agentic-security-labs</span></span>
+<span class="line"></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">make</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> up-cedar</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">   # Keycloak with the Cedar provider, Agent Gateway and the MCP server</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">make</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> test</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">       # run the use cases</span></span>
+<span class="line"><span style="--shiki-light:#6F42C1;--shiki-light-font-style:inherit;--shiki-dark:#82AAFF;--shiki-dark-font-style:italic">make</span><span style="--shiki-light:#2B5581;--shiki-dark:#ECC48D"> down</span><span style="--shiki-light:#C2C3C5;--shiki-light-font-style:inherit;--shiki-dark:#637777;--shiki-dark-font-style:italic">       # stop the lab</span></span></code></pre>
+<p>Only managers and admins may approve or cancel a payment. In Cedar, that rule reads:</p>
+<pre class="astro-code astro-code-themes min-light night-owl" style="--shiki-light:#24292eff;--shiki-dark:#d6deeb;--shiki-light-bg:#ffffff;--shiki-dark-bg:#011627; overflow-x: auto;--file-name-offset: -0.75rem;" tabindex="0" data-language="plaintext"><code><span class="line"><span>@id("managers-approve-and-cancel")</span></span>
+<span class="line"><span>permit (</span></span>
+<span class="line"><span>  principal,</span></span>
+<span class="line"><span>  action == Payments::Action::"tools/call",</span></span>
+<span class="line"><span>  resource is Payments::tool</span></span>
+<span class="line"><span>)</span></span>
+<span class="line"><span>when {</span></span>
+<span class="line"><span>  resource in [</span></span>
+<span class="line"><span>    Payments::tool::"approve_payment",</span></span>
+<span class="line"><span>    Payments::tool::"cancel_payment"</span></span>
+<span class="line"><span>  ] &#x26;&#x26;</span></span>
+<span class="line"><span>  (principal in Keycloak::Role::"payments_manager" ||</span></span>
+<span class="line"><span>   principal in Keycloak::Role::"payments_admin")</span></span>
+<span class="line"><span>};</span></span></code></pre>
+<p>For comparison, the lab can also run the same use cases without Cedar, with Keycloak’s default policies (<code>make up</code> in agentic-security-labs). The decisions are the same: Agent Gateway and the AuthZEN request do not change, only the policy engine does. The <a href="https://github.com/embesozzi/agentic-security-labs/tree/v1.1.0/mcp-authzen">lab README</a> compares both options, and <a href="/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway">Implementing OpenID AuthZEN in Agent Gateway</a> explains the PEP side.</p>
+<h2 id="considerations">Considerations</h2>
+<p>The extension is <strong>experimental</strong> and not recommended for production use. A few points to keep in mind when designing with it:</p>
+<ul>
+<li><strong>Callers</strong>: the AuthZEN endpoint accepts any valid access token of the realm. Only authorized clients should be able to obtain tokens for resource servers with Cedar policies.</li>
+<li><strong>Context</strong>: context values are trusted as sent by the PEP. The PEP must take them from a verified token or session, never from input the user or agent controls.</li>
+<li><strong>AI agents as subjects</strong>: send the agent’s token subject as is; see <a href="#how-an-ai-agent-is-identified">How an AI agent is identified</a> and the <a href="https://github.com/embesozzi/keycloak-cedar-authorization/blob/main/tests/README.md#how-an-ai-agent-is-identified">repository README</a> for the exact request format.</li>
+<li><strong>Authorization at every layer</strong>: gateways can authorize operations, such as calling <code>get_customer</code>. APIs and MCP servers must also enforce access to specific records, using the same PDP when necessary. Permission to call a tool does not automatically grant access to all the data it exposes.</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>AuthZEN and Cedar solve different problems, and that is exactly why they fit together. With the Cedar policy provider, Keycloak evaluates fine grained, testable policies for users and AI agents, using the identities, roles and agent registrations it already manages, behind a standard AuthZEN endpoint.</p>
+<blockquote>
+<p>The PEP enforces the decision. Keycloak makes the decision. AuthZEN asks the question, and Cedar expresses the answer.</p>
+</blockquote>
+<p>Keep it simple, modular, and interoperable. Less buzzwords, more design.</p>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="https://github.com/embesozzi/keycloak-cedar-authorization">embesozzi/keycloak-cedar-authorization</a></li>
+<li><a href="https://twogenidentity.com/research/keycloak-cedar-policy-engine/">Keycloak Cedar Policy Engine</a> (TwoGenIdentity research)</li>
+<li><a href="https://www.cedarpolicy.com/">Cedar Policy Language</a> and <a href="https://docs.cedarpolicy.com/">Cedar documentation</a></li>
+<li><a href="https://arxiv.org/abs/2403.04651">Cedar: A New Language for Expressive, Fast, Safe, and Analyzable Authorization</a></li>
+<li><a href="https://github.com/cedar-policy/cedar-java">cedar-java</a></li>
+<li><a href="https://openid.net/specs/authorization-api-1_0.html">AuthZEN Authorization API 1.0</a></li>
+<li><a href="https://www.keycloak.org/docs/latest/authorization_services/">Keycloak Authorization Services</a></li>
+<li><a href="/posts/martin-besozzi/authzen-standardized-authorization-for-api-and-ai-security">AuthZEN: Standardized Authorization for API and AI Security</a></li>
+<li><a href="/posts/martin-besozzi/mastering-secure-apis-and-ai-agents-with-zero-trust-and-fine-grained-authorization-based">Mastering Secure APIs and AI Agents with Zero Trust and Fine Grained Authorization Based on OpenID AuthZEN</a></li>
+</ul> </article> <hr class="my-8 border-dashed">  <div id="btt-btn-container" class="fixed inset-e-4 bottom-8 z-50 md:sticky md:inset-e-auto md:float-end md:me-1 translate-y-14 opacity-0 transition duration-500"> <button data-button="back-to-top" class="group bg-background relative px-2 py-1 size-14 rounded-full shadow-xl md:h-8 md:w-fit md:rounded-md md:shadow-none md:focus-visible:rounded-none md:bg-background/35 md:bg-clip-padding md:backdrop-blur-lg"> <span id="progress-indicator" class="absolute inset-0 -z-10 block size-14 scale-110 rounded-full bg-transparent md:hidden md:h-8 md:rounded-md"></span> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block rotate-90 md:hidden" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M5 12l6 6M5 12l6-6" /></svg> <span class="group-hover:text-accent sr-only text-sm md:not-sr-only"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M12 5v14M16 9l-4-4M8 9l4-4" /></svg> Back to top </span> </button> </div> <script data-astro-rerun>
+  function backToTop() {
+    const rootElement = document.documentElement;
+    const btnContainer = document.querySelector("#btt-btn-container");
+    const backToTopBtn = document.querySelector("[data-button='back-to-top']");
+    const progressIndicator = document.querySelector("#progress-indicator");
+
+    if (!rootElement || !btnContainer || !backToTopBtn || !progressIndicator)
+      return;
+
+    backToTopBtn.addEventListener("click", () => {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    });
+
+    let lastVisible = null;
+    function handleScroll() {
+      const scrollTotal = rootElement.scrollHeight - rootElement.clientHeight;
+      const scrollTop = rootElement.scrollTop;
+      const scrollPercent = Math.floor((scrollTop / scrollTotal) * 100);
+
+      progressIndicator.style.setProperty(
+        "background-image",
+        `conic-gradient(var(--accent), var(--accent) ${scrollPercent}%, transparent ${scrollPercent}%)`
+      );
+
+      const isVisible = scrollTop / scrollTotal > 0.3;
+
+      if (isVisible !== lastVisible) {
+        btnContainer.classList.toggle("opacity-100", isVisible);
+        btnContainer.classList.toggle("translate-y-0", isVisible);
+        btnContainer.classList.toggle("opacity-0", !isVisible);
+        btnContainer.classList.toggle("translate-y-14", !isVisible);
+        lastVisible = isVisible;
+      }
+    }
+
+    let ticking = false;
+    document.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          handleScroll();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+  }
+  backToTop();
+</script> <ul class="mt-4 mb-8 flex flex-wrap gap-4 sm:my-8"> <li> <a href="/tags/cedar/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Cedar </a> </li><li> <a href="/tags/authzen/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-2"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> AuthZEN </a> </li><li> <a href="/tags/keycloak/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-3"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Keycloak </a> </li><li> <a href="/tags/ai-agents/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-4"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> AI Agents </a> </li><li> <a href="/tags/mcp/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-5"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> MCP </a> </li><li> <a href="/tags/security/" class="inline-flex items-center gap-1 rounded-full transition-colors bg-muted text-muted-foreground hover:bg-accent/15 hover:text-accent focus-visible:text-accent focus-visible:outline-none px-2.5 py-0.5 text-sm" data-astro-transition-scope="astro-36ssibgs-6"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="opacity-80 size-4" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 9h14M5 15h14M11 4 7 20M17 4l-4 16" /></svg> Security </a> </li> </ul> <div class="flex flex-none flex-col items-center justify-center gap-1 md:items-start"><span class="italic">Share this post:</span><div class="text-center"><a href="https://wa.me/?text=https://embesozzi.github.io/posts/martin-besozzi/keycloak-cedar-authorization-authzen/" title="Share this post on Whatsapp" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m3 21 1.65-3.8a9 9 0 1 1 3.4 2.9z" /><path d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0za5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1" /></svg><span class="sr-only">Share this post on Whatsapp</span> </a><a href="https://x.com/intent/post?url=https://embesozzi.github.io/posts/martin-besozzi/keycloak-cedar-authorization-authzen/" title="Share this post on X" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg><span class="sr-only">Share this post on X</span> </a><a href="https://t.me/share/url?url=https://embesozzi.github.io/posts/martin-besozzi/keycloak-cedar-authorization-authzen/" title="Share this post on Telegram" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m15 10-4 4 6 6 4-16-18 7 4 2 2 6 3-4" /></svg><span class="sr-only">Share this post on Telegram</span> </a><a href="mailto:?subject=See%20this%20post&amp;body=https://embesozzi.github.io/posts/martin-besozzi/keycloak-cedar-authorization-authzen/" title="Share this post via email" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-1 hover:text-accent scale-90 p-2 hover:rotate-6 sm:p-1"> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg><span class="sr-only">Share this post via email</span> </a></div></div> <hr class="my-8 border-dashed"> <div data-pagefind-ignore class="my-8 grid grid-cols-1 gap-6 sm:grid-cols-2">  <a href="/posts/martin-besozzi/implementing-openid-authzen-in-agentgateway/" class="flex w-full justify-end gap-1 text-end hover:opacity-75 sm:col-start-2"> <div> <span>Next Post</span> <div class="text-accent/85 text-sm">Implementing OpenID AuthZEN in Agent Gateway: MCP Tool Authorization</div> </div> <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block flex-none rtl:rotate-180" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M5 12h14M13 18l6-6M13 6l6 6" /></svg> </a> </div> </main> <footer class="app-wide-layout mt-auto"> <div class="border-border flex flex-col items-center justify-between border-t py-6 sm:flex-row-reverse sm:py-4"> <div class="flex flex-wrap items-center gap-1"> <a href="https://github.com/embesozzi" title="Martin Besozzi on Github" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21" /></svg> <span class="sr-only">Martin Besozzi on Github</span>  </a><a href="https://x.com/embesozzi" title="Martin Besozzi on X" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="m4 4 11.733 16H20L8.267 4zM4 20l6.768-6.768m2.46-2.46L20 4" /></svg> <span class="sr-only">Martin Besozzi on X</span>  </a><a href="https://www.linkedin.com/in/embesozzi/" title="Martin Besozzi on Linkedin" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M8 11v5M8 8v.01M12 16v-5M16 16v-3a2 2 0 1 0-4 0" /><path d="M3 7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4z" /></svg> <span class="sr-only">Martin Besozzi on Linkedin</span>  </a><a href="mailto:embesozzi@gmail.com" title="Send an email to Martin Besozzi" class="group inline-flex items-center gap-1 hover:text-accent p-2 hover:rotate-6 sm:p-1">  <svg width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="inline-block size-6 scale-125 fill-transparent stroke-current stroke-2 opacity-90 group-hover:fill-transparent sm:scale-110" viewBox="0 0 24 24"><path stroke="none" d="M0 0h24v24H0z" /><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><path d="m3 7 9 6 9-6" /></svg> <span class="sr-only">Send an email to Martin Besozzi</span>  </a> </div> <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row"> <span>Copyright &#169; 2026</span> <span class="hidden sm:inline">&nbsp;|&nbsp;</span> <span>All rights reserved.</span> </div> </div> </footer>  <script type="module">
+    async function renderMermaid() {
+      const elements = document.querySelectorAll("div.mermaid");
+      if (!elements.length) return;
+
+      const isDark =
+        document.documentElement.getAttribute("data-theme") === "dark";
+
+      const { default: mermaid } = await import(
+        "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs"
+      );
+
+      mermaid.initialize({ startOnLoad: false, theme: isDark ? "dark" : "default" });
+
+      for (const el of elements) {
+        const code = el.textContent ?? "";
+        const id = `mermaid-${Math.random().toString(36).slice(2, 9)}`;
+        try {
+          const { svg } = await mermaid.render(id, code);
+          el.innerHTML = svg;
+        } catch (e) {
+          console.error("Mermaid render error:", e);
+        }
+      }
+    }
+
+    document.addEventListener("astro:page-load", renderMermaid);
+  </script>  <script type="module">const r="theme",o="light",m="dark";function a(){const e=localStorage.getItem(r);return e||o}let t=window.__theme?.value??a();function l(){localStorage.setItem(r,t),c()}function c(){document.firstElementChild?.setAttribute("data-theme",t),document.querySelector("#theme-btn")?.setAttribute("aria-label",t);const e=window.getComputedStyle(document.body).backgroundColor;document.querySelector("meta[name='theme-color']")?.setAttribute("content",e)}function u(){c(),document.querySelector("#theme-btn")?.addEventListener("click",()=>{t=t===o?m:o,l()})}u();document.addEventListener("astro:after-swap",u);document.addEventListener("astro:before-swap",e=>{const n=document.querySelector("meta[name='theme-color']")?.getAttribute("content");n&&e.newDocument.querySelector("meta[name='theme-color']")?.setAttribute("content",n)});</script> </body> </html> <script data-astro-rerun>
+  function createProgressBar() {
+    const progressContainer = document.createElement("div");
+    progressContainer.className =
+      "progress-container fixed top-0 z-10 h-1 w-full bg-background";
+
+    const progressBar = document.createElement("div");
+    progressBar.className = "progress-bar h-1 w-0 bg-accent";
+    progressBar.id = "myBar";
+
+    progressContainer.appendChild(progressBar);
+    document.body.appendChild(progressContainer);
+  }
+  createProgressBar();
+
+  function updateScrollProgress() {
+    document.addEventListener("scroll", () => {
+      const winScroll =
+        document.body.scrollTop || document.documentElement.scrollTop;
+      const height =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      if (document) {
+        const myBar = document.getElementById("myBar");
+        if (myBar) {
+          myBar.style.width = scrolled + "%";
+        }
+      }
+    });
+  }
+  updateScrollProgress();
+
+  function addHeadingLinks() {
+    const headings = Array.from(
+      document.querySelectorAll("h2, h3, h4, h5, h6")
+    );
+    for (const heading of headings) {
+      heading.classList.add("group");
+      const link = document.createElement("a");
+      link.className =
+        "heading-link ms-2 no-underline opacity-75 md:opacity-0 md:group-hover:opacity-100 md:focus:opacity-100";
+      link.href = "#" + heading.id;
+
+      const span = document.createElement("span");
+      span.ariaHidden = "true";
+      span.innerText = "#";
+      link.appendChild(span);
+      heading.appendChild(link);
+    }
+  }
+  addHeadingLinks();
+
+  function attachCopyButtons() {
+    const copyButtonLabel = "Copy";
+    const codeBlocks = Array.from(document.querySelectorAll("pre"));
+
+    for (const codeBlock of codeBlocks) {
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "relative";
+
+      const computedStyle = getComputedStyle(codeBlock);
+      const hasFileNameOffset =
+        computedStyle.getPropertyValue("--file-name-offset").trim() !== "";
+
+      const topClass = hasFileNameOffset
+        ? "top-(--file-name-offset)"
+        : "-top-3";
+
+      const copyButton = document.createElement("button");
+      copyButton.className = `copy-code absolute end-3 ${topClass} rounded bg-muted border border-muted px-2 py-1 text-xs leading-4 text-foreground font-medium`;
+      copyButton.innerHTML = copyButtonLabel;
+      codeBlock.setAttribute("tabindex", "0");
+      codeBlock.appendChild(copyButton);
+
+      codeBlock?.parentNode?.insertBefore(wrapper, codeBlock);
+      wrapper.appendChild(codeBlock);
+
+      copyButton.addEventListener("click", async () => {
+        await copyCode(codeBlock, copyButton);
+      });
+    }
+
+    async function copyCode(block, button) {
+      const code = block.querySelector("code");
+      const text = code?.innerText;
+
+      await navigator.clipboard.writeText(text ?? "");
+
+      button.innerText = "Copied";
+
+      setTimeout(() => {
+        button.innerText = copyButtonLabel;
+      }, 700);
+    }
+  }
+  attachCopyButtons();
+
+  document.addEventListener("astro:after-swap", () =>
+    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+  );
+</script>
